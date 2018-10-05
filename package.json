@@ -1,0 +1,54 @@
+{
+  "name": "frisk",
+  "version": "1.0.0",
+  "description": "GitHub App for PR security linting",
+  "author": "Martin Vrachev <martin.vrachev@gmail.com> (d)",
+  "contributors": [
+    {
+      "name": "Antoine Salon",
+      "url": "https://github.com/evqna"
+    },
+    {
+      "name": "Martin Vrachev",
+      "email": "mvrachev@vmware.com"
+    }
+  ],
+  "license": "BSD-2",
+  "repository": "https://github.com/vmware/frisk.git",
+  "homepage": "https://github.com/vmware/frisk",
+  "bugs": "https://github.com/vmware/frisk/issues",
+  "keywords": [
+    "github",
+    "checks",
+    "security",
+    "lint"
+  ],
+  "scripts": {
+    "dev": "nodemon --exec \"npm start\"",
+    "start": "probot run ./index.js",
+    "test": "jest",
+    "test:watch": "jest --watch --notify --notifyMode=change --coverage"
+  },
+  "dependencies": {
+    "fs-extra": "^7.0.0",
+    "probot": "^7.1.0"
+  },
+  "devDependencies": {
+    "jest": "^23.5.0",
+    "nodemon": "^1.17.2",
+    "smee-client": "^1.0.2"
+  },
+  "engines": {
+    "node": ">= 8.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "roots": [
+      "test"
+    ]
+  },
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  }
+}
