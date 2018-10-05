@@ -1,0 +1,29 @@
+{
+  "name": "pull_request",
+  "payload": {
+    "action": "opened",
+    "number": 8,
+    "pull_request": {
+      "number": 8,
+      "id": 1000,
+      "state": "open",
+      "title": "PR_title",
+      "body": "PR_body",
+      "head": {
+        "ref": "head_ref",
+        "sha": "head_sha"
+      },
+      "base": {
+        "ref": "base_ref",
+        "sha": "base_sha"
+      }
+    },
+    "repository": {
+      "name": "repo_name",
+      "full_name": "owner_login/repo_name",
+      "owner": {
+        "login": "owner_login"
+      }
+    }
+  }
+}

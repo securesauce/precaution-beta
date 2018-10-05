@@ -1,0 +1,10 @@
+.vscode/
+node_modules/
+npm-debug.log
+coverage
+.DS_Store
+
+cache/
+results.json
+*.pem
+.env
