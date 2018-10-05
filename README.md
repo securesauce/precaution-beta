@@ -1,8 +1,12 @@
+# Frisk
 
-
-# frisk
+[![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://github.com/vmware/frisk/blob/master/LICENSE.txt)
+[![Slack](https://img.shields.io/badge/slack-join%20chat%20%E2%86%92-e01563.svg)](https://code.vmware.com/web/code/join)
 
 ## Overview
+
+Frisk provides a simple, automated code review for GitHub projects by running
+code linters with a security focus on pull requests. 
 
 ## Try it out
 
@@ -30,3 +34,5 @@ questions about the CLA process, please refer to our [FAQ](https://cla.vmware.co
 refer to [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
+
+BSD-2 License
