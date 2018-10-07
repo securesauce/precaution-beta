@@ -1,3 +1,6 @@
+// Copyright 2018 VMware, Inc.
+// SPDX-License-Identifier: BSD-2-Clause
+
 function annotation (issue) {
   const path = issue.filename
   const start_line = issue.line_number

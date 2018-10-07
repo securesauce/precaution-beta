@@ -1,3 +1,6 @@
+// Copyright 2018 VMware, Inc.
+// SPDX-License-Identifier: BSD-2-Clause
+
 const { spawn } = require('child_process')
 const fs = require('fs')
 const path = require('path')

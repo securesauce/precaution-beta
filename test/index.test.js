@@ -1,3 +1,6 @@
+// Copyright 2018 VMware, Inc.
+// SPDX-License-Identifier: BSD-2-Clause
+
 const fs = require('fs-extra')
 
 const { Application } = require('probot')

@@ -1,3 +1,6 @@
+// Copyright 2018 VMware, Inc.
+// SPDX-License-Identifier: BSD-2-Clause
+
 const generateReport = require('../report')
 
 const banditResults = require('./fixtures/reports/mix_results.json')

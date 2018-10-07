@@ -1,3 +1,6 @@
+# Copyright 2018 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause
+
 import ssl
 from cryptography.hazmat import backends
 from cryptography.hazmat.primitives.asymmetric import dsa
