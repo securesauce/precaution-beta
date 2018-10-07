@@ -1,3 +1,6 @@
+# Copyright 2018 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause
+
 from twisted.internet import reactor
 from twisted.web import static, server, twcgi
 
