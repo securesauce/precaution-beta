@@ -1,7 +1,7 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const runBandit = require('../bandit')
+const runBandit = require('../bandit/bandit')
 
 describe('Bandit runner', () => {
   test('Handles baseline option', async () => {

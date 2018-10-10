@@ -1,9 +1,11 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const runBandit = require('./bandit')
-const generateOutput = require('./report')
+const generateOutput = require('./bandit/bandit_report')
+
 const cache = require('./cache')
+const apiHelper = require('./github_api_helper')
+const runBandit = require('./bandit/bandit')
 
 const config = require('./config')
 
@@ -38,11 +40,10 @@ module.exports = app => {
   })
 
   app.on('pull_request.opened', async context => {
-    // Same thing but have to intercept the event because check suite is not triggered
-    const pullRequest = context.payload.pull_request
-    const headSha = pullRequest.head.sha
+    const { pull_request } = context.payload
+    const headSha = pull_request.head.sha
 
-    await runLinterFromPRData([pullRequest], context, headSha)
+    await runLinterFromPRData([pull_request], context, headSha)
   })
 }
 
@@ -55,66 +56,47 @@ module.exports = app => {
 async function runLinterFromPRData (pullRequests, context, headSha) {
   const { owner, repo } = context.repo()
 
-  // Create the check run
-  const startedAt = new Date().toISOString()
-  const createCheckRunResponse = context.github.checks.create({ owner,
-    repo,
-    name: 'security-linter',
-    head_sha: headSha,
-    status: 'in_progress',
-    started_at: startedAt
-  })
-
+  // Send in progress status to Github
+  const checkRunResponse = apiHelper.inProgressAPIresponse(owner, repo, headSha, context)
+ 
+  let PRid = -1
   try {
     // Process all pull requests associated with check suite
     const PRsDownloadedPromise = pullRequests.map(pr => processPullRequest(pr, context))
     const resolvedPRs = await Promise.all(PRsDownloadedPromise)
 
+    // I need to know if there are any Python files
+    // because of the analyze Bandit
+    const { filenames, existingBanditFiles } = resolvedPRs[0]
+    
     // For now only deal with one PR
     const PR = pullRequests[0]
-    const files = resolvedPRs[0]
-    let results
 
-    if (config.compareAgainstBaseline) {
-      const baselineFile = '../baseline.json'
-      // Run baseline scan on PR base
-      await runBandit(cache.getBranchPath(PR.id, 'base'), files, { reportFile: baselineFile })
-      results = await runBandit(cache.getBranchPath(PR.id, 'head'), files, { baselineFile })
-    } else {
-      results = await runBandit(cache.getBranchPath(PR.id, 'head'), files)
+    let output
+
+    if (existingBanditFiles) {
+      banditResults = await runBandit(PR, filenames)
+      
+      output = generateOutput(banditResults, cache.getBranchPath(PR.id, 'head'))
+    }  
+
+    // The first if is when there are no python files or there are python files but without security issues.
+    if (!output || output.annotations.length === 0) {
+      output = apiHelper.noInformationOutput()
     }
 
-    const output = generateOutput(results, cache.getBranchPath(PR.id, 'head'))
-    const completedAt = new Date().toISOString()
+    apiHelper.sendResults(owner, repo, checkRunResponse, context, output)
+    if (config.cleanupAfterRun)
+      cache.clear(PR.id)
 
-    // Send results using the octokit API
-    const runId = (await createCheckRunResponse).data.id
-    await context.github.checks.update({ check_run_id: runId,
-      owner,
-      repo,
-      status: 'completed',
-      completed_at: completedAt,
-      conclusion: 'success',
-      output })
-
-    if (config.cleanupAfterRun) { cache.clear(PR.id) }
   } catch (err) {
-    // context.log.error(err)
+    
+    // clean cache files when there is an error
+    if (PRid !== -1 && config.cleanupAfterRun)
+      cache.clear(PRid)
 
     // Send error to GitHub
-    const completedAt = new Date().toISOString()
-    const runId = (await createCheckRunResponse).data.id
-    context.github.checks.update({ check_run_id: runId,
-      owner,
-      repo,
-      status: 'completed',
-      completed_at: completedAt,
-      conclusion: 'failure',
-      output: {
-        title: 'App error',
-        summary: String(err)
-      }
-    })
+    apiHelper.errorResponse(checkRunResponse, owner, repo, context, err)
   }
 }
 
@@ -129,6 +111,8 @@ async function processPullRequest (pullRequest, context) {
   const ref = pullRequest.head.ref
   const baseRef = pullRequest.base.ref
   const id = pullRequest.id
+
+  let existingBanditFiles = false
 
   // See https://developer.github.com/v3/pulls/#list-pull-requests-files
   // TODO: Support pagination for >30 files (max 300)
@@ -147,6 +131,10 @@ async function processPullRequest (pullRequest, context) {
         headers: { accept: rawMediaType } })
       cache.saveFile(id, 'head', filename, response.data)
 
+      if (existingBanditFiles === false && filename.endsWith('.py')) {
+        existingBanditFiles = true
+      }
+
       if (config.compareAgainstBaseline) {
         const baseFileResp = await context.github.repos.getContent({ owner,
           repo,
@@ -159,6 +147,8 @@ async function processPullRequest (pullRequest, context) {
       return filename
     })
 
-  // Wait until all files have been downloaded
-  return Promise.all(filesDownloadedPromise)
+    // Wait until all files have been downloaded
+    const filenames = Promise.all(filesDownloadedPromise)
+
+    return { filenames, existingBanditFiles }
 }
