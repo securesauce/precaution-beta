@@ -13,103 +13,102 @@ const rawMediaType = 'application/vnd.github.v3.raw'
  * @param {import('probot').Application} app - Probot's Application class.
  */
 module.exports = app => {
-
   app.log('Starting app')
 
   app.on('check_suite', async context => {
-    const {action, check_suite} = context.payload
-    const head_sha = check_suite.head_sha
+    const action = context.payload.action
+    const checkSuite = context.payload.check_suite
+    const headSha = checkSuite.head_sha
+    const pullRequests = checkSuite.pull_requests
 
-    // Check suite is requested when code is pushed to the repository
-    // TODO: investigate GitHub editor not triggering check suite
     if (action === 'requested') {
-      // Commit was pushed to a PR branch
-      if (check_suite.pull_requests.length > 0) {
-        await runLinterFromPRData(check_suite.pull_requests, context, head_sha)
+      // Check suite is requested when code is pushed to the repository
+      // TODO: investigate GitHub editor not triggering check suite
+      if (pullRequests.length > 0) {
+        // Commit was pushed to a PR branch
+        await runLinterFromPRData(pullRequests, context, headSha)
       }
 
       // Ignore push events not linked to a pull request
-    }
-    // Check suite was manually rerequested by a user on the checks dashboard
-    // (previous run didn't complete)
-    else if (action === 'rerequested') {
-      await runLinterFromPRData(check_suite.pull_requests, context, head_sha)
+    } else if (action === 'rerequested') {
+      // Check suite was manually rerequested by a user on the checks dashboard
+      // (previous run didn't complete)
+      await runLinterFromPRData(pullRequests, context, headSha)
     }
   })
 
-  // Same thing but have to intercept the event because check suite is not triggered
   app.on('pull_request.opened', async context => {
-    const {number, pull_request} = context.payload
-    const head_sha = pull_request.head.sha
+    // Same thing but have to intercept the event because check suite is not triggered
+    const pullRequest = context.payload.pull_request
+    const headSha = pullRequest.head.sha
 
-    await runLinterFromPRData([pull_request], context, head_sha)
+    await runLinterFromPRData([pullRequest], context, headSha)
   })
 }
 
 /**
  * Retrive files modified by pull request(s), run linter and send results
- * @param {any[]} pull_requests
+ * @param {any[]} pullRequests
  * @param {import('probot').Context} context
- * @param {string} head_sha
+ * @param {string} headSha
  */
-async function runLinterFromPRData (pull_requests, context, head_sha) {
-  const {owner, repo} = context.repo()
+async function runLinterFromPRData (pullRequests, context, headSha) {
+  const { owner, repo } = context.repo()
 
   // Create the check run
-  const started_at = new Date().toISOString()
-  const createCheckRunResponse = context.github.checks.create({owner,
+  const startedAt = new Date().toISOString()
+  const createCheckRunResponse = context.github.checks.create({ owner,
     repo,
     name: 'security-linter',
-    head_sha,
+    head_sha: headSha,
     status: 'in_progress',
-    started_at
+    started_at: startedAt
   })
 
   try {
     // Process all pull requests associated with check suite
-    const PRsDownloadedPromise = pull_requests.map(pr => processPullRequest(pr, context))
+    const PRsDownloadedPromise = pullRequests.map(pr => processPullRequest(pr, context))
     const resolvedPRs = await Promise.all(PRsDownloadedPromise)
 
     // For now only deal with one PR
-    const PR = pull_requests[0]
+    const PR = pullRequests[0]
     const files = resolvedPRs[0]
     let results
 
     if (config.compareAgainstBaseline) {
       const baselineFile = '../baseline.json'
       // Run baseline scan on PR base
-      await runBandit(cache.getBranchPath(PR.id, 'base'), files, { reportFile: baselineFile})
+      await runBandit(cache.getBranchPath(PR.id, 'base'), files, { reportFile: baselineFile })
       results = await runBandit(cache.getBranchPath(PR.id, 'head'), files, { baselineFile })
     } else {
       results = await runBandit(cache.getBranchPath(PR.id, 'head'), files)
     }
 
     const output = generateOutput(results, cache.getBranchPath(PR.id, 'head'))
-    const completed_at = new Date().toISOString()
+    const completedAt = new Date().toISOString()
 
     // Send results using the octokit API
-    const check_run_id = (await createCheckRunResponse).data.id
-    await context.github.checks.update({check_run_id,
+    const runId = (await createCheckRunResponse).data.id
+    await context.github.checks.update({ check_run_id: runId,
       owner,
       repo,
       status: 'completed',
-      completed_at,
+      completed_at: completedAt,
       conclusion: 'success',
-      output})
+      output })
 
-    if (config.cleanupAfterRun)
-      cache.clear(PR.id)
+    if (config.cleanupAfterRun) { cache.clear(PR.id) }
   } catch (err) {
     // context.log.error(err)
 
     // Send error to GitHub
-    const completed_at = new Date().toISOString()
-    const check_run_id = (await createCheckRunResponse).data.id
-    context.github.checks.update({check_run_id,
+    const completedAt = new Date().toISOString()
+    const runId = (await createCheckRunResponse).data.id
+    context.github.checks.update({ check_run_id: runId,
       owner,
       repo,
       status: 'completed',
-      completed_at,
+      completed_at: completedAt,
       conclusion: 'failure',
       output: {
         title: 'App error',
@@ -122,18 +121,18 @@ async function runLinterFromPRData (pull_requests, context, head_sha) {
 /**
  * Retrieve list of files modified by PR and download them to cache
  * @param {import('probot').Context} context
- * @returns {Promise<string[]>}
+ * @returns {Promise<string[]>} Paths to the downloaded PR files
  */
-async function processPullRequest (pull_request, context) {
-  const {owner, repo} = context.repo()
-  const number = pull_request.number
-  const ref = pull_request.head.ref
-  const baseRef = pull_request.base.ref
-  const id = pull_request.id
+async function processPullRequest (pullRequest, context) {
+  const { owner, repo } = context.repo()
+  const number = pullRequest.number
+  const ref = pullRequest.head.ref
+  const baseRef = pullRequest.base.ref
+  const id = pullRequest.id
 
   // See https://developer.github.com/v3/pulls/#list-pull-requests-files
   // TODO: Support pagination for >30 files (max 300)
-  const response = await context.github.pullRequests.getFiles({owner, repo, number})
+  const response = await context.github.pullRequests.getFiles({ owner, repo, number })
 
   const filesDownloadedPromise = response.data
     .filter(file => config.fileExtensions.reduce((acc, ext) => acc || file.filename.endsWith(ext), false))
@@ -141,20 +140,25 @@ async function processPullRequest (pull_request, context) {
       const filename = fileJSON.filename
 
       // See https://developer.github.com/v3/repos/contents/#get-contents
-      const response = await context.github.repos.getContent({owner, repo, path: filename, ref,
-        headers: {accept: rawMediaType}})
+      const response = await context.github.repos.getContent({ owner,
+        repo,
+        path: filename,
+        ref,
+        headers: { accept: rawMediaType } })
       cache.saveFile(id, 'head', filename, response.data)
 
       if (config.compareAgainstBaseline) {
-        const baseFileResp = await context.github.repos.getContent({owner, repo, path: filename, ref: baseRef,
-          headers: {accept: rawMediaType}})
+        const baseFileResp = await context.github.repos.getContent({ owner,
+          repo,
+          path: filename,
+          ref: baseRef,
+          headers: { accept: rawMediaType } })
         cache.saveFile(id, 'base', filename, baseFileResp.data)
       }
 
       return filename
     })
 
-    // Wait until all files have been downloaded
-    const filenames = await Promise.all(filesDownloadedPromise)
-    return filenames
+  // Wait until all files have been downloaded
+  return await Promise.all(filesDownloadedPromise)
 }

@@ -38,5 +38,4 @@ describe('Report generation', () => {
     expect(report).toHaveProperty('annotations')
     expect(report).toHaveProperty('title')
   })
-
 })

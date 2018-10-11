@@ -19,9 +19,9 @@ describe('Bandit-linter', () => {
   let fileRefs = {}
 
   beforeAll(() => {
-    mockFiles['examples/httplib_https.py'] = fs.readFileSync('test/fixtures/python/https.py', 'utf8'),
-    mockFiles['examples/httpoxy_cgihandler.py'] = fs.readFileSync('test/fixtures/python/cgi.py', 'utf8'),
-    mockFiles['examples/httpoxy_twisted_directory.py'] = fs.readFileSync('test/fixtures/python/twisted_dir.py', 'utf8'),
+    mockFiles['examples/httplib_https.py'] = fs.readFileSync('test/fixtures/python/https.py', 'utf8')
+    mockFiles['examples/httpoxy_cgihandler.py'] = fs.readFileSync('test/fixtures/python/cgi.py', 'utf8')
+    mockFiles['examples/httpoxy_twisted_directory.py'] = fs.readFileSync('test/fixtures/python/twisted_dir.py', 'utf8')
     mockFiles['examples/httpoxy_twisted_script.py'] = fs.readFileSync('test/fixtures/python/twisted_script.py', 'utf8')
 
     fileRefs['head_ref'] = fs.readFileSync('test/fixtures/python/key_sizes.py', 'utf8')
@@ -41,7 +41,7 @@ describe('Bandit-linter', () => {
         getFiles: jest.fn().mockResolvedValue(pullRequestFiles)
       },
       repos: {
-        getContent: jest.fn(({path}) => Promise.resolve({data: mockFiles[path]}))
+        getContent: jest.fn(({ path }) => Promise.resolve({ data: mockFiles[path] }))
       }
     }
     app.auth = () => Promise.resolve(github)
@@ -52,7 +52,6 @@ describe('Bandit-linter', () => {
   })
 
   describe('interacts with the Checks API', () => {
-
     test('responds to the requesting checks event', async () => {
       await app.receive(checkSuiteRerequestedEvent)
 
@@ -91,7 +90,7 @@ describe('Bandit-linter', () => {
         started_at: expect.any(String),
         head_sha: expect.any(String)
       }))
-      
+
       expect(github.pullRequests.getFiles).toHaveBeenCalledWith({
         owner: 'owner_login',
         repo: 'repo_name',
@@ -134,8 +133,8 @@ describe('Bandit-linter', () => {
 
     test('does not report baseline errors', async () => {
       github.pullRequests.getFiles = jest.fn().mockResolvedValue(simplePRFixture)
-      github.repos.getContent = jest.fn(({ref}) => Promise.resolve({data: fileRefs[ref]}))
-      
+      github.repos.getContent = jest.fn(({ ref }) => Promise.resolve({ data: fileRefs[ref] }))
+
       await app.receive(pullRequestOpenedEvent)
 
       // Is there a better way to do this?
@@ -177,7 +176,7 @@ describe('Bandit-linter', () => {
       expect(fs.existsSync('cache/210857942')).toBeFalsy()
     })
 
-    test('sends an error report on crash', async() => {
+    test('sends an error report on crash', async () => {
       github.pullRequests.getFiles = jest.fn().mockRejectedValue('Rejected promise')
 
       await app.receive(checkSuiteRerequestedEvent)

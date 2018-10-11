@@ -26,7 +26,7 @@ module.exports = (directory, inputFiles, params) => {
   params.reportFile = params.reportFile || 'bandit.json'
 
   const reportPath = path.join(directory, params.reportFile)
-  
+
   let banditArgs = [...inputFiles, '--format', 'json', '-o', params.reportFile]
   if (params.baselineFile) {
     banditArgs.push('--baseline', params.baselineFile)
