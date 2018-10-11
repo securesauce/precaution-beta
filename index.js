@@ -121,7 +121,7 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
 /**
  * Retrieve list of files modified by PR and download them to cache
  * @param {import('probot').Context} context
- * @returns {Promise<string[]>}
+ * @returns {Promise<string[]>} Paths to the downloaded PR files
  */
 async function processPullRequest (pullRequest, context) {
   const { owner, repo } = context.repo()
@@ -160,6 +160,5 @@ async function processPullRequest (pullRequest, context) {
     })
 
   // Wait until all files have been downloaded
-  const filenames = await Promise.all(filesDownloadedPromise)
-  return filenames
+  return await Promise.all(filesDownloadedPromise)
 }
