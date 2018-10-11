@@ -6,21 +6,30 @@
 ## Overview
 
 Frisk provides a simple, automated code review for GitHub projects by running
-code linters with a security focus on pull requests. 
+code linters with a security focus on pull requests.
 
-## Try it out
+GitHub integration is made through the GitHub app interface and the checks API (beta),
+which allows results to be presented directly as inline annotations instead of
+a pass/fail status report.
 
-### Prerequisites
+## Local setup
 
-* Prereq 1
-* Prereq 2
-* Prereq 3
+Please refer to the [Probot documentation](https://probot.github.io/docs/development/#configuring-a-github-app)
+to direct GitHub webhooks to your local machine.
 
-### Build & Run
+Additionally make sure python is installed and run ```pip install -r requirements.txt```
 
-1. Step 1
-2. Step 2
-3. Step 3
+### Deployment
+
+This app requires the following **GitHub permissions** :
+* Checks: **Read** and **Write**
+* Pull requests: **Read**
+* Code: **Read**
+ Additionnally the app should subscribe to the **Pull requests** event.
+
+### Testing
+
+Run ```npm test``` or ```yarn test```.
 
 ## Documentation
 
@@ -28,7 +37,7 @@ code linters with a security focus on pull requests.
 
 ## Contributing
 
-The frisk project team welcomes contributions from the community. If you wish to contribute code and you have not
+The Frisk project team welcomes contributions from the community. If you wish to contribute code and you have not
 signed our contributor license agreement (CLA), our bot will update the issue when you open a Pull Request. For any
 questions about the CLA process, please refer to our [FAQ](https://cla.vmware.com/faq). For more detailed information,
 refer to [CONTRIBUTING.md](CONTRIBUTING.md).
