@@ -27,6 +27,10 @@ This app requires the following **GitHub permissions** :
 * Code: **Read**
  Additionnally the app should subscribe to the **Pull requests** event.
 
+### Testing
+
+Run ```npm test``` or ```yarn test```.
+
 ## Documentation
 
 ## Releases & Major Branches
