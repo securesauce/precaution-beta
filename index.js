@@ -160,5 +160,5 @@ async function processPullRequest (pullRequest, context) {
     })
 
   // Wait until all files have been downloaded
-  return await Promise.all(filesDownloadedPromise)
+  return Promise.all(filesDownloadedPromise)
 }
