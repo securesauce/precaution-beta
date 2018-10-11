@@ -9,7 +9,7 @@ const path = require('path')
  * @param {number} prID pull request identifier
  * @param {string} branchTag branch name
  */
-function getBranchPath(prID, branchTag) {
+function getBranchPath (prID, branchTag) {
   return path.join('cache', prID.toString(), branchTag)
 }
 
@@ -20,7 +20,7 @@ function getBranchPath(prID, branchTag) {
  * @param {string} filePath relative file path
  * @param {any} data file data
  */
-function saveFileToPRCache(prID, branchTag, filePath, data) {
+function saveFileToPRCache (prID, branchTag, filePath, data) {
   writeFileCreateDirs(path.join('cache', prID.toString(), branchTag, filePath), data)
 }
 
@@ -28,7 +28,7 @@ function saveFileToPRCache(prID, branchTag, filePath, data) {
  * Delete pr cache folder
  * @param {number} prID pull request identifier
  */
-function clearPRCache(prID) {
+function clearPRCache (prID) {
   fs.removeSync(path.join('cache', prID.toString()))
 }
 
