@@ -44,7 +44,7 @@ function inProgressAPIresponse(owner, repo, head_sha, context) {
  * @param {Object} checkRunResponse see https://developer.github.com/v3/checks/runs/#response-2
  * @param {String} owner owner of the repository
  * @param {String} repo the repository
- * @param {*} context context of the pull request
+ * @param {Object} context context of the pull request; see https://probot.github.io/api/latest/classes/context.html
  * @param {Error} err the error which occurs and stops the program 
  */
 async function errorResponse(checkRunResponse, owner, repo, context, err) {
@@ -71,8 +71,8 @@ async function errorResponse(checkRunResponse, owner, repo, context, err) {
  * Send results using the octokit API
  * @param {String} owner owner of the repository
  * @param {String} repo the repository 
- * @param {*} checkRunResponse see https://developer.github.com/v3/checks/runs/#response-2
- * @param {String} context context of the pull request
+ * @param {Object} checkRunResponse see https://developer.github.com/v3/checks/runs/#response-2
+ * @param {Object} context context of the pull request; see https://probot.github.io/api/latest/classes/context.html
  * @param {Object} output output from the scan of Gosec and Bandit
  * see: https://developer.github.com/v3/checks/runs/#output-object-1
  */

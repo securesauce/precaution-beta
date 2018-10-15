@@ -148,7 +148,8 @@ async function processPullRequest (pullRequest, context) {
     })
 
     // Wait until all files have been downloaded
-    const filenames = Promise.all(filesDownloadedPromise)
+    // Without the await existingBandit files is not initialize properly
+    const filenames = await Promise.all(filesDownloadedPromise)
 
     return { filenames, existingBanditFiles }
 }
