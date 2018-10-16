@@ -67,23 +67,17 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
 
     // I need to know if there are any Python files
     // because of the analyze Bandit
-    const { filenames, existingBanditFiles } = resolvedPRs[0]
+    const { filenames, existingPythonFiles } = resolvedPRs[0]
     
     // For now only deal with one PR
     const PR = pullRequests[0]
 
-    let output
-
-    if (existingBanditFiles) {
+    let banditResults
+    if(existingPythonFiles){
       banditResults = await runBandit(PR, filenames)
-      
-      output = generateOutput(banditResults, cache.getBranchPath(PR.id, 'head'))
-    }  
-
-    // The first if is when there are no python files or there are python files but without security issues.
-    if (!output || output.annotations.length === 0) {
-      output = apiHelper.noInformationOutput()
     }
+
+    let output = generateOutput(banditResults)
 
     apiHelper.sendResults(owner, repo, checkRunResponse, context, output)
     if (config.cleanupAfterRun)
@@ -112,7 +106,7 @@ async function processPullRequest (pullRequest, context) {
   const baseRef = pullRequest.base.ref
   const id = pullRequest.id
 
-  let existingBanditFiles = false
+  let existingPythonFiles = false
 
   // See https://developer.github.com/v3/pulls/#list-pull-requests-files
   // TODO: Support pagination for >30 files (max 300)
@@ -131,8 +125,8 @@ async function processPullRequest (pullRequest, context) {
         headers: { accept: rawMediaType } })
       cache.saveFile(id, 'head', filename, response.data)
 
-      if (existingBanditFiles === false && filename.endsWith('.py')) {
-        existingBanditFiles = true
+      if (existingPythonFiles === false && filename.endsWith('.py')) {
+        existingPythonFiles = true
       }
 
       if (config.compareAgainstBaseline) {
@@ -151,5 +145,5 @@ async function processPullRequest (pullRequest, context) {
     // Without the await existingBandit files is not initialize properly
     const filenames = await Promise.all(filesDownloadedPromise)
 
-    return { filenames, existingBanditFiles }
+    return { filenames, existingPythonFiles }
 }

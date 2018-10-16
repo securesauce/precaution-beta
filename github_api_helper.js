@@ -2,22 +2,6 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 /**
- * Prepare the output when there is no information after the scan 
- * @returns {Object} output from the scan of Gosec and Bandit
- * see: https://developer.github.com/v3/checks/runs/#output-object-1
- */
-function noInformationOutput() {
-  let output = {
-    title: 'No information',
-    summary: 'No information gathered after scan. \n' +
-           'The possible reasons can be there are no python files for analyzing or ' +
-           'there are no security flaws discovered after analyze by Bandit.'
-  }
-  return output
-}
-
-
-/**
  * Create a check run with status in progress and sends it to Github
  * @param {String} owner owner of the repository
  * @param {String} repo the repository name
@@ -41,7 +25,7 @@ function inProgressAPIresponse(owner, repo, head_sha, context) {
 
 /**
  * Sends error conclusion with a message to Github
- * @param {Object} checkRunResponse see https://developer.github.com/v3/checks/runs/#response-2
+ * @param {Promise<Object>} checkRunResponse see https://developer.github.com/v3/checks/runs/#response-2
  * @param {String} owner owner of the repository
  * @param {String} repo the repository
  * @param {Object} context context of the pull request; see https://probot.github.io/api/latest/classes/context.html
@@ -71,7 +55,7 @@ async function errorResponse(checkRunResponse, owner, repo, context, err) {
  * Send results using the octokit API
  * @param {String} owner owner of the repository
  * @param {String} repo the repository 
- * @param {Object} checkRunResponse see https://developer.github.com/v3/checks/runs/#response-2
+ * @param {Promise<Object>} checkRunResponse see https://developer.github.com/v3/checks/runs/#response-2
  * @param {Object} context context of the pull request; see https://probot.github.io/api/latest/classes/context.html
  * @param {Object} output output from the scan of Gosec and Bandit
  * see: https://developer.github.com/v3/checks/runs/#output-object-1
@@ -97,4 +81,3 @@ async function sendResults(owner, repo, checkRunResponse, context, output) {
 module.exports.sendResults = sendResults
 module.exports.inProgressAPIresponse = inProgressAPIresponse
 module.exports.errorResponse = errorResponse
-module.exports.noInformationOutput = noInformationOutput

@@ -25,14 +25,22 @@ function annotation (issue) {
  */
 module.exports = (results) => {
 
-  results = results || { results: [] }
+  let title, summary, annotations
 
-  const title = 'Bandit security linter'
+  if (results){
+    results = results || { results: [] }
   
-  // That way I created the output of the summary more beatiful and readable
-  // see: https://github.com/MVrachev/Travic-CI---Tests/pull/368/checks?check_run_id=23357748 
-  const summary = JSON.stringify(results.metrics || 'N/A', null, "\n")
-  const annotations = results.results.map(issue => annotation(issue))
+    title = 'Bandit security linter'
+    // That way I created the output of the summary more beatiful and readable
+    summary = JSON.stringify(results.metrics || 'N/A', null, "\n")
+    annotations = results.results.map(issue => annotation(issue))
+  }
 
+  // This is when there are no security issues or there are no python files in the PR
+  if(!annotations || annotations.length === 0){
+    title = 'All clear'
+    summary = 'There are no security issues found.'
+  }
+  
   return { title, summary, annotations }
 }
