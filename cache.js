@@ -18,7 +18,7 @@ function getBranchPath (prID, branchTag) {
  * @param {number} prID pull request identifier
  * @param {string} branchTag branch name
  */
-function branchPathExists(prID, branchTag) {
+function branchPathExists (prID, branchTag) {
   return fs.existsSync(getBranchPath(prID, branchTag))
 }
 
