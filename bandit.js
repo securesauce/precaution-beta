@@ -22,6 +22,10 @@ function parseJSON (data) {
  * @returns {Promise} results json
  */
 module.exports = (directory, inputFiles, params) => {
+
+  if(!inputFiles){
+    return null
+  }  
   params = params || {}
   params.reportFile = params.reportFile || 'bandit.json'
 
