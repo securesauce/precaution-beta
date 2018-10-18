@@ -10,8 +10,11 @@ const checkSuiteRerequestedEvent = require('./events/check_suite.rerequested.jso
 const pullRequestOpenedEvent = require('./events/pull_request.opened.json')
 
 const pullRequestFiles = require('./fixtures/pull_request.files.json')
-const multipleTypesFixture = require('./fixtures/pull_request.files.2.json')
-const simplePRFixture = require('./fixtures/pull_request.files.3.json')
+const multipleTypesFixture = require('./fixtures/pull_request.files.unhandled.json')
+const simplePRFixture = require('./fixtures/pull_request.files.modified.json')
+const fileCreatedPRFixture = require('./fixtures/pull_request.files.added.json')
+
+const fileNotFoundResponse = require('./fixtures/github/getContent.response.missing.json')
 
 describe('Bandit-linter', () => {
   let app, github
@@ -23,9 +26,11 @@ describe('Bandit-linter', () => {
     mockFiles['examples/httpoxy_cgihandler.py'] = fs.readFileSync('test/fixtures/python/cgi.py', 'utf8')
     mockFiles['examples/httpoxy_twisted_directory.py'] = fs.readFileSync('test/fixtures/python/twisted_dir.py', 'utf8')
     mockFiles['examples/httpoxy_twisted_script.py'] = fs.readFileSync('test/fixtures/python/twisted_script.py', 'utf8')
+    mockFiles['key_sizes.py'] = fs.readFileSync('test/fixtures/python/key_sizes.py', 'utf8')
+    mockFiles['key_sizes.old.py'] = fs.readFileSync('test/fixtures/python/key_sizes.old.py', 'utf8')
 
-    fileRefs['head_ref'] = fs.readFileSync('test/fixtures/python/key_sizes.py', 'utf8')
-    fileRefs['base_ref'] = fs.readFileSync('test/fixtures/python/key_sizes.old.py', 'utf8')
+    fileRefs['head_ref'] = mockFiles['key_sizes.py']
+    fileRefs['base_ref'] = mockFiles['key_sizes.old.py']
   })
 
   beforeEach(() => {
@@ -167,6 +172,27 @@ describe('Bandit-linter', () => {
             })
           ])
         })
+      }))
+    })
+
+    test('does not download base version of new files', async () => {
+      github.pullRequests.getFiles = jest.fn().mockResolvedValue(fileCreatedPRFixture)
+      // Simulate newly created file: return contents on head ref, error on base ref
+      github.repos.getContent = jest.fn(({ ref, path }) => {
+        if (ref === 'head') {
+          return mockFiles[path]
+        } else {
+          return fileNotFoundResponse
+        }
+      })
+
+      await app.receive(pullRequestOpenedEvent)
+
+      expect(github.repos.getContent).toHaveBeenCalledWith(expect.objectContaining({
+        ref: 'head_ref'
+      }))
+      expect(github.repos.getContent).not.toHaveBeenCalledWith(expect.objectContaining({
+        ref: 'base_ref'
       }))
     })
 

@@ -14,6 +14,15 @@ function getBranchPath (prID, branchTag) {
 }
 
 /**
+ * Check whether the cache directory for this branch exists
+ * @param {number} prID pull request identifier
+ * @param {string} branchTag branch name
+ */
+function branchPathExists (prID, branchTag) {
+  return fs.existsSync(getBranchPath(prID, branchTag))
+}
+
+/**
  * Save a file to local PR cache, distinguish by revision
  * @param {number} prID unique pull request identifier
  * @param {string} branchTag a tag to identify the current file revision
@@ -43,5 +52,6 @@ function writeFileCreateDirs (filePath, data) {
 }
 
 module.exports.getBranchPath = getBranchPath
+module.exports.branchPathExists = branchPathExists
 module.exports.saveFile = saveFileToPRCache
 module.exports.clear = clearPRCache
