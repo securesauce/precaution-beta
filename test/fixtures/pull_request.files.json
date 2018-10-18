@@ -1,16 +1,20 @@
 {
   "data": [
     {
-      "filename": "examples/httplib_https.py"
+      "filename": "examples/httplib_https.py",
+      "status": "added"
     },
     {
-      "filename": "examples/httpoxy_cgihandler.py"
+      "filename": "examples/httpoxy_cgihandler.py",
+      "status": "added"
     },
     {
-      "filename": "examples/httpoxy_twisted_directory.py"
+      "filename": "examples/httpoxy_twisted_directory.py",
+      "status": "added"
     },
     {
-      "filename": "examples/httpoxy_twisted_script.py"
+      "filename": "examples/httpoxy_twisted_script.py",
+      "status": "added"
     }
   ]
 }

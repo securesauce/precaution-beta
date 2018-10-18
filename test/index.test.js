@@ -10,8 +10,8 @@ const checkSuiteRerequestedEvent = require('./events/check_suite.rerequested.jso
 const pullRequestOpenedEvent = require('./events/pull_request.opened.json')
 
 const pullRequestFiles = require('./fixtures/pull_request.files.json')
-const multipleTypesFixture = require('./fixtures/pull_request.files.2.json')
-const simplePRFixture = require('./fixtures/pull_request.files.3.json')
+const multipleTypesFixture = require('./fixtures/pull_request.files.unhandled.json')
+const simplePRFixture = require('./fixtures/pull_request.files.modified.json')
 const fileCreatedPRFixture = require('./fixtures/pull_request.files.added.json')
 
 const fileNotFoundResponse = require('./fixtures/github/getContent.response.missing.json')

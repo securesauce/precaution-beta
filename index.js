@@ -75,9 +75,9 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     const files = resolvedPRs[0]
     let results
 
-    if (config.compareAgainstBaseline) {
+    // Only run baseline scan if the directory exists (spawn will crash if working directory doesn't exist)
+    if (config.compareAgainstBaseline && cache.branchPathExists(PR.id, 'base')) {
       const baselineFile = '../baseline.json'
-      // Run baseline scan on PR base
       await runBandit(cache.getBranchPath(PR.id, 'base'), files, { reportFile: baselineFile })
       results = await runBandit(cache.getBranchPath(PR.id, 'head'), files, { baselineFile })
     } else {
@@ -99,7 +99,7 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
 
     if (config.cleanupAfterRun) { cache.clear(PR.id) }
   } catch (err) {
-    // context.log.error(err)
+    context.log.error(err)
 
     // Send error to GitHub
     const completedAt = new Date().toISOString()
@@ -136,18 +136,20 @@ async function processPullRequest (pullRequest, context) {
 
   const filesDownloadedPromise = response.data
     .filter(file => config.fileExtensions.reduce((acc, ext) => acc || file.filename.endsWith(ext), false))
+    .filter(async fileJSON => fileJSON !== 'deleted')
     .map(async fileJSON => {
       const filename = fileJSON.filename
+      const status = fileJSON.status
 
       // See https://developer.github.com/v3/repos/contents/#get-contents
-      const response = await context.github.repos.getContent({ owner,
+      const headFileResp = await context.github.repos.getContent({ owner,
         repo,
         path: filename,
         ref,
         headers: { accept: rawMediaType } })
-      cache.saveFile(id, 'head', filename, response.data)
+      cache.saveFile(id, 'head', filename, headFileResp.data)
 
-      if (config.compareAgainstBaseline) {
+      if (config.compareAgainstBaseline && status === 'modified') {
         const baseFileResp = await context.github.repos.getContent({ owner,
           repo,
           path: filename,
