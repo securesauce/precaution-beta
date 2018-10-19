@@ -56,7 +56,7 @@
     ]
   },
   "main": "index.js",
-  "directooperies": {
+  "directories": {
     "test": "test"
   }
 }
