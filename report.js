@@ -24,7 +24,7 @@ function annotation (issue) {
  */
 module.exports = (results) => {
   let title, summary, annotations
-  
+
   if (results) {
     results = results || { results: [] }
     title = 'Bandit security linter'
