@@ -23,9 +23,9 @@ function parseJSON (data) {
  */
 module.exports = (directory, inputFiles, params) => {
 
-  if(!inputFiles){
+  if (!inputFiles) {
     return null
-  }  
+  }
   params = params || {}
   params.reportFile = params.reportFile || 'bandit.json'
 
