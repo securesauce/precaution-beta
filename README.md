@@ -12,7 +12,7 @@ GitHub integration is made through the GitHub app interface and the checks API (
 which allows results to be presented directly as inline annotations instead of
 a pass/fail status report.
 
-Frisk supports analyze of python files for security issues. New languages might be added in future.
+Frisk supports analysis of python files via Bandit. New languages may be added in future.
 
 ## Set up Frisk
 
