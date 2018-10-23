@@ -12,6 +12,7 @@ GitHub integration is made through the GitHub app interface and the checks API (
 which allows results to be presented directly as inline annotations instead of
 a pass/fail status report.
 
+
 Frisk supports analysis of python files via Bandit. New languages may be added in future.
 
 ## Set up Frisk
@@ -28,7 +29,8 @@ We guarantee that we use minimal amount of permissions and all of them are conne
 5. Done! Now Frisk is installed.
 
 
-## Local setup
+## Local development setup
+
 
 Please refer to the [Probot documentation](https://probot.github.io/docs/development/#configuring-a-github-app)
 to direct GitHub webhooks to your local machine.
@@ -41,11 +43,12 @@ This app requires the following **GitHub permissions** :
 * Checks: **Read** and **Write**
 * Pull requests: **Read**
 * Code: **Read**
- Additionnally the app should subscribe to the **Pull requests** event.
+
+Additionnally the app should subscribe to the **Pull requests** event.
 
 ### Testing
 
-Run ```npm test``` or ```yarn test```.
+Run ```npm test``` or ```yarn test```. This does not require any GitHub interaction (no need to register an instance of the app).
 
 ## Documentation
 
