@@ -5,6 +5,7 @@ const fs = require('fs-extra')
 
 const { Application } = require('probot')
 const linterApp = require('..')
+const config = require('../config')
 
 const checkSuiteRerequestedEvent = require('./events/check_suite.rerequested.json')
 const pullRequestOpenedEvent = require('./events/pull_request.opened.json')
@@ -140,7 +141,12 @@ describe('Bandit-linter', () => {
       github.pullRequests.getFiles = jest.fn().mockResolvedValue(simplePRFixture)
       github.repos.getContent = jest.fn(({ ref }) => Promise.resolve({ data: fileRefs[ref] }))
 
+      const previousConfig = config.compareAgainstBaseline
+      config.compareAgainstBaseline = true
+
       await app.receive(pullRequestOpenedEvent)
+
+      config.compareAgainstBaseline = previousConfig
 
       // Is there a better way to do this?
 
@@ -148,12 +154,10 @@ describe('Bandit-linter', () => {
         output: expect.objectContaining({
           annotations: expect.arrayContaining([
             expect.objectContaining({
-              start_line: 5,
-              end_line: 6
+              start_line: 5
             }),
             expect.objectContaining({
-              start_line: 8,
-              end_line: 10
+              start_line: 8
             })
           ])
         })
@@ -163,12 +167,10 @@ describe('Bandit-linter', () => {
         output: expect.objectContaining({
           annotations: expect.not.arrayContaining([
             expect.objectContaining({
-              start_line: 13,
-              end_line: 14
+              start_line: 13
             }),
             expect.objectContaining({
-              start_line: 16,
-              end_line: 18
+              start_line: 16
             })
           ])
         })
