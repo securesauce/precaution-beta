@@ -4,7 +4,7 @@
 function annotation (issue) {
   const path = issue.filename
   const startLine = issue.line_number
-  const endLine = issue.line_range[issue.line_range.length - 1]
+  const endLine = issue.line_number
   const annotationLevel = 'warning'
   const title = `${issue.test_id}:${issue.test_name}`
   const message = issue.issue_text
