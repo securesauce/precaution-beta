@@ -9,7 +9,8 @@ function annotation (issue) {
   const title = `${issue.test_id}:${issue.test_name}`
   const message = issue.issue_text
 
-  return { path,
+  return {
+    path,
     start_line: startLine,
     end_line: endLine,
     annotation_level: annotationLevel,
@@ -29,7 +30,7 @@ module.exports = (results) => {
     results = results || { results: [] }
     title = 'Bandit security linter'
     // That way I created the output of the summary more beatiful and readable
-    summary = JSON.stringify(results.metrics || 'N/A')
+    summary = JSON.stringify(results.metrics || 'N/A', null, '\n')
     annotations = results.results.map(issue => annotation(issue))
   }
 

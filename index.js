@@ -1,11 +1,11 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const runBandit = require('./bandit')
-const generateOutput = require('./report')
+const runBandit = require('./bandit/bandit')
+const generateOutput = require('./bandit/bandit_report')
 const cache = require('./cache')
-
 const config = require('./config')
+const apiHelper = require('./github_api_helper')
 
 const rawMediaType = 'application/vnd.github.v3.raw'
 
@@ -37,7 +37,7 @@ module.exports = app => {
     }
   })
 
-  app.on(['pull_request.opened', 'pull_request.reopened'], async context => {
+  app.on('pull_request.opened', async context => {
     // Same thing but have to intercept the event because check suite is not triggered
     const pullRequest = context.payload.pull_request
     const headSha = pullRequest.head.sha
@@ -55,16 +55,10 @@ module.exports = app => {
 async function runLinterFromPRData (pullRequests, context, headSha) {
   const { owner, repo } = context.repo()
 
-  // Create the check run
-  const startedAt = new Date().toISOString()
-  const createCheckRunResponse = context.github.checks.create({ owner,
-    repo,
-    name: 'security-linter',
-    head_sha: headSha,
-    status: 'in_progress',
-    started_at: startedAt
-  })
+  // Send in progress status to Github
+  const checkRunResponse = apiHelper.inProgressAPIresponse(owner, repo, headSha, context)
 
+  let prID = -1
   try {
     // Process all pull requests associated with check suite
     const PRsDownloadedPromise = pullRequests.map(pr => processPullRequest(pr, context))
@@ -72,49 +66,36 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
 
     // For now only deal with one PR
     const PR = pullRequests[0]
-    const files = resolvedPRs[0]
-    let results
+    prID = PR.id
 
+    const inputFiles = resolvedPRs[0]
+
+    let banditResults
     // Only run baseline scan if the directory exists (spawn will crash if working directory doesn't exist)
     if (config.compareAgainstBaseline && cache.branchPathExists(PR.id, 'base')) {
       const baselineFile = '../baseline.json'
-      await runBandit(cache.getBranchPath(PR.id, 'base'), files, { reportFile: baselineFile })
-      results = await runBandit(cache.getBranchPath(PR.id, 'head'), files, { baselineFile })
+      await runBandit(cache.getBranchPath(PR.id, 'base'), inputFiles, { reportFile: baselineFile })
+      banditResults = await runBandit(cache.getBranchPath(PR.id, 'head'), inputFiles, { baselineFile })
     } else {
-      results = await runBandit(cache.getBranchPath(PR.id, 'head'), files)
+      banditResults = await runBandit(cache.getBranchPath(PR.id, 'head'), inputFiles)
     }
-
-    const output = generateOutput(results, cache.getBranchPath(PR.id, 'head'))
-    const completedAt = new Date().toISOString()
+    const output = generateOutput(banditResults, cache.getBranchPath(PR.id, 'head'))
 
     // Send results using the octokit API
-    const runId = (await createCheckRunResponse).data.id
-    await context.github.checks.update({ check_run_id: runId,
-      owner,
-      repo,
-      status: 'completed',
-      completed_at: completedAt,
-      conclusion: 'success',
-      output })
+    apiHelper.sendResults(owner, repo, checkRunResponse, context, output)
 
-    if (config.cleanupAfterRun) { cache.clear(PR.id) }
+    if (config.cleanupAfterRun) {
+      cache.clear(PR.id)
+    }
   } catch (err) {
     context.log.error(err)
 
+    // clean cache files when there is an error
+    if (prID !== -1 && config.cleanupAfterRun) {
+      cache.clear(prID)
+    }
     // Send error to GitHub
-    const completedAt = new Date().toISOString()
-    const runId = (await createCheckRunResponse).data.id
-    context.github.checks.update({ check_run_id: runId,
-      owner,
-      repo,
-      status: 'completed',
-      completed_at: completedAt,
-      conclusion: 'failure',
-      output: {
-        title: 'App error',
-        summary: String(err)
-      }
-    })
+    apiHelper.errorResponse(checkRunResponse, owner, repo, context, err)
   }
 }
 
@@ -142,7 +123,8 @@ async function processPullRequest (pullRequest, context) {
       const status = fileJSON.status
 
       // See https://developer.github.com/v3/repos/contents/#get-contents
-      const headFileResp = await context.github.repos.getContent({ owner,
+      const headFileResp = await context.github.repos.getContent({
+        owner,
         repo,
         path: filename,
         ref,
@@ -150,7 +132,8 @@ async function processPullRequest (pullRequest, context) {
       cache.saveFile(id, 'head', filename, headFileResp.data)
 
       if (config.compareAgainstBaseline && status === 'modified') {
-        const baseFileResp = await context.github.repos.getContent({ owner,
+        const baseFileResp = await context.github.repos.getContent({
+          owner,
           repo,
           path: filename,
           ref: baseRef,
