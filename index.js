@@ -37,7 +37,7 @@ module.exports = app => {
     }
   })
 
-  app.on('pull_request.opened', async context => {
+  app.on(['pull_request.opened', 'pull_request.reopened'], async context => {
     // Same thing but have to intercept the event because check suite is not triggered
     const pullRequest = context.payload.pull_request
     const headSha = pullRequest.head.sha
