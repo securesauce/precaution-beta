@@ -3,7 +3,7 @@
 
 const config = {
   cleanupAfterRun: true,
-  compareAgainstBaseline: true,
+  compareAgainstBaseline: false,
   fileExtensions: ['.py', '.pyw', '.go']
 }
 

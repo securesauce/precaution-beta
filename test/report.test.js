@@ -14,7 +14,7 @@ describe('Report generation', () => {
 
   test('Creates correct annotations', () => {
     expect(report.annotations).toHaveLength(4)
-    expect(report.annotations[0].end_line).toBe(9)
+    expect(report.annotations[0].end_line).toBe(8)
     expect(report.annotations[3].start_line).toBe(15)
     expect(report.annotations[1].path).toBe('mix.py')
     expect(report.annotations[2].title).toBe('B305:blacklist')
