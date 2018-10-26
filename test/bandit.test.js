@@ -16,7 +16,7 @@ describe('Bandit runner', () => {
   // This test is needed when a PR is without python or go files
   // and when our app gets the content of the PR
   // it wouldnt get any files because we filter them.
-  test('Bandit run with an empty "inputFiles" parameters', async () => {
+  test('Handles empty input', async () => {
     const results = await runBandit('test/fixtures')
 
     expect(results).toBeNull()
