@@ -135,7 +135,7 @@ describe('Bandit-linter', () => {
         path: 'executable'
       }))
     })
-    
+
     test('does not report baseline errors', async () => {
       github.pullRequests.getFiles = jest.fn().mockResolvedValue(simplePRFixture)
       github.repos.getContent = jest.fn(({ ref }) => Promise.resolve({ data: fileRefs[ref] }))
