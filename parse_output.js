@@ -21,7 +21,7 @@ function parseJSON (data) {
  * @param {function} reject is a function that will be used if there is an error
  * @param {String} filePath
  */
-module.exports.readFile = (resolve, reject, readFile) => {
+module.exports.readFile = (filePath, resolve, reject) => {
   fs.readFile(readFile, 'utf8', (err, data) => {
     if (err) {
       reject(err)
