@@ -17,7 +17,7 @@ describe('Bandit runner', () => {
   // and when our app gets the content of the PR
   // it wouldnt get any files because we filter them.
   test('Handles empty input', async () => {
-    const results = await runBandit('test/fixtures')
+    const results = await runBandit('test/fixtures', [])
 
     expect(results).toBeNull()
   })
