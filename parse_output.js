@@ -19,7 +19,7 @@ function parseJSON (data) {
  * The function reads the content ot the file
  * @param {function} resolve is a function that will be resolved if everything succeeds
  * @param {function} reject is a function that will be used if there is an error
- * @param {String} readFile is the file from which we read
+ * @param {String} filePath
  */
 module.exports.readFile = (resolve, reject, readFile) => {
   fs.readFile(readFile, 'utf8', (err, data) => {
