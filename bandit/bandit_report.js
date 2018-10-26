@@ -29,7 +29,6 @@ module.exports = (results) => {
   if (results) {
     results = results || { results: [] }
     title = 'Bandit security linter'
-    // That way I created the output of the summary more beatiful and readable
     summary = JSON.stringify(results.metrics || 'N/A', null, '\n')
     annotations = results.results.map(issue => annotation(issue))
   }
