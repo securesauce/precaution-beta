@@ -23,11 +23,21 @@ function annotation (issue) {
  * @param {any} results Bandit json output
  */
 module.exports = (results) => {
-  results = results || { results: [] }
+  let title, summary, annotations
 
-  const title = 'Bandit security linter'
-  const summary = JSON.stringify(results.metrics || 'N/A')
-  const annotations = results.results.map(issue => annotation(issue))
+  if (results) {
+    results = results || { results: [] }
+    title = 'Bandit security linter'
+    // That way I created the output of the summary more beatiful and readable
+    summary = JSON.stringify(results.metrics || 'N/A')
+    annotations = results.results.map(issue => annotation(issue))
+  }
+
+  // This is when there are no security issues or there are no python files in the PR
+  if (!annotations || annotations.length === 0) {
+    title = 'All clear'
+    summary = 'There are no security issues found.'
+  }
 
   return { title, summary, annotations }
 }

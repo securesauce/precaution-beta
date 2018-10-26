@@ -38,4 +38,16 @@ describe('Report generation', () => {
     expect(report).toHaveProperty('annotations')
     expect(report).toHaveProperty('title')
   })
+
+  // This test caches a few cases at a time: when a pr scans python files without security issues
+  // and when a PR doesn't have any python files
+  test('Generate report on results from Bandit without security issues', async () => {
+    const jsonResults = require('./fixtures/reports/no_issues_report.json')
+
+    const trueReport = generateReport(jsonResults)
+
+    expect(trueReport.title).toEqual('All clear')
+    expect(trueReport.summary).toEqual('There are no security issues found.')
+    expect(trueReport.annotations.length).toEqual(0)
+  })
 })
