@@ -33,7 +33,7 @@ module.exports = (directory, inputFiles, params) => {
     banditProcess
       .on('error', reject)
       .on('close', () => {
-        parseOutput.readFile(resolve, reject, reportPath)
+        parseOutput.readFile(reportPath, resolve, reject)
       })
   })
 }

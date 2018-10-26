@@ -27,19 +27,17 @@ function inProgressAPIresponse (owner, repo, headSha, context) {
 
 /**
  * Sends error conclusion with a message to Github
- * @param {Promise<Object>} checkRunResponse see https://developer.github.com/v3/checks/runs/#response-2
  * @param {String} owner owner of the repository
  * @param {String} repo the repository
  * @param {import('probot').Context} context context of the pull request; see https://probot.github.io/api/latest/classes/context.html
+ * @param {Number} runId positive number for the chek run ID
  * @param {Error} err the error which occurs and stops the program
  */
-async function errorResponse (checkRunResponse, owner, repo, context, err) {
-  const resolvedErroResponse = await checkRunResponse
+async function errorResponse (owner, repo, context, runID, err) {
   const completedAt = new Date().toISOString()
 
-  const checkRunID = resolvedErroResponse.data.id
   context.github.checks.update({
-    check_run_id: checkRunID,
+    check_run_id: runID,
     owner,
     repo,
     status: 'completed',
@@ -56,18 +54,15 @@ async function errorResponse (checkRunResponse, owner, repo, context, err) {
  * Send results using the octokit API
  * @param {String} owner owner of the repository
  * @param {String} repo the repository
- * @param {Promise<Object>} checkRunResponse see https://developer.github.com/v3/checks/runs/#response-2
+ * @param {Number} runID positive number for the chek run ID
  * @param {import('probot').Context} context context of the pull request; see https://probot.github.io/api/latest/classes/context.html
  * @param {Object} output output from the scan of Gosec and Bandit
  * see: https://developer.github.com/v3/checks/runs/#output-object-1
  */
-async function sendResults (owner, repo, checkRunResponse, context, output) {
+async function sendResults (owner, repo, runID, context, output) {
   const completedAt = new Date().toISOString()
-  const resolvedCheckRunResponse = await checkRunResponse
-
-  const checkRunID = resolvedCheckRunResponse.data.id
   await context.github.checks.update({
-    check_run_id: checkRunID,
+    check_run_id: runID,
     owner,
     repo,
     status: 'completed',

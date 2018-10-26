@@ -28,15 +28,14 @@ module.exports = (results) => {
 
   if (results) {
     results = results || { results: [] }
-    title = 'Bandit security linter'
+    title = 'Frisk security linter'
     summary = JSON.stringify(results.metrics || 'N/A', null, '\n')
     annotations = results.results.map(issue => annotation(issue))
   }
 
-  // This is when there are no security issues or there are no python files in the PR
   if (!annotations || annotations.length === 0) {
-    title = 'All clear'
-    summary = 'There are no security issues found.'
+    title = 'Frisk security linter'
+    summary = 'All clear. \n There are no security issues found.'
   }
 
   return { title, summary, annotations }

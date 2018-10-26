@@ -46,8 +46,8 @@ describe('Report generation', () => {
 
     const trueReport = generateReport(jsonResults)
 
-    expect(trueReport.title).toEqual('All clear')
-    expect(trueReport.summary).toEqual('There are no security issues found.')
+    expect(trueReport.title).toEqual('Frisk security linter')
+    expect(trueReport.summary).toEqual('All clear. \n There are no security issues found.')
     expect(trueReport.annotations.length).toEqual(0)
   })
 })

@@ -37,7 +37,7 @@ module.exports = app => {
     }
   })
 
-  app.on('pull_request.opened', async context => {
+  app.on(['pull_request.opened', 'pull_request.reopened'], async context => {
     // Same thing but have to intercept the event because check suite is not triggered
     const pullRequest = context.payload.pull_request
     const headSha = pullRequest.head.sha
@@ -57,8 +57,9 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
 
   // Send in progress status to Github
   const checkRunResponse = apiHelper.inProgressAPIresponse(owner, repo, headSha, context)
+  const resolvedCheckRunResponse = await checkRunResponse
+  const runID = resolvedCheckRunResponse.data.id
 
-  let prID = -1
   try {
     // Process all pull requests associated with check suite
     const PRsDownloadedPromise = pullRequests.map(pr => processPullRequest(pr, context))
@@ -66,7 +67,6 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
 
     // For now only deal with one PR
     const PR = pullRequests[0]
-    prID = PR.id
 
     const inputFiles = resolvedPRs[0]
 
@@ -81,8 +81,8 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     }
     const output = generateOutput(banditResults, cache.getBranchPath(PR.id, 'head'))
 
-    // Send results using the octokit API
-    apiHelper.sendResults(owner, repo, checkRunResponse, context, output)
+    // Send results using the octokit APIrunID
+    apiHelper.sendResults(owner, repo, runID, context, output)
 
     if (config.cleanupAfterRun) {
       cache.clear(PR.id)
@@ -90,12 +90,8 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
   } catch (err) {
     context.log.error(err)
 
-    // clean cache files when there is an error
-    if (prID !== -1 && config.cleanupAfterRun) {
-      cache.clear(prID)
-    }
     // Send error to GitHub
-    apiHelper.errorResponse(checkRunResponse, owner, repo, context, err)
+    apiHelper.errorResponse(owner, repo, context, runID, err)
   }
 }
 
