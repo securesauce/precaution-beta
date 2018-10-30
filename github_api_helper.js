@@ -8,7 +8,7 @@
  * @param {String} headSha sha of the commit
  *  @param {import('probot').Context} context of the pull request;
  * see https://probot.github.io/api/latest/classes/context.html
- * @return {{Promise<Object>}} see https://developer.github.com/v3/checks/runs/#response-2
+ * @return {Promise<any>} see https://developer.github.com/v3/checks/runs/#response-2
  */
 function inProgressAPIresponse (owner, repo, headSha, context) {
   // Create the check run
