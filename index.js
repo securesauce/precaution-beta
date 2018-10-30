@@ -57,8 +57,6 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
 
   // Send in progress status to Github
   const checkRunResponse = apiHelper.inProgressAPIresponse(owner, repo, headSha, context)
-  const resolvedCheckRunResponse = await checkRunResponse
-  const runID = resolvedCheckRunResponse.data.id
 
   try {
     // Process all pull requests associated with check suite
@@ -81,6 +79,8 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     }
     const output = generateOutput(banditResults, cache.getBranchPath(PR.id, 'head'))
 
+    const resolvedCheckRunResponse = await checkRunResponse
+    const runID = resolvedCheckRunResponse.data.id
     // Send results using the octokit APIrunID
     apiHelper.sendResults(owner, repo, runID, context, output)
 
@@ -90,6 +90,8 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
   } catch (err) {
     context.log.error(err)
 
+    const resolvedCheckRunResponse = await checkRunResponse
+    const runID = resolvedCheckRunResponse.data.id
     // Send error to GitHub
     apiHelper.errorResponse(owner, repo, context, runID, err)
   }
