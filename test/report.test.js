@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const generateReport = require('../bandit/bandit_report')
+const config = require('../config')
 
 const banditResults = require('./fixtures/reports/mix_results.json')
 
@@ -46,8 +47,8 @@ describe('Report generation', () => {
 
     const trueReport = generateReport(jsonResults)
 
-    expect(trueReport.title).toEqual('No security issues found')
-    expect(trueReport.summary).toEqual('There were no issues found.')
+    expect(trueReport.title).toEqual(config.noIssuesResultTitle)
+    expect(trueReport.summary).toEqual(config.noIssuesResultSummary)
     expect(trueReport.annotations.length).toEqual(0)
   })
 })

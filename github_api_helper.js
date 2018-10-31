@@ -1,6 +1,8 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
+const config = require('./config')
+
 /**
  * Create a check run with status in progress and sends it to Github
  * @param {String} owner owner of the repository
@@ -16,7 +18,7 @@ function inProgressAPIresponse (owner, repo, headSha, context) {
   return context.github.checks.create({
     owner,
     repo,
-    name: 'Frisk',
+    name: config.checkRunName,
     head_sha: headSha,
     status: 'in_progress',
     started_at: startedAt
