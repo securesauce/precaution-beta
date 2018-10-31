@@ -16,7 +16,7 @@ function inProgressAPIresponse (owner, repo, headSha, context) {
   return context.github.checks.create({
     owner,
     repo,
-    name: 'Frisk security linter',
+    name: 'Frisk',
     head_sha: headSha,
     status: 'in_progress',
     started_at: startedAt
