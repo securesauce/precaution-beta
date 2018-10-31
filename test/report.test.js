@@ -48,6 +48,6 @@ describe('Report generation', () => {
 
     expect(trueReport.title).toEqual('No security issues found')
     expect(trueReport.summary).toEqual('There were no issues found.')
-    expect(trueReport.annotations.length).toEqual(0)
+    expect(trueReport.annotations).toBeFalsy()
   })
 })

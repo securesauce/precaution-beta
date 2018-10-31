@@ -26,14 +26,11 @@ function annotation (issue) {
 module.exports = (results) => {
   let title, summary, annotations
 
-  if (results) {
-    results = results || { results: [] }
+  if (results && results.results.length !== 0) {
     title = 'Security issues found'
     summary = JSON.stringify(results.metrics || 'N/A', null, '\n')
     annotations = results.results.map(issue => annotation(issue))
-  }
-
-  if (!annotations || annotations.length === 0) {
+  } else {
     title = 'No security issues found'
     summary = 'There were no issues found.'
   }
