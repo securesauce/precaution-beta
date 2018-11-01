@@ -2,16 +2,8 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const { spawn } = require('child_process')
-const fs = require('fs')
 const path = require('path')
-
-function parseJSON (data) {
-  try {
-    return JSON.parse(data)
-  } catch (error) {
-    return null
-  }
-}
+const parseOutput = require('../parse_output')
 
 /**
  * Spawn a bandit process analyzing all given files in provided directory
@@ -22,7 +14,6 @@ function parseJSON (data) {
  * @returns {Promise} results json
  */
 module.exports = (directory, inputFiles, params) => {
-
   if (!inputFiles) {
     return null
   }
@@ -42,12 +33,7 @@ module.exports = (directory, inputFiles, params) => {
     banditProcess
       .on('error', reject)
       .on('close', () => {
-        fs.readFile(reportPath, 'utf8', (err, data) => {
-          if (err) return reject(err)
-
-          const results = parseJSON(data)
-          resolve(results)
-        })
+        parseOutput.readFile(reportPath, resolve, reject)
       })
   })
 }
