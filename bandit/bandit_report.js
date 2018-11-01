@@ -1,6 +1,8 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
+const config = require('../config')
+
 function annotation (issue) {
   const path = issue.filename
   const startLine = issue.line_number
@@ -27,12 +29,12 @@ module.exports = (results) => {
   let title, summary, annotations
 
   if (results && results.results.length !== 0) {
-    title = 'Security issues found'
+    title = config.issuesFoundResultTitle
     summary = JSON.stringify(results.metrics || 'N/A', null, '\n')
     annotations = results.results.map(issue => annotation(issue))
   } else {
-    title = 'No security issues found'
-    summary = 'There were no issues found.'
+    title = config.noIssuesResultTitle
+    summary = config.noIssuesResultSummary
   }
 
   return { title, summary, annotations }

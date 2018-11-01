@@ -4,7 +4,11 @@
 const config = {
   cleanupAfterRun: true,
   compareAgainstBaseline: false,
-  fileExtensions: ['.py', '.pyw', '.go']
+  fileExtensions: ['.py', '.pyw', '.go'],
+  checkRunName: 'Frisk',
+  noIssuesResultTitle: 'No security issues found',
+  noIssuesResultSummary: 'There were no issues found.',
+  issuesFoundResultTitle: 'Security issues found'
 }
 
 module.exports = config
