@@ -6,7 +6,7 @@ const config = {
   compareAgainstBaseline: false,
   fileExtensions: ['.py', '.pyw', '.go'],
   checkRunName: 'Frisk',
-  noIssuesResultTitle: 'No security issues found',
+  noIssuesResultTitle: 'No issues found',
   noIssuesResultSummary: 'There were no issues found.',
   issuesFoundResultTitle: 'Security issues found'
 }
