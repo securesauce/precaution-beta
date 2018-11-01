@@ -8,7 +8,7 @@ const config = {
   checkRunName: 'Frisk',
   noIssuesResultTitle: 'No issues found',
   noIssuesResultSummary: 'There were no issues found.',
-  issuesFoundResultTitle: 'Security issues found'
+  issuesFoundResultTitle: 'Issues found'
 }
 
 module.exports = config
