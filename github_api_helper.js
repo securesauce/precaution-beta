@@ -1,7 +1,7 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const config = require('./config')
+const { config } = require('./config')
 
 /**
  * Create a check run with status in progress and sends it to Github
@@ -52,6 +52,28 @@ async function errorResponse (owner, repo, context, runID, err) {
 }
 
 /**
+ * @param {Object[]} annotations see: https://developer.github.com/v3/checks/runs/#annotations-object-1
+ * @returns {String} the conclusion of the check run
+ * see possible conclusions on: https://developer.github.com/v3/checks/runs/#parameters-1
+ */
+function getConclusion (annotations) {
+  let conclusion = 'success'
+
+  if (annotations) {
+    for (let i = 0; i < annotations.length; ++i) {
+      if (annotations[i].annotation_level === 'failure') {
+        conclusion = 'failure'
+        break
+      } else if (annotations[i].annotation_level === 'warning') {
+        conclusion = 'neutral'
+      }
+    }
+  }
+
+  return conclusion
+}
+
+/**
  * Send results using the octokit API
  * @param {String} owner owner of the repository
  * @param {String} repo the repository
@@ -69,7 +91,7 @@ async function sendResults (owner, repo, runID, context, output) {
     repo,
     status: 'completed',
     completed_at: completedAt,
-    conclusion: 'success',
+    conclusion: getConclusion(output.annotations),
     output
   })
 }

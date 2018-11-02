@@ -11,4 +11,22 @@ const config = {
   issuesFoundResultTitle: 'Issues found'
 }
 
-module.exports = config
+const annotationsLevels = {
+  // severity levels low:
+  severityHIGHconfidenceHIGH: 'failure',
+  severityHIGHconfidenceMEDIUM: 'failure',
+  severityHIGHconfidenceLOW: 'failure',
+  // severity levels medium:
+  severityMEDIUMconfidenceHIGH: 'warning',
+  severityMEDIUMconfidenceMEDIUM: 'warning',
+  severityMEDIUMconfidenceLOW: 'warning',
+  // severity level low:
+  severityLOWconfidenceHIGH: 'warning',
+  severityLOWconfidenceMEDIUM: 'warning',
+  severityLOWconfidenceLOW: 'notice'
+}
+
+module.exports = {
+  config,
+  annotationsLevels
+}

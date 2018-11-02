@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const generateReport = require('../bandit/bandit_report')
-const config = require('../config')
+const { config } = require('../config')
 const banditResults = require('./fixtures/reports/mix_results.json')
 
 describe('Report generation', () => {
