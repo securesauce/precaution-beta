@@ -12,15 +12,15 @@ const config = {
 }
 
 const annotationsLevels = {
-  // severity levels low:
+  // severity levels HIGH:
   severityHIGHconfidenceHIGH: 'failure',
   severityHIGHconfidenceMEDIUM: 'failure',
   severityHIGHconfidenceLOW: 'failure',
-  // severity levels medium:
+  // severity levels MEDIUM:
   severityMEDIUMconfidenceHIGH: 'warning',
   severityMEDIUMconfidenceMEDIUM: 'warning',
   severityMEDIUMconfidenceLOW: 'warning',
-  // severity level low:
+  // severity level LOW:
   severityLOWconfidenceHIGH: 'warning',
   severityLOWconfidenceMEDIUM: 'warning',
   severityLOWconfidenceLOW: 'notice'
