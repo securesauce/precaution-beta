@@ -5,7 +5,7 @@ const fs = require('fs-extra')
 
 const { Application } = require('probot')
 const linterApp = require('..')
-const config = require('../config')
+const { config } = require('../config')
 
 const checkSuiteRerequestedEvent = require('./events/check_suite.rerequested.json')
 const pullRequestOpenedEvent = require('./events/pull_request.opened.json')
@@ -79,7 +79,7 @@ describe('Bandit-linter', () => {
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
         check_run_id: 1,
         status: 'completed',
-        conclusion: 'success',
+        conclusion: 'neutral',
         owner: 'owner_login',
         repo: 'repo_name',
         completed_at: expect.any(String)

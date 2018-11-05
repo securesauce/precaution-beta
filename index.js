@@ -4,7 +4,7 @@
 const runBandit = require('./bandit/bandit')
 const generateOutput = require('./bandit/bandit_report')
 const cache = require('./cache')
-const config = require('./config')
+const { config } = require('./config')
 const apiHelper = require('./github_api_helper')
 
 const rawMediaType = 'application/vnd.github.v3.raw'
