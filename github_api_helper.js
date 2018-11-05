@@ -99,3 +99,4 @@ async function sendResults (owner, repo, runID, context, output) {
 module.exports.inProgressAPIresponse = inProgressAPIresponse
 module.exports.errorResponse = errorResponse
 module.exports.sendResults = sendResults
+module.exports.getConclusion = getConclusion
