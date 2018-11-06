@@ -4230,7 +4230,7 @@ private@^0.1.8:
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
   integrity sha512-VvivMrbvd2nKkiG38qjULzlc+4Vx4wm/whI9pQD35YrARNnhxeiRktSOhSukRLFNlzg6Br/cJPet5J/u19r/mg==
 
-probot@^7.1.0:
+probot@^7.3.1:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/probot/-/probot-7.3.1.tgz#c18da943eb143d58857bbfc7842f98ef5b4585d4"
   integrity sha512-zzavBZAe1kSk3dJnhHOTmd+x1uxktuKe67KKKTNiqO+Cmov38Gsb1FCzMtjoxvatvGfVvpOg9tJb+13cQAdgCA==
