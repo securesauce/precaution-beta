@@ -1,0 +1,25 @@
+{
+  "annotations": [ 
+    { "path": "mix.py",
+      "start_line": 8,
+      "end_line": 8,
+      "annotation_level": "neutral",
+      "title": "B505:weak_cryptographic_key",
+      "message": "DSA key sizes below 2048 bits are considered breakable."
+    },
+    { "path": "mix.py",
+      "start_line": 8,
+      "end_line": 8,
+      "annotation_level": "neutral",
+      "title": "B505:weak_cryptographic_key",
+      "message": "DSA key sizes below  2048 bits are considered breakable."
+    },
+    { "path": "mix.py",
+      "start_line": 8,
+      "end_line": 8,
+      "annotation_level": "neutral",
+      "title": "B505:weak_cryptographic_key",
+      "message": "DSA key sizes below 2048 bits are considered breakable."
+    }
+  ]
+}
