@@ -24,10 +24,10 @@ function parseJSON (data) {
 module.exports.readFile = (filePath, resolve, reject) => {
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
+      console.log('Error when reading the file in parse.output function!')
       reject(err)
     }
     const results = parseJSON(data)
-
     resolve(results)
   })
 }
