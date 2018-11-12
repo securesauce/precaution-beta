@@ -1,5 +1,6 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
+
 const fs = require('fs-extra')
 
 const runBandit = require('../bandit/bandit')
@@ -23,7 +24,7 @@ describe('Bandit runner', () => {
     expect(results).toBeNull()
   })
 
-  afterAll(() => {
+  afterEach(() => {
     fs.remove('test/fixtures/bandit.json')
   })
 })
