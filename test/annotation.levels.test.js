@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const { annotationsLevels } = require('../config')
-const { getAnnotationLevel } = require('../bandit/bandit_annotations')
+const { getAnnotationLevel } = require('../annotations_levels')
 
 describe('Tests for annotation levels on issues with HIGH severity', () => {
   test('HIGH severity and HIGH confidence', () => {
