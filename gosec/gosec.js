@@ -39,7 +39,7 @@ module.exports = (workingDirectory, reportFile) => {
         if (fs.existsSync(reportPath)) {
           parse.readFile(reportPath, resolve, reject)
         } else {
-          reject(Error (config.noGoFilesFound))
+          reject(Error(config.noGoFilesFound))
         }
       })
   })
