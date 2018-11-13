@@ -9,7 +9,7 @@ const { config } = require('../config')
 
 /**
  * Spawn a gosec process analyzing all the files in a given directory.
- * @param {string} workingDirectory Input directory where files for analyze are
+ * @param {string} workingDirectory The working directory for the gosec process
  * @param {string?} reportFile Path to report file relative to working directory (default: gosec.json)
  * @returns {Promise} gosec.json
  */
