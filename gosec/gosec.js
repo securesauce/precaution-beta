@@ -11,7 +11,7 @@ const { config } = require('../config')
  * Spawn a gosec process analyzing all the files in a given directory.
  * @param {string} workingDirectory The working directory for the gosec process
  * @param {string?} reportFile Path to report file relative to working directory (default: gosec.json)
- * @returns {Promise} gosec.json
+ * @returns {Promise} The contents of the gosec report
  */
 module.exports = (workingDirectory, reportFile) => {
   if (!workingDirectory) {
