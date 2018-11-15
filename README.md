@@ -49,7 +49,7 @@ to direct GitHub webhooks to your local machine.
 
 1. Install go if you haven't: https://golang.org/doc/install 
 2. Download the latest version of gosec from here: https://github.com/securego/gosec/releases
-3. Make sure your GOPATH variable is setted with a right existing path
+3. Make sure your GOPATH variable is set to the proper path
 4. Add $GOPATH/bin into your PATH environmental variable. 
 
 
