@@ -41,7 +41,7 @@ to direct GitHub webhooks to your local machine.
 
 #### Python and Bandit
 
-1. Make sure python is installed 
+1. Make sure Python is installed 
 2. Run ```pip install -r requirements.txt```
 
 
