@@ -17,7 +17,7 @@ module.exports = (results) => {
     annotations = results.Issues.map(issue => getAnnotation(issue))
   } else {
     title = config.noIssuesResultTitle
-    summary = config.noIssuesResultSummary
+    summary = config.noIssuesGosecResultSummary
   }
 
   return { title, summary, annotations }

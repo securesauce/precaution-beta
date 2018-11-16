@@ -1,0 +1,24 @@
+{
+    "annotations": [ 
+      {   
+       "path":
+         "/Users/mvrachev/Martins/go/src/github.com/frisk/test/fixtures/go/src/bad_files/badTestFile.go",
+       "start_line": "16",
+       "end_line": "16",
+       "annotation_level": "failure",
+       "title": "G101:Potential hardcoded credentials",
+       "message":
+         "The issue is in the code: password := f62e5bcda4fae4f82370da0c6f20697b8f8447ef "
+      },
+      { 
+       "path":
+          "/Users/mvrachev/Martins/go/src/github.com/frisk/test/fixtures/go/src/bad_files/badTestFile.go",
+       "start_line": "20",
+       "end_line": "20",
+       "annotation_level": "warning",
+       "title": "G102:Binds to all network interfaces",
+       "message":
+         "The issue is in the code: net.Listen(tcp, 0.0.0.0:2000)" 
+      }  
+    ]
+}
