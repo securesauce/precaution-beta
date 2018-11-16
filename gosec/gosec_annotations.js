@@ -1,12 +1,12 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const getAnnotationLevel = require('../annotations_levels')
+const { getAnnotationLevel } = require('../annotations_levels')
 
 /**
  * @param {*} issue - an issue from which the annotation will be build
- * @return {Object} returns an annotation object as specified here: 
- * https://developer.github.com/v3/checks/runs/#annotations-object 
+ * @return {Object} returns an annotation object as specified here:
+ * https://developer.github.com/v3/checks/runs/#annotations-object
  */
 function getAnnotation (issue) {
   const path = issue.file
