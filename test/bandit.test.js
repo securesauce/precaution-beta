@@ -15,7 +15,17 @@ describe('Bandit runner', () => {
     expect(results.results[1].line_number).toBe(8)
   })
 
-  // This test is needed when a PR is without python or go files
+  test('Run Bandit without baseline on a problematic file', async () => {
+    const results = await runBandit('test/fixtures/python', ['mix.py'])
+
+    expect(results.results[0].line_number).toBe(8)
+    expect(results.results[1].line_number).toBe(11)
+    expect(results.results[2].line_number).toBe(13)
+    expect(results.results[3].line_number).toBe(15)
+    expect(results.results.length).toEqual(4)
+  })
+
+  // This test is needed when a PR is without python files
   // and when our app gets the content of the PR
   // it wouldnt get any files because we filter them.
   test('Handles empty input', async () => {
