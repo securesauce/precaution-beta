@@ -2,7 +2,7 @@
     "annotations": [ 
       {   
        "path":
-         "/Users/mvrachev/Martins/go/src/github.com/frisk/test/fixtures/go/src/bad_files/badTestFile.go",
+         "test/fixtures/go/src/bad_files/badTestFile.go",
        "start_line": "16",
        "end_line": "16",
        "annotation_level": "failure",
@@ -12,7 +12,7 @@
       },
       { 
        "path":
-          "/Users/mvrachev/Martins/go/src/github.com/frisk/test/fixtures/go/src/bad_files/badTestFile.go",
+          "test/fixtures/go/src/bad_files/badTestFile.go",
        "start_line": "20",
        "end_line": "20",
        "annotation_level": "warning",
