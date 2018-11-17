@@ -5,7 +5,7 @@
       "confidence": "LOW",
       "rule_id": "G101",
       "details": "Potential hardcoded credentials",
-      "file": "/Users/mvrachev/Martins/go/src/github.com/frisk/test/fixtures/go/src/bad_files/badTestFile.go",
+      "file": "test/fixtures/go/src/bad_files/badTestFile.go",
       "code": "password := \"f62e5bcda4fae4f82370da0c6f20697b8f8447ef\"",
       "line": "16"
     },
@@ -14,7 +14,7 @@
       "confidence": "HIGH",
       "rule_id": "G102",
       "details": "Binds to all network interfaces",
-      "file": "/Users/mvrachev/Martins/go/src/github.com/frisk/test/fixtures/go/src/bad_files/badTestFile.go",
+      "file": "test/fixtures/go/src/bad_files/badTestFile.go",
       "code": "net.Listen(\"tcp\", \"0.0.0.0:2000\")",
       "line": "20"
 	},
@@ -23,7 +23,7 @@
       "confidence": "HIGH",
       "rule_id": "G302",
       "details": "Expect file permissions to be 0600 or less",
-      "file": "/Users/mvrachev/Martins/go/src/github.com/frisk/test/fixtures/go/src/bad_files/badTestFile.go",
+      "file": "test/fixtures/go/src/bad_files/badTestFile.go",
       "code": "os.Chmod(\"/etc/passwd\", 0777)",
       "line": "27"
     },
@@ -32,7 +32,7 @@
       "confidence": "HIGH",
       "rule_id": "G302",
       "details": "Expect file permissions to be 0600 or less",
-      "file": "/Users/mvrachev/Martins/go/src/github.com/frisk/test/fixtures/go/src/bad_files/badTestFile.go",
+      "file": "test/fixtures/go/src/bad_files/badTestFile.go",
       "code": "os.Chmod(\"~/.bashrc\", 0777)",
       "line": "28"
     },
@@ -41,7 +41,7 @@
       "confidence": "HIGH",
       "rule_id": "G104",
       "details": "Errors unhandled.",
-      "file": "/Users/mvrachev/Martins/go/src/github.com/frisk/test/fixtures/go/src/bad_files/badTestFile.go",
+      "file": "test/fixtures/go/src/bad_files/badTestFile.go",
       "code": "os.Chmod(\"/etc/passwd\", 0777)",
       "line": "27"
     },
@@ -50,7 +50,7 @@
       "confidence": "HIGH",
       "rule_id": "G104",
       "details": "Errors unhandled.",
-      "file": "/Users/mvrachev/Martins/go/src/github.com/frisk/test/fixtures/go/src/bad_files/badTestFile.go",
+      "file": "test/fixtures/go/src/bad_files/badTestFile.go",
       "code": "os.Chmod(\"~/.bashrc\", 0777)",
       "line": "28"
     }
