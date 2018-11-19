@@ -14,7 +14,7 @@ describe('Spawn gosec tests', () => {
   test('Run gosec on non go files', async () => {
     await gosec('test/fixtures/go/src', 'test/fixtures/go/src/non_go_files')
       .catch((err) => {
-        const expected = config.noGoFilesFound
+        const expected = config.noGoFilesFoundErrorMessage
         expect(err.message).toEqual(expected)
       })
   })

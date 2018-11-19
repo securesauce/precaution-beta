@@ -9,7 +9,7 @@ const config = {
   noIssuesResultTitle: 'No issues found',
   noIssuesResultSummary: 'There were no issues found.',
   issuesFoundResultTitle: 'Issues found',
-  noGoFilesFound: 'There were no Go files to analyze by gosec.'
+  noGoFilesFoundErrorMessage: 'There were no Go files to analyze by gosec.'
 }
 
 const annotationsLevels = {
