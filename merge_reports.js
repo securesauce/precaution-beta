@@ -3,6 +3,11 @@
 
 const { config } = require('./config')
 
+/**
+ * @param banditReport the Bandit output converted into valid 'output' object for check run conclusion
+ * @param gosecReport the Gosec output converted into valid 'output' object for check run conclusion
+ * for reference of the 'output' object see: https://developer.github.com/v3/checks/runs/#output-object
+ */
 module.exports = (banditReport, gosecReport) => {
   let title, summary
   let annotations = []
