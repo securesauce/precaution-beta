@@ -17,7 +17,12 @@ module.exports = (banditReport, gosecReport) => {
                                 '-----------------------------------------------------------------' +
                                 '\nBandit summuary' + '\n' + banditReport.summary
 
-  annotations = annotations.concat(gosecReport.annotations, banditReport.annotations)
-
+  if (!gosecReport.annotations) {
+    annotations = banditReport.annotations
+  } else if (!banditReport.annotations) {
+    annotations = gosecReport.annotations
+  } else {
+    annotations = annotations.concat(gosecReport.annotations, banditReport.annotations)
+  }
   return { title, summary, annotations }
 }
