@@ -36,7 +36,6 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
     expect(result.title).toEqual(config.issuesFoundResultTitle)
     expect(result.summary).toEqual(expectedSummary)
     expect(result.annotations).toEqual(banditAnnotations)
-    expect(result.annotations.length).toBe(banditAnnotations.length)
   })
 
   test('No issues found by Bandit but issues are found by Gosec', () => {
@@ -54,7 +53,6 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
     expect(result.title).toEqual(config.issuesFoundResultTitle)
     expect(result.summary).toEqual(expectedSummary)
     expect(result.annotations).toEqual(gosecAnnotations)
-    expect(result.annotations.length).toBe(gosecAnnotations.length)
   })
 
   test('Issues found by Bandit and by Gosec', () => {
@@ -78,6 +76,5 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
     expect(result.title).toEqual(config.issuesFoundResultTitle)
     expect(result.summary).toEqual(expectedSummary)
     expect(result.annotations).toEqual(expectedAnnotations)
-    expect(result.annotations.length).toBe(gosecAnnotations.length + banditAnnotations.length)
   })
 })
