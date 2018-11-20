@@ -44,10 +44,10 @@ describe('Bandit-linter', () => {
         update: jest.fn().mockResolvedValue({})
       },
       pullRequests: {
-        getFiles: jest.fn().mockResolvedValue(pullRequestFiles)
+        listFiles: jest.fn().mockResolvedValue(pullRequestFiles)
       },
       repos: {
-        getContent: jest.fn(({ path }) => Promise.resolve({ data: mockFiles[path] }))
+        getContents: jest.fn(({ path }) => Promise.resolve({ data: mockFiles[path] }))
       }
     }
     app.auth = () => Promise.resolve(github)
@@ -69,12 +69,12 @@ describe('Bandit-linter', () => {
         head_sha: expect.any(String)
       }))
 
-      expect(github.pullRequests.getFiles).toHaveBeenCalledWith({
+      expect(github.pullRequests.listFiles).toHaveBeenCalledWith({
         owner: 'owner_login',
         repo: 'repo_name',
         number: 6
       })
-      // expect(github.repos.getContent).toHaveBeenCalledTimes(4)
+      // expect(github.repos.getContents).toHaveBeenCalledTimes(4)
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
         check_run_id: 1,
@@ -97,7 +97,7 @@ describe('Bandit-linter', () => {
         head_sha: expect.any(String)
       }))
 
-      expect(github.pullRequests.getFiles).toHaveBeenCalledWith({
+      expect(github.pullRequests.listFiles).toHaveBeenCalledWith({
         owner: 'owner_login',
         repo: 'repo_name',
         number: 8
@@ -113,33 +113,33 @@ describe('Bandit-linter', () => {
     })
 
     test('downloads only necessary files', async () => {
-      github.pullRequests.getFiles = jest.fn().mockResolvedValue(multipleTypesFixture)
+      github.pullRequests.listFiles = jest.fn().mockResolvedValue(multipleTypesFixture)
 
       await app.receive(pullRequestOpenedEvent)
 
-      expect(github.repos.getContent).toHaveBeenCalledWith(expect.objectContaining({
+      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
         path: 'pythonFile1.py'
       }))
-      expect(github.repos.getContent).toHaveBeenCalledWith(expect.objectContaining({
+      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
         path: 'pythonFile2.py'
       }))
-      expect(github.repos.getContent).toHaveBeenCalledWith(expect.objectContaining({
+      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
         path: 'goFile1.go'
       }))
-      expect(github.repos.getContent).toHaveBeenCalledWith(expect.objectContaining({
+      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
         path: 'goFile2.go'
       }))
-      expect(github.repos.getContent).not.toHaveBeenCalledWith(expect.objectContaining({
+      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
         path: 'AbstractJavaFileFactoryServiceProvider.java'
       }))
-      expect(github.repos.getContent).not.toHaveBeenCalledWith(expect.objectContaining({
+      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
         path: 'executable'
       }))
     })
 
     test('does not report baseline errors', async () => {
-      github.pullRequests.getFiles = jest.fn().mockResolvedValue(simplePRFixture)
-      github.repos.getContent = jest.fn(({ ref }) => Promise.resolve({ data: fileRefs[ref] }))
+      github.pullRequests.listFiles = jest.fn().mockResolvedValue(simplePRFixture)
+      github.repos.getContents = jest.fn(({ ref }) => Promise.resolve({ data: fileRefs[ref] }))
 
       const previousConfig = config.compareAgainstBaseline
       config.compareAgainstBaseline = true
@@ -178,9 +178,9 @@ describe('Bandit-linter', () => {
     })
 
     test('does not download base version of new files', async () => {
-      github.pullRequests.getFiles = jest.fn().mockResolvedValue(fileCreatedPRFixture)
+      github.pullRequests.listFiles = jest.fn().mockResolvedValue(fileCreatedPRFixture)
       // Simulate newly created file: return contents on head ref, error on base ref
-      github.repos.getContent = jest.fn(({ ref, path }) => {
+      github.repos.getContents = jest.fn(({ ref, path }) => {
         if (ref === 'head') {
           return mockFiles[path]
         } else {
@@ -190,10 +190,10 @@ describe('Bandit-linter', () => {
 
       await app.receive(pullRequestOpenedEvent)
 
-      expect(github.repos.getContent).toHaveBeenCalledWith(expect.objectContaining({
+      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
         ref: 'head_ref'
       }))
-      expect(github.repos.getContent).not.toHaveBeenCalledWith(expect.objectContaining({
+      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
         ref: 'base_ref'
       }))
     })
@@ -205,7 +205,7 @@ describe('Bandit-linter', () => {
     })
 
     test('sends an error report on crash', async () => {
-      github.pullRequests.getFiles = jest.fn().mockRejectedValue('Rejected promise')
+      github.pullRequests.listFiles = jest.fn().mockRejectedValue('Rejected promise')
 
       await app.receive(checkSuiteRerequestedEvent)
 
@@ -219,7 +219,7 @@ describe('Bandit-linter', () => {
         })
       }))
 
-      github.pullRequests.getFiles = jest.fn(() => { throw new Error('Unhandled error') })
+      github.pullRequests.listFiles = jest.fn(() => { throw new Error('Unhandled error') })
 
       await app.receive(checkSuiteRerequestedEvent)
 
