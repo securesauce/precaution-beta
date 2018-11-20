@@ -111,7 +111,7 @@ async function processPullRequest (pullRequest, context) {
 
   // See https://developer.github.com/v3/pulls/#list-pull-requests-files
   // TODO: Support pagination for >30 files (max 300)
-  const response = await context.github.pullRequests.getFiles({ owner, repo, number })
+  const response = await context.github.pullRequests.listFiles({ owner, repo, number })
 
   const filesDownloadedPromise = response.data
     .filter(file => config.fileExtensions.reduce((acc, ext) => acc || file.filename.endsWith(ext), false))
@@ -121,7 +121,7 @@ async function processPullRequest (pullRequest, context) {
       const status = fileJSON.status
 
       // See https://developer.github.com/v3/repos/contents/#get-contents
-      const headFileResp = await context.github.repos.getContent({
+      const headFileResp = await context.github.repos.getContents({
         owner,
         repo,
         path: filename,
@@ -130,7 +130,7 @@ async function processPullRequest (pullRequest, context) {
       cache.saveFile(id, 'head', filename, headFileResp.data)
 
       if (config.compareAgainstBaseline && status === 'modified') {
-        const baseFileResp = await context.github.repos.getContent({
+        const baseFileResp = await context.github.repos.getContents({
           owner,
           repo,
           path: filename,
