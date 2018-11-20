@@ -31,11 +31,27 @@ We guarantee that we use minimal amount of permissions and all of them are conne
 
 ## Local development setup
 
+### Redirect Github webhooks to your local machine
 
 Please refer to the [Probot documentation](https://probot.github.io/docs/development/#configuring-a-github-app)
 to direct GitHub webhooks to your local machine.
 
-Additionally make sure python is installed and run ```pip install -r requirements.txt```
+### Set up all dependencies
+
+
+#### Python and Bandit
+
+1. Make sure Python is installed 
+2. Run ```pip install -r requirements.txt```
+
+
+#### Go and Gosec
+
+1. Install Go if you haven't already: https://golang.org/doc/install 
+2. Download the latest version of gosec from here: https://github.com/securego/gosec/releases
+3. Make sure your GOPATH variable is set to the proper path
+4. Add $GOPATH/bin into your PATH environmental variable. 
+
 
 ### Deployment
 
