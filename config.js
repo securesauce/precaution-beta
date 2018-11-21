@@ -7,8 +7,7 @@ const config = {
   fileExtensions: ['.py', '.pyw', '.go'],
   checkRunName: 'Frisk',
   noIssuesResultTitle: 'No issues found',
-  noIssuesGosecResultSummary: 'There were no issues found by Gosec - golang security linter.',
-  noIssuesBanditResultSummary: 'There were no issues found by Bandit - python security linter.',
+  noIssuesResultSummary: 'There were no issues found.',
   issuesFoundResultTitle: 'Issues found'
 }
 

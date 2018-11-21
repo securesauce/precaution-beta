@@ -47,7 +47,7 @@ describe('Report generation', () => {
     const trueReport = generateReport(jsonResults)
 
     expect(trueReport.title).toEqual(config.noIssuesResultTitle)
-    expect(trueReport.summary).toEqual(config.noIssuesBanditResultSummary)
+    expect(trueReport.summary).toEqual(config.noIssuesResultSummary)
     expect(trueReport.annotations).toBeFalsy()
   })
 })
