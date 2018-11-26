@@ -8,7 +8,8 @@ const config = {
   checkRunName: 'Frisk',
   noIssuesResultTitle: 'No issues found',
   noIssuesResultSummary: 'There were no issues found.',
-  issuesFoundResultTitle: 'Issues found'
+  issuesFoundResultTitle: 'Issues found',
+  noGoFilesFoundErrorMessage: 'There were no Go files to analyze.'
 }
 
 const annotationsLevels = {
