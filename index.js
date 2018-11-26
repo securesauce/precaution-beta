@@ -66,15 +66,15 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     // For now only deal with one PR
     const PR = pullRequests[0]
 
-    const { inputFiles, existingPythonFiles } = resolvedPRs[0]
+    const inputFiles = resolvedPRs[0]
 
     let banditResults
     // Only run baseline scan if the directory exists (spawn will crash if working directory doesn't exist)
-    if (existingPythonFiles && config.compareAgainstBaseline && cache.branchPathExists(PR.id, 'base')) {
+    if (config.compareAgainstBaseline && cache.branchPathExists(PR.id, 'base')) {
       const baselineFile = '../baseline.json'
       await runBandit(cache.getBranchPath(PR.id, 'base'), inputFiles, { reportFile: baselineFile })
       banditResults = await runBandit(cache.getBranchPath(PR.id, 'head'), inputFiles, { baselineFile })
-    } else if (existingPythonFiles && !config.compareAgainstBaseline) {
+    } else {
       banditResults = await runBandit(cache.getBranchPath(PR.id, 'head'), inputFiles)
     }
     const output = generateOutput(banditResults, cache.getBranchPath(PR.id, 'head'))
@@ -109,8 +109,6 @@ async function processPullRequest (pullRequest, context) {
   const baseRef = pullRequest.base.ref
   const id = pullRequest.id
 
-  let existingPythonFiles = false
-
   // See https://developer.github.com/v3/pulls/#list-pull-requests-files
   // TODO: Support pagination for >30 files (max 300)
   const response = await context.github.pullRequests.listFiles({ owner, repo, number })
@@ -121,10 +119,6 @@ async function processPullRequest (pullRequest, context) {
     .map(async fileJSON => {
       const filename = fileJSON.filename
       const status = fileJSON.status
-
-      if (existingPythonFiles === false && filename.endsWith('.py')) {
-        existingPythonFiles = true
-      }
 
       // See https://developer.github.com/v3/repos/contents/#get-contents
       const headFileResp = await context.github.repos.getContents({
@@ -149,6 +143,5 @@ async function processPullRequest (pullRequest, context) {
     })
 
   // Wait until all files have been downloaded
-  const inputFiles = await Promise.all(filesDownloadedPromise)
-  return { inputFiles, existingPythonFiles }
+  return Promise.all(filesDownloadedPromise)
 }
