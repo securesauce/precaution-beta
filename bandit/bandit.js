@@ -4,7 +4,6 @@
 const { spawn } = require('child_process')
 const path = require('path')
 const parseOutput = require('../parse_output')
-const commonFunctions = require('../common_functions')
 
 /**
  * Spawn a bandit process analyzing all given files in provided directory
@@ -15,7 +14,8 @@ const commonFunctions = require('../common_functions')
  * @returns {Promise} results json
  */
 module.exports = (directory, inputFiles, params) => {
-  if (!inputFiles || !commonFunctions.doesAStringEndsWith(inputFiles, '.py')) {
+  const pyFiles = inputFiles.filter(fileName => fileName.endsWith('.py'))
+  if (pyFiles.length === 0) {
     return null
   }
 
@@ -24,7 +24,7 @@ module.exports = (directory, inputFiles, params) => {
 
   const reportPath = path.join(directory, params.reportFile)
 
-  let banditArgs = [...inputFiles, '--format', 'json', '-o', params.reportFile]
+  let banditArgs = [...pyFiles, '--format', 'json', '-o', params.reportFile]
   if (params.baselineFile) {
     banditArgs.push('--baseline', params.baselineFile)
   }
