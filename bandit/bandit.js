@@ -14,15 +14,17 @@ const parseOutput = require('../parse_output')
  * @returns {Promise} results json
  */
 module.exports = (directory, inputFiles, params) => {
-  if (!inputFiles) {
+  const pyFiles = inputFiles.filter(fileName => fileName.endsWith('.py'))
+  if (pyFiles.length === 0) {
     return null
   }
+
   params = params || {}
   params.reportFile = params.reportFile || 'bandit.json'
 
   const reportPath = path.join(directory, params.reportFile)
 
-  let banditArgs = [...inputFiles, '--format', 'json', '-o', params.reportFile]
+  let banditArgs = [...pyFiles, '--format', 'json', '-o', params.reportFile]
   if (params.baselineFile) {
     banditArgs.push('--baseline', params.baselineFile)
   }

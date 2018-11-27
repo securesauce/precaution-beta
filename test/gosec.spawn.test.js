@@ -2,31 +2,27 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const gosec = require('../gosec/gosec')
-const { config } = require('../config')
 const fs = require('fs-extra')
 
 describe('Spawn gosec tests', () => {
   test('Empty input for gosec', async () => {
-    const results = await gosec('', '')
-    expect(results).toBeFalsy()
+    const gosecResult = await gosec('', [])
+    expect(gosecResult).toBeFalsy()
   })
 
   test('Run gosec on non go files', async () => {
-    await gosec('test/fixtures/go/src', 'test/fixtures/go/src/non_go_files')
-      .catch((err) => {
-        const expected = config.noGoFilesFoundErrorMessage
-        expect(err.message).toEqual(expected)
-      })
+    const gosecResult = await gosec('test/fixtures/go/src', ['test/fixtures/go/src/non_go_files/hello_world.py'])
+    expect(gosecResult).toBeFalsy()
   })
 
   test('Run gosec on a go file without security problems', async () => {
-    const results = await gosec('test/fixtures/go/src', 'test/fixtures/go/src/secure_go_files')
-    expect(results.Issues.length).toEqual(0)
+    const gosecResult = await gosec('test/fixtures/go/src', ['test/fixtures/go/src/secure_go_files/hello_world.go'])
+    expect(gosecResult.Issues.length).toEqual(0)
   })
 
   test('Run gosec on go problematic file', async () => {
-    const results = await gosec('test/fixtures/go/src', 'test/fixtures/go/src/bad_files')
-    expect(results.Stats.found).toBeGreaterThan(0)
+    const gosecResult = await gosec('test/fixtures/go/src', ['test/fixtures/go/src/bad_files/bad_test_file.go'])
+    expect(gosecResult.Stats.found).toBeGreaterThan(0)
   })
 
   afterEach(() => {
