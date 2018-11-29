@@ -9,9 +9,16 @@ const path = require('path')
  * @param {number} repoID repository identifier
  * @param {number} prID pull request identifier
  * @param {string} branchTag branch name
+ * @param {string} app Optional: an app that calls the function. (default bandit)
+ * It's needed because gosec uses GOPATH.
  */
-function getBranchPath (repoID, prID, branchTag) {
-  return path.join('cache', repoID.toString(), prID.toString(), branchTag)
+function getBranchPath (repoID, prID, branchTag, app) {
+  app = app || 'bandit'
+  if (app === 'bandit') {
+    return path.join('cache', repoID.toString(), prID.toString(), branchTag)
+  } else if (app === 'gosec') {
+    return path.join('cache/go/src', repoID.toString(), prID.toString())
+  }
 }
 
 /**
@@ -31,9 +38,16 @@ function branchPathExists (repoID, prID, branchTag) {
  * @param {string} branchTag a tag to identify the current file revision
  * @param {string} filePath relative file path
  * @param {any} data file data
+ * @param {string} fileType Optional: file type so it knows where to save the file (default python)
+ * It's needed because go files should be in the GOPATH.
  */
-function saveFileToPRCache (repoID, prID, branchTag, filePath, data) {
-  writeFileCreateDirs(path.join('cache', repoID.toString(), prID.toString(), branchTag, filePath), data)
+function saveFileToPRCache (repoID, prID, branchTag, filePath, data, fileType) {
+  fileType = fileType || 'python'
+  if (fileType === 'go') {
+    writeFileCreateDirs(path.join('cache/go/src', repoID.toString(), prID.toString(), filePath), data)
+  } else if (fileType === 'python') {
+    writeFileCreateDirs(path.join('cache', repoID.toString(), prID.toString(), branchTag, filePath), data)
+  }
 }
 
 /**
@@ -43,6 +57,7 @@ function saveFileToPRCache (repoID, prID, branchTag, filePath, data) {
  */
 function clearPRCache (repoID, prID) {
   fs.removeSync(path.join('cache', repoID.toString(), prID.toString()))
+  fs.removeSync(path.join('cache/go/src', repoID.toString(), prID.toString()))
 }
 
 /**

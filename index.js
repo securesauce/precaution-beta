@@ -2,7 +2,10 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const runBandit = require('./bandit/bandit')
-const generateOutput = require('./bandit/bandit_report')
+const runGosec = require('./gosec/gosec')
+const generateBanditReport = require('./bandit/bandit_report')
+const generateGosecReport = require('./gosec/gosec_report')
+const mergeReports = require('./merge_reports')
 const cache = require('./cache')
 const { config } = require('./config')
 const apiHelper = require('./github_api_helper')
@@ -75,8 +78,13 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     } else {
       banditResults = await runBandit(cache.getBranchPath(repoID, PR.id, 'head'), inputFiles)
     }
-    const output = generateOutput(banditResults, cache.getBranchPath(repoID, PR.id, 'head'))
+    cache.getBranchPath(repoID, PR.id, 'head')
+    const banditReport = generateBanditReport(banditResults, cache.getBranchPath(repoID, PR.id, 'head', 'bandit'))
 
+    const gosecResults = await runGosec(cache.getBranchPath(repoID, PR.id, 'head', 'gosec'), inputFiles)
+    const gosecReport = generateGosecReport(gosecResults)
+
+    const output = mergeReports(banditReport, gosecReport)
     const resolvedCheckRunResponse = await checkRunResponse
     const runID = resolvedCheckRunResponse.data.id
     // Send results using the octokit APIrunID
@@ -87,7 +95,6 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     }
   } catch (err) {
     context.log.error(err)
-
     const resolvedCheckRunResponse = await checkRunResponse
     const runID = resolvedCheckRunResponse.data.id
     // Send error to GitHub
@@ -121,10 +128,14 @@ async function processPullRequest (pullRequest, context) {
 
       if (config.compareAgainstBaseline && status === 'modified') {
         const baseRevision = apiHelper.getContents(context, filename, baseRef)
-        cache.saveFile(repoID, id, 'base', filename, (await baseRevision).data)
+        cache.saveFile(repoID, id, 'base', filename, (await baseRevision).data, 'python')
       }
 
-      cache.saveFile(repoID, id, 'head', filename, (await headRevision).data)
+      if (filename.endsWith('.py')) {
+        cache.saveFile(repoID, id, 'head', filename, (await headRevision).data, 'python')
+      } else if (filename.endsWith('.go')) {
+        cache.saveFile(repoID, id, 'head', filename, (await headRevision).data, 'go')
+      }
 
       return filename
     })
