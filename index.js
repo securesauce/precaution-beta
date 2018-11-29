@@ -2,7 +2,10 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const runBandit = require('./bandit/bandit')
-const generateOutput = require('./bandit/bandit_report')
+const runGosec = require('./gosec/gosec')
+const generateBanditReport = require('./bandit/bandit_report')
+const generateGosecReport = require('./gosec/gosec_report')
+const mergeReports = require('./merge_reports')
 const cache = require('./cache')
 const { config } = require('./config')
 const apiHelper = require('./github_api_helper')
@@ -77,8 +80,12 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     } else {
       banditResults = await runBandit(cache.getBranchPath(PR.id, 'head'), inputFiles)
     }
-    const output = generateOutput(banditResults, cache.getBranchPath(PR.id, 'head'))
+    const banditReport = generateBanditReport(banditResults, cache.getBranchPath(PR.id, 'head'))
 
+    const gosecResults = await runGosec(cache.getBranchPath(PR.id, 'head', 'gosec'), inputFiles)
+    const gosecReport = generateGosecReport(gosecResults)
+
+    const output = mergeReports(banditReport, gosecReport)
     const resolvedCheckRunResponse = await checkRunResponse
     const runID = resolvedCheckRunResponse.data.id
     // Send results using the octokit APIrunID
@@ -89,7 +96,7 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     }
   } catch (err) {
     context.log.error(err)
-
+    console.log(err.stack)
     const resolvedCheckRunResponse = await checkRunResponse
     const runID = resolvedCheckRunResponse.data.id
     // Send error to GitHub
@@ -127,7 +134,12 @@ async function processPullRequest (pullRequest, context) {
         path: filename,
         ref,
         headers: { accept: rawMediaType } })
-      cache.saveFile(id, 'head', filename, headFileResp.data)
+
+      if (filename.endsWith('.py')) {
+        cache.saveFile(id, 'head', filename, headFileResp.data, 'python')
+      } else if (filename.endsWith('.go')) {
+        cache.saveFile(id, 'head', filename, headFileResp.data, 'go')
+      }
 
       if (config.compareAgainstBaseline && status === 'modified') {
         const baseFileResp = await context.github.repos.getContents({
@@ -136,7 +148,7 @@ async function processPullRequest (pullRequest, context) {
           path: filename,
           ref: baseRef,
           headers: { accept: rawMediaType } })
-        cache.saveFile(id, 'base', filename, baseFileResp.data)
+        cache.saveFile(id, 'base', filename, baseFileResp.data, 'python')
       }
 
       return filename
