@@ -79,7 +79,7 @@ describe('Bandit-linter', () => {
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
         check_run_id: 1,
         status: 'completed',
-        conclusion: 'neutral',
+        conclusion: 'failure',
         owner: 'owner_login',
         repo: 'repo_name',
         completed_at: expect.any(String)

@@ -12,7 +12,7 @@ function getAnnotation (issue) {
   const path = issue.filename
   const startLine = issue.line_number
   const endLine = issue.line_number
-  const annotationLevel = getAnnotationLevel(issue.severity, issue.confidence)
+  const annotationLevel = getAnnotationLevel(issue.issue_severity, issue.issue_confidence)
   const title = `${issue.test_id}:${issue.test_name}`
   const message = issue.issue_text
 
