@@ -11,21 +11,19 @@ describe('Spawn gosec tests', () => {
   })
 
   test('Run gosec on non go files', async () => {
-    const gosecResult = await gosec('test/fixtures/go/src', ['test/fixtures/go/src/non_go_files/hello_world.py'])
+    const gosecResult = await gosec('test/fixtures/go/src/non_go_files', ['hello_world.py'])
     expect(gosecResult).toBeFalsy()
   })
 
   test('Run gosec on a go file without security problems', async () => {
-    const gosecResult = await gosec('test/fixtures/go/src', ['test/fixtures/go/src/secure_go_files/hello_world.go'])
+    const gosecResult = await gosec('test/fixtures/go/src/secure_go_files', ['hello_world.go'])
     expect(gosecResult.Issues.length).toEqual(0)
+    fs.remove('test/fixtures/go/src/secure_go_files/gosec.json')
   })
 
   test('Run gosec on go problematic file', async () => {
-    const gosecResult = await gosec('test/fixtures/go/src', ['test/fixtures/go/src/bad_files/bad_test_file.go'])
+    const gosecResult = await gosec('test/fixtures/go/src/bad_files', ['bad_test_file.go'])
     expect(gosecResult.Stats.found).toBeGreaterThan(0)
-  })
-
-  afterEach(() => {
-    fs.remove('test/fixtures/go/src/gosec.json')
+    fs.remove('test/fixtures/go/src/bad_files/gosec.json')
   })
 })
