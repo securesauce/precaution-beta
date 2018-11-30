@@ -14,9 +14,9 @@
     }
   ],
   "license": "BSD-2",
-  "repository": "https://github.com/vmware/frisk.git",
-  "homepage": "https://github.com/vmware/frisk",
-  "bugs": "https://github.com/vmware/frisk/issues",
+  "repository": "https://github.com/vmware/precaution.git",
+  "homepage": "https://github.com/vmware/precaution",
+  "bugs": "https://github.com/vmware/precaution/issues",
   "keywords": [
     "github",
     "checks",
