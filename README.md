@@ -1,32 +1,32 @@
-# Frisk
+# Precaution
 
 [![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://github.com/vmware/frisk/blob/master/LICENSE.txt)
 [![Slack](https://img.shields.io/badge/slack-join%20chat%20%E2%86%92-e01563.svg)](https://code.vmware.com/web/code/join)
 
 ## Overview
 
-Frisk provides a simple, automated code review for GitHub projects by running
-code linters with a security focus on pull requests.
+Precaution provides simple, automated code reviews for GitHub projects by running
+code linters with a security focus on all pull requests.
 
 GitHub integration is made through the GitHub app interface and the checks API (beta),
 which allows results to be presented directly as inline annotations instead of
 a pass/fail status report.
 
 
-Frisk supports analysis of python files via Bandit. New languages may be added in future.
+Precaution currently supports analysis of python files via Bandit. New languages may be added in future.
 
-## Set up Frisk
+## Setup
 
-1. You can install Frisk from here: [ weblink to Frisk app installation ]
+1. You can install Precaution from here: [ weblink to Precaution app installation ]
 
-2. Then choose the profile you want to connect Frisk with.
+2. Then choose the profile you want to connect Precaution with.
 
-3. Next you have to choose over which repositories do you want to use Frisk on. 
+3. Next you have to choose which repositories you want to enable Precaution on. 
 
-4. Below that read carefully what kind of data Frisk needs to operate. 
-We guarantee that we use minimal amount of permissions and all of them are connected with the functionality of Frisk. No information will be leaked!
+4. Review and accept the permissions for the GitHub app. These are the minimal permissions required to read the pull request contents
+and communicate with the checks API.
  
-5. Done! Now Frisk is installed.
+5. Done! Now Precaution is installed on your repositories.
 
 
 ## Local development setup
@@ -72,7 +72,7 @@ Run ```npm test``` or ```yarn test```. This does not require any GitHub interact
 
 ## Contributing
 
-The Frisk project team welcomes contributions from the community. Before you start working with Frisk, please read our [Developer Certificate of Origin](https://cla.vmware.com/dco). All contributions to this repository must be signed as described on that page. Your signature certifies that you wrote the patch or have the right to pass it on as an open-source patch. For more detailed information, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
+The Precaution project team welcomes contributions from the community. Before you start working with Precaution, please read our [Developer Certificate of Origin](https://cla.vmware.com/dco). All contributions to this repository must be signed as described on that page. Your signature certifies that you wrote the patch or have the right to pass it on as an open-source patch. For more detailed information, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
