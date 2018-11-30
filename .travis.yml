@@ -1,12 +1,22 @@
 # Copyright 2018 VMware, Inc.
 # SPDX-License-Identifier: BSD-2-Clause
 
-sudo: false
+dist: "trusty"
+install:
+  - yarn install
+  - pip3 install --user -r requirements.txt
+
 language: node_js
 node_js:
   - "8"
   - "10"
   - "11"
+
+addons:
+  apt:
+    packages:
+      - "python3"
+      - "python3-pip"
 
 notifications:
   disabled: true
