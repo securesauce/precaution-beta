@@ -17,7 +17,7 @@ Precaution currently supports analysis of python files via Bandit. New languages
 
 ## Setup
 
-1. You can install Precaution from here: [ weblink to Precaution app installation ]
+1. You can install Precaution from here: https://github.com/apps/precaution
 
 2. Then choose the profile you want to connect Precaution with.
 
