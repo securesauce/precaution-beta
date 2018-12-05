@@ -7,8 +7,6 @@ const cache = require('./cache')
 const { config } = require('./config')
 const apiHelper = require('./github_api_helper')
 
-const rawMediaType = 'application/vnd.github.v3.raw'
-
 /**
  * @param {import('probot').Application} app - Probot's Application class.
  */
@@ -53,11 +51,10 @@ module.exports = app => {
  * @param {string} headSha
  */
 async function runLinterFromPRData (pullRequests, context, headSha) {
-  const { owner, repo } = context.repo()
   const repoID = context.payload.repository.id
 
-  // Send in progress status to Github
-  const checkRunResponse = apiHelper.inProgressAPIresponse(owner, repo, headSha, context)
+  // Create check run on GitHub to send early feedback
+  const checkRunResponse = apiHelper.inProgressAPIresponse(context, headSha)
 
   try {
     // Process all pull requests associated with check suite
@@ -83,7 +80,7 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     const resolvedCheckRunResponse = await checkRunResponse
     const runID = resolvedCheckRunResponse.data.id
     // Send results using the octokit APIrunID
-    apiHelper.sendResults(owner, repo, runID, context, output)
+    apiHelper.sendResults(context, runID, output)
 
     if (config.cleanupAfterRun) {
       cache.clear(repoID, PR.id)
@@ -94,7 +91,7 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     const resolvedCheckRunResponse = await checkRunResponse
     const runID = resolvedCheckRunResponse.data.id
     // Send error to GitHub
-    apiHelper.errorResponse(owner, repo, context, runID, err)
+    apiHelper.errorResponse(context, runID, err)
   }
 }
 
@@ -104,16 +101,14 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
  * @returns {Promise<string[]>} Paths to the downloaded PR files
  */
 async function processPullRequest (pullRequest, context) {
-  const { owner, repo } = context.repo()
   const number = pullRequest.number
   const ref = pullRequest.head.ref
   const baseRef = pullRequest.base.ref
   const id = pullRequest.id
   const repoID = context.payload.repository.id
 
-  // See https://developer.github.com/v3/pulls/#list-pull-requests-files
   // TODO: Support pagination for >30 files (max 300)
-  const response = await context.github.pullRequests.listFiles({ owner, repo, number })
+  const response = await apiHelper.getPRFiles(context, number)
 
   const filesDownloadedPromise = response.data
     .filter(file => config.fileExtensions.reduce((acc, ext) => acc || file.filename.endsWith(ext), false))
@@ -122,24 +117,14 @@ async function processPullRequest (pullRequest, context) {
       const filename = fileJSON.filename
       const status = fileJSON.status
 
-      // See https://developer.github.com/v3/repos/contents/#get-contents
-      const headFileResp = await context.github.repos.getContents({
-        owner,
-        repo,
-        path: filename,
-        ref,
-        headers: { accept: rawMediaType } })
-      cache.saveFile(repoID, id, 'head', filename, headFileResp.data)
+      const headRevision = apiHelper.getContents(context, filename, ref)
 
       if (config.compareAgainstBaseline && status === 'modified') {
-        const baseFileResp = await context.github.repos.getContents({
-          owner,
-          repo,
-          path: filename,
-          ref: baseRef,
-          headers: { accept: rawMediaType } })
-        cache.saveFile(repoID, id, 'base', filename, baseFileResp.data)
+        const baseRevision = apiHelper.getContents(context, filename, baseRef)
+        cache.saveFile(repoID, id, 'base', filename, (await baseRevision).data)
       }
+
+      cache.saveFile(repoID, id, 'head', filename, (await headRevision).data)
 
       return filename
     })

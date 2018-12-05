@@ -3,18 +3,19 @@
 
 const { config } = require('./config')
 
+const rawMediaType = 'application/vnd.github.v3.raw'
+
 /**
  * Create a check run with status in progress and sends it to Github
- * @param {String} owner owner of the repository
- * @param {String} repo the repository name
+ * @param {import('probot').Context} context Probot context
  * @param {String} headSha sha of the commit
- * @param {import('probot').Context} context of the pull request
- * see https://probot.github.io/api/latest/classes/context.html
- * @return {Promise<any>} see https://developer.github.com/v3/checks/runs/#response-1
+ * @return {Promise<any>}
+ * See https://developer.github.com/v3/checks/runs/#create-a-check-run
  */
-function inProgressAPIresponse (owner, repo, headSha, context) {
-  // Create the check run
+function inProgressAPIresponse (context, headSha) {
+  const { owner, repo } = context.repo()
   const startedAt = new Date().toISOString()
+
   return context.github.checks.create({
     owner,
     repo,
@@ -26,28 +27,39 @@ function inProgressAPIresponse (owner, repo, headSha, context) {
 }
 
 /**
- * Sends error conclusion with a message to Github
- * @param {String} owner owner of the repository
- * @param {String} repo the repository
- * @param {import('probot').Context} context context of the pull request; see https://probot.github.io/api/latest/classes/context.html
- * @param {Number} runId positive number for the chek run ID
- * @param {Error} err the error which occurs and stops the program
- * @returns {{Promise<any>}} see https://developer.github.com/v3/checks/runs/#response-2
+ * Get list of files modified by a pull request
+ * @param {import('probot').Context} context Probot context
+ * @param {number} number the pull request number inside the repository
+ * @returns {Promise<any>} GitHub response
+ * See https://developer.github.com/v3/pulls/#list-pull-requests-files
  */
-async function errorResponse (owner, repo, context, runID, err) {
-  const completedAt = new Date().toISOString()
+function getPRFiles (context, number) {
+  const { owner, repo } = context.repo()
 
-  return context.github.checks.update({
-    check_run_id: runID,
+  return context.github.pullRequests.listFiles({
     owner,
     repo,
-    status: 'completed',
-    completed_at: completedAt,
-    conclusion: 'failure',
-    output: {
-      title: 'App error',
-      summary: String(err)
-    }
+    number
+  })
+}
+
+/**
+ * Get file contents as raw data
+ * @param {import('probot').Context} context Probot context
+ * @param {string} path file path relative to repository root
+ * @param {string} ref sha of file revision
+ * @returns {Promise<any>} GitHub response
+ * See https://developer.github.com/v3/repos/contents/#get-contents
+ */
+function getRawFileContents (context, path, ref) {
+  const { owner, repo } = context.repo()
+
+  return context.github.repos.getContents({
+    owner,
+    repo,
+    path,
+    ref,
+    headers: { accept: rawMediaType }
   })
 }
 
@@ -74,17 +86,17 @@ function getConclusion (annotations) {
 }
 
 /**
- * Send results using the octokit API
- * @param {String} owner owner of the repository
- * @param {String} repo the repository
- * @param {Number} runID positive number for the chek run ID
- * @param {import('probot').Context} context context of the pull request; see https://probot.github.io/api/latest/classes/context.html
+ * Send check run results
+ * @param {import('probot').Context} context Probot context
+ * @param {Number} runID chek run identifier
  * @param {Object} output output from the scan of Gosec and Bandit
- * @returns {{Promise<any>}} see https://developer.github.com/v3/checks/runs/#response-2
- * see: https://developer.github.com/v3/checks/runs/#output-object-1
+ * @returns {Promise<any>} GitHub response
+ * See: https://developer.github.com/v3/checks/runs/#update-a-check-run
  */
-async function sendResults (owner, repo, runID, context, output) {
+function sendResults (context, runID, output) {
+  const { owner, repo } = context.repo()
   const completedAt = new Date().toISOString()
+
   return context.github.checks.update({
     check_run_id: runID,
     owner,
@@ -96,7 +108,35 @@ async function sendResults (owner, repo, runID, context, output) {
   })
 }
 
+/**
+ * Sends check run error conclusion
+ * @param {import('probot').Context} context Probot context
+ * @param {Number} runId chek run identifier
+ * @param {Error} err the error which occurs and stops the program
+ * @returns {Promise<any>} GitHub response
+ * See: https://developer.github.com/v3/checks/runs/#update-a-check-run
+ */
+function errorResponse (context, runID, err) {
+  const { owner, repo } = context.repo()
+  const completedAt = new Date().toISOString()
+
+  return context.github.checks.update({
+    check_run_id: runID,
+    owner,
+    repo,
+    status: 'completed',
+    completed_at: completedAt,
+    conclusion: 'failure',
+    output: {
+      title: 'App error',
+      summary: String(err)
+    }
+  })
+}
+
 module.exports.inProgressAPIresponse = inProgressAPIresponse
 module.exports.errorResponse = errorResponse
+module.exports.getPRFiles = getPRFiles
+module.exports.getContents = getRawFileContents
 module.exports.sendResults = sendResults
 module.exports.getConclusion = getConclusion
