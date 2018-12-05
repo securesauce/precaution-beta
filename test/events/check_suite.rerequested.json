@@ -29,6 +29,7 @@
       }
     },
     "repository": {
+      "id": 54321,
       "name": "repo_name",
       "full_name": "owner_login/repo_name",
       "owner": {

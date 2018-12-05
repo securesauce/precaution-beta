@@ -54,6 +54,7 @@ module.exports = app => {
  */
 async function runLinterFromPRData (pullRequests, context, headSha) {
   const { owner, repo } = context.repo()
+  const repoID = context.payload.repository.id
 
   // Send in progress status to Github
   const checkRunResponse = apiHelper.inProgressAPIresponse(owner, repo, headSha, context)
@@ -70,14 +71,14 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
 
     let banditResults
     // Only run baseline scan if the directory exists (spawn will crash if working directory doesn't exist)
-    if (config.compareAgainstBaseline && cache.branchPathExists(PR.id, 'base')) {
+    if (config.compareAgainstBaseline && cache.branchPathExists(repoID, PR.id, 'base')) {
       const baselineFile = '../baseline.json'
-      await runBandit(cache.getBranchPath(PR.id, 'base'), inputFiles, { reportFile: baselineFile })
-      banditResults = await runBandit(cache.getBranchPath(PR.id, 'head'), inputFiles, { baselineFile })
+      await runBandit(cache.getBranchPath(repoID, PR.id, 'base'), inputFiles, { reportFile: baselineFile })
+      banditResults = await runBandit(cache.getBranchPath(repoID, PR.id, 'head'), inputFiles, { baselineFile })
     } else {
-      banditResults = await runBandit(cache.getBranchPath(PR.id, 'head'), inputFiles)
+      banditResults = await runBandit(cache.getBranchPath(repoID, PR.id, 'head'), inputFiles)
     }
-    const output = generateOutput(banditResults, cache.getBranchPath(PR.id, 'head'))
+    const output = generateOutput(banditResults, cache.getBranchPath(repoID, PR.id, 'head'))
 
     const resolvedCheckRunResponse = await checkRunResponse
     const runID = resolvedCheckRunResponse.data.id
@@ -85,7 +86,7 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     apiHelper.sendResults(owner, repo, runID, context, output)
 
     if (config.cleanupAfterRun) {
-      cache.clear(PR.id)
+      cache.clear(repoID, PR.id)
     }
   } catch (err) {
     context.log.error(err)
@@ -108,6 +109,7 @@ async function processPullRequest (pullRequest, context) {
   const ref = pullRequest.head.ref
   const baseRef = pullRequest.base.ref
   const id = pullRequest.id
+  const repoID = context.payload.repository.id
 
   // See https://developer.github.com/v3/pulls/#list-pull-requests-files
   // TODO: Support pagination for >30 files (max 300)
@@ -127,7 +129,7 @@ async function processPullRequest (pullRequest, context) {
         path: filename,
         ref,
         headers: { accept: rawMediaType } })
-      cache.saveFile(id, 'head', filename, headFileResp.data)
+      cache.saveFile(repoID, id, 'head', filename, headFileResp.data)
 
       if (config.compareAgainstBaseline && status === 'modified') {
         const baseFileResp = await context.github.repos.getContents({
@@ -136,7 +138,7 @@ async function processPullRequest (pullRequest, context) {
           path: filename,
           ref: baseRef,
           headers: { accept: rawMediaType } })
-        cache.saveFile(id, 'base', filename, baseFileResp.data)
+        cache.saveFile(repoID, id, 'base', filename, baseFileResp.data)
       }
 
       return filename
