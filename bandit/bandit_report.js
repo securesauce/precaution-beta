@@ -26,13 +26,7 @@ module.exports = (results) => {
 
   if (results && results.results.length !== 0) {
     title = config.issuesFoundResultTitle
-    let severityInfo = customSummary(results.metrics._totals)
-    // Temporary output before the final pull request which will combine the
-    // the output for Gosec and Bandit is merged into master
-    summary = 'SEVERITY_HIGH: ' + severityInfo.SEVERITY_HIGH + '\n'
-    summary += 'SEVERITY_MEDIUM: ' + severityInfo.SEVERITY_MEDIUM + '\n'
-    summary += 'SEVERITY_LOW: ' + severityInfo.SEVERITY_LOW + '\n'
-
+    summary = customSummary(results.metrics._totals)
     annotations = results.results.map(issue => getAnnotation(issue))
   } else {
     title = config.noIssuesResultTitle
