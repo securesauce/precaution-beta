@@ -19,6 +19,7 @@ module.exports = (directory, inputFiles, reportFile) => {
   }
   reportFile = reportFile || 'gosec.json'
   const currentDirectory = path.join(__dirname, '../', directory)
+
   /**
   * @argument gosec command which the child process will execute
   * @argument -fmt output format of the command
@@ -26,7 +27,8 @@ module.exports = (directory, inputFiles, reportFile) => {
   * @argument reportFile the file where the output of gosec will be stored
   * @argument goFiles files which will be analyzed by gosec
   */
-  let gosecArgs = ['-fmt=json', '-out', reportFile, goFiles]
+  let args = ['-fmt=json', '-out', reportFile]
+  let gosecArgs = args.concat(goFiles)
 
   let gosecProcess = spawn('gosec', gosecArgs, { cwd: currentDirectory })
 
