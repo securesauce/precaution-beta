@@ -78,7 +78,6 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     } else {
       banditResults = await runBandit(cache.getBranchPath(repoID, PR.id, 'head'), inputFiles)
     }
-    cache.getBranchPath(repoID, PR.id, 'head')
     const banditReport = generateBanditReport(banditResults, cache.getBranchPath(repoID, PR.id, 'head', 'bandit'))
 
     const gosecResults = await runGosec(cache.getBranchPath(repoID, PR.id, 'head', 'gosec'), inputFiles)
