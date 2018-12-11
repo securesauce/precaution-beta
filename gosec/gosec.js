@@ -27,8 +27,7 @@ module.exports = (directory, inputFiles, reportFile) => {
   * @argument reportFile the file where the output of gosec will be stored
   * @argument goFiles files which will be analyzed by gosec
   */
-  let args = ['-fmt=json', '-out', reportFile]
-  let gosecArgs = args.concat(goFiles)
+  let gosecArgs = ['-fmt=json', '-out', reportFile, ...goFiles]
 
   let gosecProcess = spawn('gosec', gosecArgs, { cwd: currentDirectory })
 
