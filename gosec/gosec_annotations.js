@@ -5,11 +5,12 @@ const { getAnnotationLevel } = require('../annotations_levels')
 
 /**
  * @param {*} issue - an issue from which the annotation will be build
+ * @param {String} directory working directory for the Gosec process
  * @return {Object} returns an annotation object as specified here:
  * https://developer.github.com/v3/checks/runs/#annotations-object
  */
-function getAnnotation (issue) {
-  const path = issue.file
+function getAnnotation (issue, directory) {
+  const path = issue.file.replace(directory + '/', '')
   const startLine = issue.line
   const endLine = issue.line
   const annotationLevel = getAnnotationLevel(issue.severity, issue.confidence)
