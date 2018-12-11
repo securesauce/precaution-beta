@@ -26,4 +26,10 @@ describe('Spawn gosec tests', () => {
     expect(gosecResult.Stats.found).toBeGreaterThan(0)
     fs.remove('test/fixtures/go/src/bad_files/gosec.json')
   })
+
+  test('Run gosec multiple go files', async () => {
+    const gosecResult = await gosec('test/fixtures/go/src/multiple_bad_files/', ['bad_test_file.go', 'networking_binding_test.go', 'randNumTest.go'])
+    expect(gosecResult.Stats.found).toBeGreaterThan(0)
+    fs.remove('test/fixtures/go/src/multiple_bad_files/gosec.json')
+  })
 })
