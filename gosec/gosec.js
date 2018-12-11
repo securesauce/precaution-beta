@@ -4,6 +4,7 @@
 const { spawn } = require('child_process')
 const parse = require('../parse_output.js')
 const path = require('path')
+const fs = require('fs')
 
 /**
  * Spawn a gosec process analyzing all the files in a given directory.
@@ -30,10 +31,19 @@ module.exports = (directory, inputFiles, reportFile) => {
 
   let gosecProcess = spawn('gosec', gosecArgs, { cwd: currentDirectory })
 
+  let logs = ''
+  gosecProcess.stderr.on('data', function (data) {
+    logs += data.toString()
+  })
+
   return new Promise((resolve, reject) => {
     gosecProcess
       .on('error', reject)
       .on('close', () => {
+        if (!fs.existsSync(path.join(currentDirectory, reportFile))) {
+          console.log('The logs for Gosec are: ')
+          console.log(logs)
+        }
         parse.readFile(path.join(currentDirectory, reportFile), resolve, reject)
       })
   })
