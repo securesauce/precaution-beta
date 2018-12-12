@@ -10,6 +10,8 @@ const cache = require('./cache')
 const { config } = require('./config')
 const apiHelper = require('./github_api_helper')
 
+const path = require('path')
+
 /**
  * @param {import('probot').Application} app - Probot's Application class.
  */
@@ -81,7 +83,7 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     const banditReport = generateBanditReport(banditResults, cache.getBranchPath(repoID, PR.id, 'head', 'bandit'))
 
     const gosecResults = await runGosec(cache.getBranchPath(repoID, PR.id, 'head', 'gosec'), inputFiles)
-    const gosecReport = generateGosecReport(gosecResults)
+    const gosecReport = generateGosecReport(gosecResults, path.resolve(cache.getBranchPath(repoID, PR.id, 'head', 'gosec')))
 
     const output = mergeReports(banditReport, gosecReport)
     const resolvedCheckRunResponse = await checkRunResponse

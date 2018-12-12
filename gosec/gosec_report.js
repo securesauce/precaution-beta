@@ -26,16 +26,16 @@ function customSummary (gosecAnnotations) {
 }
 
 /**
- * Convert gosec json output into valid 'output' object for check run conclusion
- * @param {any} results gosec json output
+ *
+ * @param {*} results results gosec json output
+ * @param {*} directory working directory for Gosec process
  */
-module.exports = (results) => {
+module.exports = (results, directory) => {
   let title, summary, annotations
-
   if (results && results.Issues.length !== 0) {
     title = config.issuesFoundResultTitle
     summary = customSummary(results.Issues)
-    annotations = results.Issues.map(issue => getAnnotation(issue))
+    annotations = results.Issues.map(issue => getAnnotation(issue, directory))
   } else {
     title = config.noIssuesResultTitle
     summary = config.noIssuesResultSummary
