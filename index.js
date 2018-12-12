@@ -83,7 +83,7 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     const banditReport = generateBanditReport(banditResults, cache.getBranchPath(repoID, PR.id, 'head', 'bandit'))
 
     const gosecResults = await runGosec(cache.getBranchPath(repoID, PR.id, 'head', 'gosec'), inputFiles)
-    const gosecReport = generateGosecReport(gosecResults, path.join(__dirname, cache.getBranchPath(repoID, PR.id, 'head', 'gosec')))
+    const gosecReport = generateGosecReport(gosecResults, path.resolve(cache.getBranchPath(repoID, PR.id, 'head', 'gosec')))
 
     const output = mergeReports(banditReport, gosecReport)
     const resolvedCheckRunResponse = await checkRunResponse

@@ -19,7 +19,7 @@ module.exports = (directory, inputFiles, reportFile) => {
     return null
   }
   reportFile = reportFile || 'gosec.json'
-  const currentDirectory = path.join(__dirname, '../', directory)
+  const currentDirectory = path.resolve(directory)
   /**
   * @argument gosec command which the child process will execute
   * @argument -fmt output format of the command
