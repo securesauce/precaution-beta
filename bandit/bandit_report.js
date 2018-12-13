@@ -3,16 +3,15 @@
 
 const { config } = require('../config')
 const { getAnnotation } = require('./bandit_annotations')
+const { countIssueLevels } = require('../annotations_levels')
 
-function customSummary (banditSummary) {
-  let severityHigh = banditSummary['SEVERITY.HIGH']
-  let severityMedium = banditSummary['SEVERITY.MEDIUM']
-  let severityLow = banditSummary['SEVERITY.LOW']
+function customSummary (annotations) {
+  const { errors, warnings, notices } = countIssueLevels(annotations)
 
   const summary = {
-    'SEVERITY_HIGH': severityHigh,
-    'SEVERITY_MEDIUM': severityMedium,
-    'SEVERITY_LOW': severityLow
+    'errors': errors,
+    'warnings': warnings,
+    'notices': notices
   }
   return summary
 }
@@ -26,8 +25,9 @@ module.exports = (results) => {
 
   if (results && results.results.length !== 0) {
     title = config.issuesFoundResultTitle
-    summary = customSummary(results.metrics._totals)
     annotations = results.results.map(issue => getAnnotation(issue))
+
+    summary = customSummary(annotations)
   } else {
     title = config.noIssuesResultTitle
     summary = config.noIssuesResultSummary

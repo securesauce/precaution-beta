@@ -3,6 +3,23 @@
 
 const { annotationsLevels } = require('./config')
 
+function countAnnotationLevels (annotations) {
+  let errors = 0
+  let warnings = 0
+  let notices = 0
+
+  for (let i = 0; i < annotations.length; ++i) {
+    if (annotations[i].annotation_level === 'failure') {
+      errors += 1
+    } else if (annotations[i].annotation_level === 'warning') {
+      warnings += 1
+    } else {
+      notices += 1
+    }
+  }
+  return { errors, warnings, notices }
+}
+
 /**
  * @param {String} severity issue severity from bandit analyze
  * @param {String} confidence issue confidence from bandit analyze
@@ -37,3 +54,4 @@ function getAnnotationLevel (severity, confidence) {
 }
 
 module.exports.getAnnotationLevel = getAnnotationLevel
+module.exports.countIssueLevels = countAnnotationLevels

@@ -3,24 +3,15 @@
 
 const { config } = require('../config')
 const { getAnnotation } = require('./gosec_annotations')
+const { countIssueLevels } = require('../annotations_levels')
 
-function customSummary (gosecAnnotations) {
-  let severityHigh = 0
-  let severityMedium = 0
-  let severityLow = 0
-
-  for (let i = 0; i < gosecAnnotations.length; ++i) {
-    switch (gosecAnnotations[i].severity) {
-      case 'HIGH' : severityHigh += 1; break
-      case 'MEDIUM' : severityMedium += 1; break
-      case 'LOW' : severityLow += 1
-    }
-  }
+function customSummary (annotations) {
+  const { errors, warnings, notices } = countIssueLevels(annotations)
 
   const summary = {
-    'SEVERITY_HIGH': severityHigh,
-    'SEVERITY_MEDIUM': severityMedium,
-    'SEVERITY_LOW': severityLow
+    'errors': errors,
+    'warnings': warnings,
+    'notices': notices
   }
   return summary
 }
@@ -34,8 +25,8 @@ module.exports = (results, directory) => {
   let title, summary, annotations
   if (results && results.Issues.length !== 0) {
     title = config.issuesFoundResultTitle
-    summary = customSummary(results.Issues)
-    annotations = results.Issues.map(issue => getAnnotation(issue, directory))
+    annotations = results.Issues.map(issue => getAnnotation(issue))
+    summary = customSummary(annotations)
   } else {
     title = config.noIssuesResultTitle
     summary = config.noIssuesResultSummary

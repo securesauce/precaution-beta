@@ -2,28 +2,42 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const { config } = require('./config')
+/**
+ * @param {Number} errors the amount of errors found
+ * @param {Number} warnings the amount of warnings found
+ * @param {Number} notices the amount of notices found
+ */
+function getCorrectSummary (errors, warnings, notices) {
+  let summary = ''
+  let errorPrefix = errors > 1 ? 'There where ' + errors + ' errors found.' : 'There is 1 error found.'
+  let warningPrefix = warnings > 1 ? 'There where ' + warnings + ' warnings found.' : 'There is 1 warning found.'
+  let noticePrefix = notices > 1 ? 'There where ' + notices + ' notices found.' : 'There is 1 notices.'
 
-function mergeSummaries (banditSummary, gosecSummary) {
-  let severityHigh, severityMedium, severityLow
+  let errorsMessage = errorPrefix + ' The errors are marked in red.\n'
+  let warningsMessage = warningPrefix + ' The warnings are marked with orange.\n'
+  let noticesMessage = noticePrefix + ' The notices are marked in white.\n'
 
-  if (banditSummary === config.noIssuesResultSummary) {
-    severityHigh = gosecSummary.SEVERITY_HIGH
-    severityMedium = gosecSummary.SEVERITY_MEDIUM
-    severityLow = gosecSummary.SEVERITY_LOW
-  } else if (gosecSummary === config.noIssuesResultSummary) {
-    severityHigh = banditSummary.SEVERITY_HIGH
-    severityMedium = banditSummary.SEVERITY_MEDIUM
-    severityLow = banditSummary.SEVERITY_LOW
-  } else {
-    severityHigh = banditSummary.SEVERITY_HIGH + gosecSummary.SEVERITY_HIGH
-    severityMedium = banditSummary.SEVERITY_MEDIUM + gosecSummary.SEVERITY_MEDIUM
-    severityLow = banditSummary.SEVERITY_LOW + gosecSummary.SEVERITY_LOW
-  }
-  let summary = 'SEVERITY_HIGH: ' + severityHigh + '\n'
-  summary += 'SEVERITY_MEDIUM: ' + severityMedium + '\n'
-  summary += 'SEVERITY_LOW: ' + severityLow + '\n'
+  summary += errors !== 0 ? errorsMessage : ''
+  summary += warnings !== 0 ? warningsMessage : ''
+  summary += notices !== 0 ? noticesMessage : ''
 
   return summary
+}
+
+function mergeSummaries (banditSummary, gosecSummary) {
+  let result = { errors: 0, warnings: 0, notices: 0 }
+
+  if (banditSummary === config.noIssuesResultSummary) {
+    result = gosecSummary
+  } else if (gosecSummary === config.noIssuesResultSummary) {
+    result = banditSummary
+  } else {
+    result.errors = banditSummary.errors + gosecSummary.errors
+    result.warnings = banditSummary.warnings + gosecSummary.warnings
+    result.notices = banditSummary.notices + gosecSummary.notices
+  }
+
+  return getCorrectSummary(result.errors, result.warnings, result.notices)
 }
 
 /**
