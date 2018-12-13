@@ -1,3 +1,8 @@
+<!--
+    Copyright 2018 VMware, Inc.
+    SPDX-License-Identifier: BSD-2-Clause
+-->
+
 # Precaution
 
 [![Build Status](https://travis-ci.com/vmware/precaution.svg?branch=master)](https://travis-ci.com/vmware/precaution)

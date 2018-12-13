@@ -1,4 +1,7 @@
-
+<!--
+    Copyright 2018 VMware, Inc.
+    SPDX-License-Identifier: BSD-2-Clause
+-->
 
 # Contributing to Precaution
 
