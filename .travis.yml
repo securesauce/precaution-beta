@@ -7,7 +7,8 @@ install:
   - yarn install
   - pip3 install --user -r requirements.txt
   - curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GOPATH/bin 1.2.0
-  - export GOPATH=$GOPATH:/home/travis/build/vmware/precaution/test/fixtures/go
+  - export GOPATH=$GOPATH:${TRAVIS_BUILD_DIR}/test/fixtures/go
+
 language: node_js
 node_js:
   - "8"
