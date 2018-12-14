@@ -3,15 +3,15 @@
 
 const { config } = require('./config')
 /**
- * @param {Number} errors the amount of errors found
- * @param {Number} warnings the amount of warnings found
- * @param {Number} notices the amount of notices found
+ * @param {Number} errors the number of errors found
+ * @param {Number} warnings the number of warnings found
+ * @param {Number} notices the number of notices found
  */
 function getCorrectSummary (errors, warnings, notices) {
   let summary = ''
-  let errorPrefix = errors > 1 ? 'There where ' + errors + ' errors found.' : 'There is 1 error found.'
-  let warningPrefix = warnings > 1 ? 'There where ' + warnings + ' warnings found.' : 'There is 1 warning found.'
-  let noticePrefix = notices > 1 ? 'There where ' + notices + ' notices found.' : 'There is 1 notices.'
+  let errorPrefix = errors > 1 ? 'There were ' + errors + ' errors found.' : 'There was 1 error found.'
+  let warningPrefix = warnings > 1 ? 'There were ' + warnings + ' warnings found.' : 'There was 1 warning found.'
+  let noticePrefix = notices > 1 ? 'There were ' + notices + ' notices found.' : 'There was 1 notices.'
 
   let errorsMessage = errorPrefix + ' The errors are marked in red.\n'
   let warningsMessage = warningPrefix + ' The warnings are marked with orange.\n'
