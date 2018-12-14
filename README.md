@@ -21,7 +21,7 @@ a pass/fail status report.
 
 Precaution currently supports analysis of python files via Bandit. New languages may be added in future.
 
-## Setup
+## Installing Precaution on a GitHub repository
 
 1. You can install Precaution from here: https://github.com/apps/precaution
 
@@ -34,32 +34,30 @@ and communicate with the checks API.
  
 5. Done! Now Precaution is installed on your repositories.
 
+## Setting up a manual deployment
 
-## Local development setup
+This requires two distinct steps: setting up the environment and dependencies, and registering a GitHub application pointing to your own running copy.
 
-### Redirect Github webhooks to your local machine
-
-Please refer to the [Probot documentation](https://probot.github.io/docs/development/#configuring-a-github-app)
-to direct GitHub webhooks to your local machine.
-
-### Set up all dependencies
-
+### Install dependencies
 
 #### Python and Bandit
 
 1. Make sure Python is installed 
 2. Run ```pip install -r requirements.txt```
 
-
 #### Go and Gosec
 
 1. Install Go if you haven't already: https://golang.org/doc/install 
-2. Download the latest version of gosec from here: https://github.com/securego/gosec/releases
-3. Make sure your GOPATH variable is set to the proper path
-4. Add $GOPATH/bin into your PATH environmental variable. 
+2. Download the latest version of gosec:
+```go get github.com/securego/gosec```
+3. Add $GOPATH/bin into your PATH:
+```export PATH=$PATH:${GOPATH}/bin```
+4. Add the work folder to your gopath:
+```export GOPATH=$GOPATH:$(pwd)/cache/go```
 
+### Register the app
 
-### Deployment
+Please refer to the [GitHub app documentation](https://developer.github.com/apps/building-your-first-github-app/#one-time-setup) to get started on registering your own running instance of the app.
 
 This app requires the following **GitHub permissions** :
 * Checks: **Read** and **Write**
@@ -67,6 +65,13 @@ This app requires the following **GitHub permissions** :
 * Code: **Read**
 
 Additionnally the app should subscribe to the **Pull requests** event.
+
+### Redirect Github webhooks to your local machine
+
+This can be useful when you are doing development work on Precaution itself and need a simple solution to trace the webhooks sent by GitHub and receive them without exposing your app to the internet.
+
+Please refer to the [Probot documentation](https://probot.github.io/docs/development/#configuring-a-github-app)
+to direct GitHub webhooks to your local machine.
 
 ### Testing
 
