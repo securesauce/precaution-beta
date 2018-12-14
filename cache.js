@@ -56,8 +56,8 @@ function saveFileToPRCache (repoID, prID, branchTag, filePath, data, fileType) {
  * @param {number} prID pull request identifier
  */
 function clearPRCache (repoID, prID) {
-  fs.removeSync(path.join('cache', repoID.toString(), prID.toString()))
-  fs.removeSync(path.join('cache/go/src', repoID.toString(), prID.toString()))
+  fs.removeSync(path.join('cache', repoID.toString()))
+  fs.removeSync(path.join('cache/go/src', repoID.toString()))
 }
 
 /**
