@@ -6,6 +6,17 @@ const parse = require('../parse_output.js')
 const path = require('path')
 const fs = require('fs')
 
+function checkIfValidContent (pathToFile) {
+  const fd = fs.openSync(pathToFile, 0o666)
+  var buf = Buffer.alloc(7)
+
+  fs.readSync(fd, buf, 0, 7, 0)
+  if (buf.toString() !== 'package') {
+    return false
+  }
+  return true
+}
+
 /**
  * Spawn a gosec process analyzing all the files in a given directory.
  * @param {string} directory Working directory for the Gosec process
@@ -14,12 +25,15 @@ const fs = require('fs')
  * @returns {Promise} The contents of the gosec report
  */
 module.exports = (directory, inputFiles, reportFile) => {
-  const goFiles = inputFiles.filter(fileName => fileName.endsWith('.go'))
+  const currentDirectory = path.resolve(directory)
+
+  const goFiles = inputFiles.filter(fileName => fileName.endsWith('.go') &&
+           checkIfValidContent(path.join(currentDirectory, fileName)))
+
   if (goFiles.length === 0) {
     return null
   }
   reportFile = reportFile || 'gosec.json'
-  const currentDirectory = path.resolve(directory)
   /**
   * @argument gosec command which the child process will execute
   * @argument -fmt output format of the command
