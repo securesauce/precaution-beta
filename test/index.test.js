@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const fs = require('fs-extra')
+const path = require('path')
 
 const { Application } = require('probot')
 const linterApp = require('..')
@@ -10,8 +11,7 @@ const { config } = require('../config')
 const checkSuiteRerequestedEvent = require('./events/check_suite.rerequested.json')
 const pullRequestOpenedEvent = require('./events/pull_request.opened.json')
 
-const pullRequestFiles = require('./fixtures/pull_request.files.json')
-const multipleTypesFixture = require('./fixtures/pull_request.files.unhandled.json')
+const samplePythonPRFixture = require('./fixtures/pull_request.files.python.json')
 const simplePRFixture = require('./fixtures/pull_request.files.modified.json')
 const fileCreatedPRFixture = require('./fixtures/pull_request.files.added.json')
 
@@ -23,12 +23,11 @@ describe('Bandit-linter', () => {
   let fileRefs = {}
 
   beforeAll(() => {
-    mockFiles['examples/httplib_https.py'] = fs.readFileSync('test/fixtures/python/https.py', 'utf8')
-    mockFiles['examples/httpoxy_cgihandler.py'] = fs.readFileSync('test/fixtures/python/cgi.py', 'utf8')
-    mockFiles['examples/httpoxy_twisted_directory.py'] = fs.readFileSync('test/fixtures/python/twisted_dir.py', 'utf8')
-    mockFiles['examples/httpoxy_twisted_script.py'] = fs.readFileSync('test/fixtures/python/twisted_script.py', 'utf8')
-    mockFiles['key_sizes.py'] = fs.readFileSync('test/fixtures/python/key_sizes.py', 'utf8')
-    mockFiles['key_sizes.old.py'] = fs.readFileSync('test/fixtures/python/key_sizes.old.py', 'utf8')
+    // Load all files in the fixture directories and map names to contents in mock object
+    const files = fs.readdirSync('test/fixtures/python', { encoding: 'utf8' })
+    files.forEach((filename) => {
+      mockFiles[filename] = fs.readFileSync(path.join('test/fixtures/python', filename), 'utf8')
+    })
 
     fileRefs['head_ref'] = mockFiles['key_sizes.py']
     fileRefs['base_ref'] = mockFiles['key_sizes.old.py']
@@ -44,7 +43,7 @@ describe('Bandit-linter', () => {
         update: jest.fn().mockResolvedValue({})
       },
       pullRequests: {
-        listFiles: jest.fn().mockResolvedValue(pullRequestFiles)
+        listFiles: jest.fn().mockResolvedValue(samplePythonPRFixture)
       },
       repos: {
         getContents: jest.fn(({ path }) => Promise.resolve({ data: mockFiles[path] }))
@@ -74,7 +73,6 @@ describe('Bandit-linter', () => {
         repo: 'repo_name',
         number: 6
       })
-      // expect(github.repos.getContents).toHaveBeenCalledTimes(4)
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
         check_run_id: 1,
@@ -109,31 +107,6 @@ describe('Bandit-linter', () => {
         owner: 'owner_login',
         repo: 'repo_name',
         completed_at: expect.any(String)
-      }))
-    })
-
-    test('downloads only necessary files', async () => {
-      github.pullRequests.listFiles = jest.fn().mockResolvedValue(multipleTypesFixture)
-
-      await app.receive(pullRequestOpenedEvent)
-
-      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
-        path: 'pythonFile1.py'
-      }))
-      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
-        path: 'pythonFile2.py'
-      }))
-      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
-        path: 'goFile1.go'
-      }))
-      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
-        path: 'goFile2.go'
-      }))
-      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
-        path: 'AbstractJavaFileFactoryServiceProvider.java'
-      }))
-      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
-        path: 'executable'
       }))
     })
 
