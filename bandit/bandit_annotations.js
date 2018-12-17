@@ -14,7 +14,7 @@ function getAnnotation (issue) {
   const endLine = issue.line_number
   const annotationLevel = getAnnotationLevel(issue.issue_severity, issue.issue_confidence)
   const title = `${issue.test_id}:${issue.test_name}`
-  const message = issue.issue_text
+  const message = issue.issue_text + '\nMore info about the issue can be found here:\n' + issue.more_info
 
   return {
     path,
