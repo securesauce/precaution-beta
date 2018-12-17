@@ -46,7 +46,13 @@ describe('Bandit-linter', () => {
         listFiles: jest.fn().mockResolvedValue(samplePythonPRFixture)
       },
       repos: {
-        getContents: jest.fn(({ path }) => Promise.resolve({ data: mockFiles[path] }))
+        getContents: jest.fn(({ path }) => {
+          if (mockFiles.hasOwnProperty(path)) {
+            return Promise.resolve({ data: mockFiles[path] })
+          } else {
+            throw Error(path + ' fixture does not exist')
+          }
+        })
       }
     }
     app.auth = () => Promise.resolve(github)
@@ -189,20 +195,6 @@ describe('Bandit-linter', () => {
         output: expect.objectContaining({
           title: 'App error',
           summary: 'Rejected promise'
-        })
-      }))
-
-      github.pullRequests.listFiles = jest.fn(() => { throw new Error('Unhandled error') })
-
-      await app.receive(checkSuiteRerequestedEvent)
-
-      expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
-        check_run_id: 1,
-        status: 'completed',
-        conclusion: 'failure',
-        output: expect.objectContaining({
-          title: 'App error',
-          summary: 'Error: Unhandled error'
         })
       }))
     })
