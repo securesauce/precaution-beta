@@ -9,13 +9,13 @@ const { config } = require('./config')
  */
 function getCorrectSummary (errors, warnings, notices) {
   let summary = ''
-  let errorPrefix = errors > 1 ? 'There were ' + errors + ' errors found.' : 'There was 1 error found.'
-  let warningPrefix = warnings > 1 ? 'There were ' + warnings + ' warnings found.' : 'There was 1 warning found.'
-  let noticePrefix = notices > 1 ? 'There were ' + notices + ' notices found.' : 'There was 1 notices.'
 
-  let errorsMessage = errorPrefix + ' The errors are marked in red.\n'
-  let warningsMessage = warningPrefix + ' The warnings are marked with orange.\n'
-  let noticesMessage = noticePrefix + ' The notices are marked in white.\n'
+  let errorsMessage = errors > 1 ? ':x: There were ' + errors + ' errors found.\n'
+    : ':x: There was 1 error found.\n'
+  let warningsMessage = warnings > 1 ? ':warning: There were ' + warnings + ' warnings found.\n'
+    : ':warning: There was 1 warning found.\n'
+  let noticesMessage = notices > 1 ? ':information_source: There were ' + notices + ' notices found.\n'
+    : ':information_source: There was 1 notice found.\n'
 
   summary += errors !== 0 ? errorsMessage : ''
   summary += warnings !== 0 ? warningsMessage : ''

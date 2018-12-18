@@ -24,9 +24,9 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
     let banditReport = { title: config.issuesFoundResultTitle, summary: banditSummary, annotations: banditAnnotations }
     let gosecReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
 
-    let expectedSummary = 'There was 1 error found. The errors are marked in red.\n' +
-      'There was 1 warning found. The warnings are marked with orange.\n' +
-      'There was 1 notices. The notices are marked in white.\n'
+    let expectedSummary = ':x: There was 1 error found.\n' +
+      ':warning: There was 1 warning found.\n' +
+      ':information_source: There was 1 notice found.\n'
 
     const result = mergeReports(banditReport, gosecReport)
     expect(result.title).toEqual(config.issuesFoundResultTitle)
@@ -38,8 +38,8 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
     let banditReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
     let gosecReport = { title: config.issuesFoundResultTitle, summary: gosecSummary, annotations: gosecAnnotations }
 
-    let expectedSummary = 'There was 1 error found. The errors are marked in red.\n' +
-      'There was 1 warning found. The warnings are marked with orange.\n'
+    let expectedSummary = ':x: There was 1 error found.\n' +
+      ':warning: There was 1 warning found.\n'
 
     const result = mergeReports(banditReport, gosecReport)
     expect(result.title).toEqual(config.issuesFoundResultTitle)
@@ -51,9 +51,9 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
     let banditReport = { title: config.issuesFoundResultTitle, summary: banditSummary, annotations: banditAnnotations }
     let gosecReport = { title: config.issuesFoundResultTitle, summary: gosecSummary, annotations: gosecAnnotations }
 
-    let expectedSummary = 'There were 2 errors found. The errors are marked in red.\n' +
-      'There were 2 warnings found. The warnings are marked with orange.\n' +
-      'There was 1 notices. The notices are marked in white.\n'
+    let expectedSummary = ':x: There were 2 errors found.\n' +
+      ':warning: There were 2 warnings found.\n' +
+      ':information_source: There was 1 notice found.\n'
 
     let expectedAnnotations = []
     expectedAnnotations = expectedAnnotations.concat(gosecAnnotations, banditAnnotations)
