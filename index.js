@@ -1,16 +1,10 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const runBandit = require('./bandit/bandit')
-const runGosec = require('./gosec/gosec')
-const generateBanditReport = require('./bandit/bandit_report')
-const generateGosecReport = require('./gosec/gosec_report')
-const mergeReports = require('./merge_reports')
 const cache = require('./cache')
 const { config } = require('./config')
 const apiHelper = require('./github_api_helper')
-
-const path = require('path')
+const { runLinters } = require('./runner')
 
 /**
  * @param {import('probot').Application} app - Probot's Application class.
@@ -80,17 +74,10 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
     const PR = pullRequests[0]
     const inputFiles = resolvedPRs[0]
 
-    const banditResults = await runBandit(cache.getBranchPath(repoID, PR.id, 'bandit'), inputFiles)
-    const banditReport = generateBanditReport(banditResults, cache.getBranchPath(repoID, PR.id, 'bandit'))
+    const report = await runLinters(inputFiles, repoID, PR.id)
 
-    const gosecResults = await runGosec(cache.getBranchPath(repoID, PR.id, 'gosec'), inputFiles)
-    const gosecReport = generateGosecReport(gosecResults, path.resolve(cache.getBranchPath(repoID, PR.id, 'gosec')))
-
-    const output = mergeReports(banditReport, gosecReport)
-    const resolvedCheckRunResponse = await checkRunResponse
-    const runID = resolvedCheckRunResponse.data.id
-    // Send results using the octokit APIrunID
-    apiHelper.sendResults(context, runID, output)
+    const runID = (await checkRunResponse).data.id
+    apiHelper.sendResults(context, runID, report)
 
     if (config.cleanupAfterRun) {
       cache.clear(repoID, PR.id)
