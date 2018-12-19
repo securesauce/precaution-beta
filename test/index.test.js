@@ -12,10 +12,15 @@ const checkSuiteRerequestedEvent = require('./events/check_suite.rerequested.jso
 const pullRequestOpenedEvent = require('./events/pull_request.opened.json')
 
 const samplePythonPRFixture = require('./fixtures/pull_request.files.python.json')
+const sampleMixedPRFixture = require('./fixtures/pull_request.files.mix.json')
 const simplePRFixture = require('./fixtures/pull_request.files.modified.json')
 const fileCreatedPRFixture = require('./fixtures/pull_request.files.added.json')
 
 const fileNotFoundResponse = require('./fixtures/github/getContent.response.missing.json')
+
+function mockPRContents (github, PR) {
+  github.pullRequests.listFiles = jest.fn().mockResolvedValue(PR)
+}
 
 describe('Bandit-linter', () => {
   let app, github
@@ -23,7 +28,7 @@ describe('Bandit-linter', () => {
   let fileRefs = {}
 
   beforeAll(() => {
-    // Load all files in the fixture directories and map names to contents in mock object
+    // Load all python files in the fixture directories and map names to contents in mock object
     const files = fs.readdirSync('test/fixtures/python', { encoding: 'utf8' })
     files.forEach((filename) => {
       mockFiles[filename] = fs.readFileSync(path.join('test/fixtures/python', filename), 'utf8')
@@ -37,6 +42,7 @@ describe('Bandit-linter', () => {
     app = new Application()
     app.load(linterApp)
 
+    // Setup the default mocks for API calls
     github = {
       checks: {
         create: jest.fn().mockResolvedValue({ data: { id: 1 } }),
@@ -116,8 +122,31 @@ describe('Bandit-linter', () => {
       }))
     })
 
+    test('handles PRs with mixed file types', async () => {
+      // Manually load in the go file contents
+      mockFiles['networking_binding.go'] = fs.readFileSync('test/fixtures/go/src/multiple_bad_files/networking_binding.go', 'utf8')
+      mockFiles['bad_test_file.go'] = fs.readFileSync('test/fixtures/go/src/multiple_bad_files/bad_test_file.go', 'utf8')
+
+      mockPRContents(github, sampleMixedPRFixture)
+
+      await app.receive(pullRequestOpenedEvent)
+
+      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
+        path: 'https.py'
+      }))
+      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
+        path: 'networking_binding.go'
+      }))
+      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
+        path: 'AbstractJavaFileFactoryServiceProvider.java'
+      }))
+      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
+        path: 'executable'
+      }))
+    })
+
     test('does not report baseline errors', async () => {
-      github.pullRequests.listFiles = jest.fn().mockResolvedValue(simplePRFixture)
+      mockPRContents(github, simplePRFixture)
       github.repos.getContents = jest.fn(({ ref }) => Promise.resolve({ data: fileRefs[ref] }))
 
       const previousConfig = config.compareAgainstBaseline
@@ -157,7 +186,8 @@ describe('Bandit-linter', () => {
     })
 
     test('does not download base version of new files', async () => {
-      github.pullRequests.listFiles = jest.fn().mockResolvedValue(fileCreatedPRFixture)
+      mockPRContents(github, fileCreatedPRFixture)
+
       // Simulate newly created file: return contents on head ref, error on base ref
       github.repos.getContents = jest.fn(({ ref, path }) => {
         if (ref === 'head') {

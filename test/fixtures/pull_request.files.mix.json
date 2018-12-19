@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "filename": "https.py",
+      "status": "added"
+    },
+    {
+      "filename": "networking_binding.go",
+      "status": "added"
+    },
+    {
+      "filename": "bad_test_file.go",
+      "status": "added"
+    },
+    {
+      "filename": "AbstractJavaFileFactoryServiceProvider.java",
+      "status": "added"
+    },
+    {
+      "filename": "executable",
+      "status": "added"
+    }
+  ]
+}
