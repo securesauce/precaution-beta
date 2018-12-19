@@ -201,7 +201,7 @@ describe('Bandit-linter', () => {
     test('cleans up after performing checks', async () => {
       await app.receive(checkSuiteRerequestedEvent)
 
-      expect(fs.existsSync('cache/210857942')).toBeFalsy()
+      expect(fs.existsSync('cache/54321/2108')).toBeFalsy()
     })
 
     test('sends an error report on crash', async () => {
