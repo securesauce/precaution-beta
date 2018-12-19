@@ -9,6 +9,12 @@ const merge = require('./merge_reports')
 const Bandit = require('./linters/bandit')
 const Gosec = require('./linters/gosec')
 
+/**
+ * Run all linters on specified files
+ * @param {string[]} files Files to analyze
+ * @param {string} repoID 
+ * @param {string} prID 
+ */
 async function runLinters (files, repoID, prID) {
   // TODO: Sync with file download location resolution
   const bandit = new Bandit()
@@ -20,9 +26,11 @@ async function runLinters (files, repoID, prID) {
 }
 
 /**
- *
- * @param {*} linter
- * @param {string[]} files
+ * Linter driver logic: spawn a child process, gather the results and build
+ * a report
+ * @param {*} linter A linter instance
+ * @param {string} workingDirectory The path to the process working directory
+ * @param {string[]} files Files to analyze
  * @returns {Promise<any>} A promise for the report object with the analysis results,
  *                         or null if there were no files to analyze
  */
