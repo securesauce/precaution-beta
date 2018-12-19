@@ -6,7 +6,6 @@ const path = require('path')
 
 const { Application } = require('probot')
 const linterApp = require('..')
-const { config } = require('../config')
 
 const checkSuiteRerequestedEvent = require('./events/check_suite.rerequested.json')
 const checkRunRerequestEvent = require('./events/check_run_rerequested.json')
@@ -14,10 +13,6 @@ const pullRequestOpenedEvent = require('./events/pull_request.opened.json')
 
 const samplePythonPRFixture = require('./fixtures/pull_request.files.python.json')
 const sampleMixedPRFixture = require('./fixtures/pull_request.files.mix.json')
-const simplePRFixture = require('./fixtures/pull_request.files.modified.json')
-const fileCreatedPRFixture = require('./fixtures/pull_request.files.added.json')
-
-const fileNotFoundResponse = require('./fixtures/github/getContent.response.missing.json')
 
 function mockPRContents (github, PR) {
   github.pullRequests.listFiles = jest.fn().mockResolvedValue(PR)
@@ -170,68 +165,6 @@ describe('Bandit-linter', () => {
       }))
       expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
         path: 'executable'
-      }))
-    })
-
-    test('does not report baseline errors', async () => {
-      mockPRContents(github, simplePRFixture)
-      github.repos.getContents = jest.fn(({ ref }) => Promise.resolve({ data: fileRefs[ref] }))
-
-      const previousConfig = config.compareAgainstBaseline
-      config.compareAgainstBaseline = true
-
-      await app.receive(pullRequestOpenedEvent)
-
-      config.compareAgainstBaseline = previousConfig
-
-      // Is there a better way to do this?
-
-      expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
-        output: expect.objectContaining({
-          annotations: expect.arrayContaining([
-            expect.objectContaining({
-              start_line: 5
-            }),
-            expect.objectContaining({
-              start_line: 8
-            })
-          ])
-        })
-      }))
-
-      expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
-        output: expect.objectContaining({
-          annotations: expect.not.arrayContaining([
-            expect.objectContaining({
-              start_line: 13
-            }),
-            expect.objectContaining({
-              start_line: 16
-            })
-          ])
-        })
-      }))
-    })
-
-    test('does not download base version of new files', async () => {
-      mockPRContents(github, fileCreatedPRFixture)
-
-      // Simulate newly created file: return contents on head ref, error on base ref
-      github.repos.getContents = jest.fn(({ ref, path }) => {
-        if (ref === 'head') {
-          return mockFiles[path]
-        } else {
-          return fileNotFoundResponse
-        }
-      })
-
-      await app.receive(pullRequestOpenedEvent)
-
-      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
-        ref: 'head_ref'
-      }))
-      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
-        ref: 'base_ref'
       }))
     })
 
