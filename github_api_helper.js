@@ -72,11 +72,11 @@ function getConclusion (annotations) {
   let conclusion = 'success'
 
   if (annotations) {
-    for (let i = 0; i < annotations.length; ++i) {
-      if (annotations[i].annotation_level === 'failure') {
+    for (let annotation of annotations) {
+      if (annotation.annotation_level === 'failure') {
         conclusion = 'failure'
         break
-      } else if (annotations[i].annotation_level === 'warning') {
+      } else if (annotation.annotation_level === 'warning') {
         conclusion = 'neutral'
       }
     }

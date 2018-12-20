@@ -3,16 +3,36 @@
 
 const { config } = require('../config')
 const { getAnnotation } = require('./bandit_annotations')
+const { countIssueLevels } = require('../annotations_levels')
 
-function customSummary (banditSummary) {
-  let severityHigh = banditSummary['SEVERITY.HIGH']
-  let severityMedium = banditSummary['SEVERITY.MEDIUM']
-  let severityLow = banditSummary['SEVERITY.LOW']
+/**
+ * @param {*} issues the issues found by Bandit
+ */
+function createMoreInfoLinks (issues) {
+  let issuesMap = new Map()
+  let moreInfo = 'For more information about the issues follow the links: \n'
+
+  for (let issue of issues) {
+    if (issuesMap.has(issue.test_id) === false) {
+      issuesMap.set(issue.test_id)
+      const text = `${issue.test_id}:${issue.test_name}`
+      moreInfo += `[${text}](${issue.more_info})\n`
+    }
+  }
+  return moreInfo
+}
+
+/**
+ * @param {*} annotations all issues found by Bandit wrapped in the annotation object
+ * see: https://developer.github.com/v3/checks/runs/#annotations-object
+ */
+function customSummary (annotations) {
+  const { errors, warnings, notices } = countIssueLevels(annotations)
 
   const summary = {
-    'SEVERITY_HIGH': severityHigh,
-    'SEVERITY_MEDIUM': severityMedium,
-    'SEVERITY_LOW': severityLow
+    'errors': errors,
+    'warnings': warnings,
+    'notices': notices
   }
   return summary
 }
@@ -22,15 +42,16 @@ function customSummary (banditSummary) {
  * @param {any} results Bandit json output
  */
 module.exports = (results) => {
-  let title, summary, annotations
+  let title, summary, annotations, moreInfo
 
   if (results && results.results.length !== 0) {
     title = config.issuesFoundResultTitle
-    summary = customSummary(results.metrics._totals)
     annotations = results.results.map(issue => getAnnotation(issue))
+    summary = customSummary(annotations)
+    moreInfo = createMoreInfoLinks(results.results)
   } else {
     title = config.noIssuesResultTitle
     summary = config.noIssuesResultSummary
   }
-  return { title, summary, annotations }
+  return { title, summary, annotations, moreInfo }
 }
