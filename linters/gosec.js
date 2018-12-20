@@ -38,7 +38,7 @@ module.exports = class Gosec {
 
   /**
    * Builds the command line args to pass to the linter process
-   * @param {string[]} files 
+   * @param {string[]} files
    */
   args (files) {
     return ['-fmt=json', '-out', this.reportPath, './...']

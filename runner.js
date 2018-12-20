@@ -12,8 +12,8 @@ const Gosec = require('./linters/gosec')
 /**
  * Run all linters on specified files
  * @param {string[]} files Files to analyze
- * @param {string} repoID 
- * @param {string} prID 
+ * @param {string} repoID
+ * @param {string} prID
  */
 async function runLinters (files, repoID, prID) {
   // TODO: Sync with file download location resolution

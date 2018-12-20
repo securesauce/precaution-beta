@@ -38,7 +38,7 @@ module.exports = class Bandit {
 
   /**
    * Builds the command line args to pass to the linter process
-   * @param {string[]} files 
+   * @param {string[]} files
    */
   args (files) {
     return ['--format', 'json', '-o', this.reportPath, ...files]
