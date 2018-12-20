@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const fs = require('fs-extra')
+const path = require('path')
 
 const { Application } = require('probot')
 const linterApp = require('..')
@@ -10,12 +11,16 @@ const { config } = require('../config')
 const checkSuiteRerequestedEvent = require('./events/check_suite.rerequested.json')
 const pullRequestOpenedEvent = require('./events/pull_request.opened.json')
 
-const pullRequestFiles = require('./fixtures/pull_request.files.json')
-const multipleTypesFixture = require('./fixtures/pull_request.files.unhandled.json')
+const samplePythonPRFixture = require('./fixtures/pull_request.files.python.json')
+const sampleMixedPRFixture = require('./fixtures/pull_request.files.mix.json')
 const simplePRFixture = require('./fixtures/pull_request.files.modified.json')
 const fileCreatedPRFixture = require('./fixtures/pull_request.files.added.json')
 
 const fileNotFoundResponse = require('./fixtures/github/getContent.response.missing.json')
+
+function mockPRContents (github, PR) {
+  github.pullRequests.listFiles = jest.fn().mockResolvedValue(PR)
+}
 
 describe('Bandit-linter', () => {
   let app, github
@@ -23,12 +28,11 @@ describe('Bandit-linter', () => {
   let fileRefs = {}
 
   beforeAll(() => {
-    mockFiles['examples/httplib_https.py'] = fs.readFileSync('test/fixtures/python/https.py', 'utf8')
-    mockFiles['examples/httpoxy_cgihandler.py'] = fs.readFileSync('test/fixtures/python/cgi.py', 'utf8')
-    mockFiles['examples/httpoxy_twisted_directory.py'] = fs.readFileSync('test/fixtures/python/twisted_dir.py', 'utf8')
-    mockFiles['examples/httpoxy_twisted_script.py'] = fs.readFileSync('test/fixtures/python/twisted_script.py', 'utf8')
-    mockFiles['key_sizes.py'] = fs.readFileSync('test/fixtures/python/key_sizes.py', 'utf8')
-    mockFiles['key_sizes.old.py'] = fs.readFileSync('test/fixtures/python/key_sizes.old.py', 'utf8')
+    // Load all python files in the fixture directories and map names to contents in mock object
+    const files = fs.readdirSync('test/fixtures/python', { encoding: 'utf8' })
+    files.forEach((filename) => {
+      mockFiles[filename] = fs.readFileSync(path.join('test/fixtures/python', filename), 'utf8')
+    })
 
     fileRefs['head_ref'] = mockFiles['key_sizes.py']
     fileRefs['base_ref'] = mockFiles['key_sizes.old.py']
@@ -38,16 +42,23 @@ describe('Bandit-linter', () => {
     app = new Application()
     app.load(linterApp)
 
+    // Setup the default mocks for API calls
     github = {
       checks: {
         create: jest.fn().mockResolvedValue({ data: { id: 1 } }),
         update: jest.fn().mockResolvedValue({})
       },
       pullRequests: {
-        listFiles: jest.fn().mockResolvedValue(pullRequestFiles)
+        listFiles: jest.fn().mockResolvedValue(samplePythonPRFixture)
       },
       repos: {
-        getContents: jest.fn(({ path }) => Promise.resolve({ data: mockFiles[path] }))
+        getContents: jest.fn(({ path }) => {
+          if (mockFiles.hasOwnProperty(path)) {
+            return Promise.resolve({ data: mockFiles[path] })
+          } else {
+            throw Error(path + ' fixture does not exist')
+          }
+        })
       }
     }
     app.auth = () => Promise.resolve(github)
@@ -74,7 +85,6 @@ describe('Bandit-linter', () => {
         repo: 'repo_name',
         number: 6
       })
-      // expect(github.repos.getContents).toHaveBeenCalledTimes(4)
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
         check_run_id: 1,
@@ -112,22 +122,20 @@ describe('Bandit-linter', () => {
       }))
     })
 
-    test('downloads only necessary files', async () => {
-      github.pullRequests.listFiles = jest.fn().mockResolvedValue(multipleTypesFixture)
+    test('handles PRs with mixed file types', async () => {
+      // Manually load in the go file contents
+      mockFiles['networking_binding.go'] = fs.readFileSync('test/fixtures/go/src/multiple_bad_files/networking_binding.go', 'utf8')
+      mockFiles['bad_test_file.go'] = fs.readFileSync('test/fixtures/go/src/multiple_bad_files/bad_test_file.go', 'utf8')
+
+      mockPRContents(github, sampleMixedPRFixture)
 
       await app.receive(pullRequestOpenedEvent)
 
       expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
-        path: 'pythonFile1.py'
+        path: 'https.py'
       }))
       expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
-        path: 'pythonFile2.py'
-      }))
-      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
-        path: 'goFile1.go'
-      }))
-      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
-        path: 'goFile2.go'
+        path: 'networking_binding.go'
       }))
       expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
         path: 'AbstractJavaFileFactoryServiceProvider.java'
@@ -138,7 +146,7 @@ describe('Bandit-linter', () => {
     })
 
     test('does not report baseline errors', async () => {
-      github.pullRequests.listFiles = jest.fn().mockResolvedValue(simplePRFixture)
+      mockPRContents(github, simplePRFixture)
       github.repos.getContents = jest.fn(({ ref }) => Promise.resolve({ data: fileRefs[ref] }))
 
       const previousConfig = config.compareAgainstBaseline
@@ -178,7 +186,8 @@ describe('Bandit-linter', () => {
     })
 
     test('does not download base version of new files', async () => {
-      github.pullRequests.listFiles = jest.fn().mockResolvedValue(fileCreatedPRFixture)
+      mockPRContents(github, fileCreatedPRFixture)
+
       // Simulate newly created file: return contents on head ref, error on base ref
       github.repos.getContents = jest.fn(({ ref, path }) => {
         if (ref === 'head') {
@@ -216,20 +225,6 @@ describe('Bandit-linter', () => {
         output: expect.objectContaining({
           title: 'App error',
           summary: 'Rejected promise'
-        })
-      }))
-
-      github.pullRequests.listFiles = jest.fn(() => { throw new Error('Unhandled error') })
-
-      await app.receive(checkSuiteRerequestedEvent)
-
-      expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
-        check_run_id: 1,
-        status: 'completed',
-        conclusion: 'failure',
-        output: expect.objectContaining({
-          title: 'App error',
-          summary: 'Error: Unhandled error'
         })
       }))
     })

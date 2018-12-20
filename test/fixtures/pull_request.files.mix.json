@@ -1,19 +1,15 @@
 {
   "data": [
     {
-      "filename": "pythonFile1.py",
+      "filename": "https.py",
       "status": "added"
     },
     {
-      "filename": "pythonFile2.py",
+      "filename": "networking_binding.go",
       "status": "added"
     },
     {
-      "filename": "goFile1.go",
-      "status": "added"
-    },
-    {
-      "filename": "goFile2.go",
+      "filename": "bad_test_file.go",
       "status": "added"
     },
     {
