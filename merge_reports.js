@@ -4,18 +4,20 @@
 const { config } = require('./config')
 
 /**
+ * Creates the final summary based on how many errors, warnings and notices there is
+ * so the final summary to be meaningful.
  * @param {Number} errors the number of errors found
  * @param {Number} warnings the number of warnings found
  * @param {Number} notices the number of notices found
  */
-function getCorrectSummary (errors, warnings, notices) {
+function createFinalSummaryMessage (errors, warnings, notices) {
   let summary = ''
 
-  let errorsMessage = errors > 1 ? ':x: ' + errors + ' errors\n'
+  const errorsMessage = errors > 1 ? ':x: ' + errors + ' errors\n'
     : ':x: 1 error\n'
-  let warningsMessage = warnings > 1 ? ':warning: ' + warnings + ' warnings\n'
+  const warningsMessage = warnings > 1 ? ':warning: ' + warnings + ' warnings\n'
     : ':warning: 1 warning\n'
-  let noticesMessage = notices > 1 ? ':information_source: ' + notices + ' notices\n'
+  const noticesMessage = notices > 1 ? ':information_source: ' + notices + ' notices\n'
     : ':information_source: 1 notice\n'
 
   summary += errors !== 0 ? errorsMessage : ''
@@ -38,7 +40,7 @@ function mergeSummaries (banditSummary, gosecSummary) {
     result.notices = banditSummary.notices + gosecSummary.notices
   }
 
-  return getCorrectSummary(result.errors, result.warnings, result.notices)
+  return createFinalSummaryMessage(result.errors, result.warnings, result.notices)
 }
 
 /**
@@ -47,17 +49,20 @@ function mergeSummaries (banditSummary, gosecSummary) {
  * for reference of the 'output' object see: https://developer.github.com/v3/checks/runs/#output-object
  */
 module.exports = (banditReport, gosecReport) => {
-  let title, summary, text
+  let title = ''
+  let summary = ''
+  let text = ''
   let annotations = []
 
   if (banditReport.title === config.noIssuesResultTitle && banditReport.title === gosecReport.title) {
     title = config.noIssuesResultTitle
     summary = config.noIssuesResultSummary
-  } else {
-    title = config.issuesFoundResultTitle
-    summary = mergeSummaries(banditReport.summary, gosecReport.summary)
-    text = banditReport.moreInfo
+    return { title, summary }
   }
+
+  title = config.issuesFoundResultTitle
+  summary = mergeSummaries(banditReport.summary, gosecReport.summary)
+  text = banditReport.moreInfo
 
   if (!gosecReport.annotations) {
     annotations = banditReport.annotations

@@ -33,9 +33,8 @@ describe('Report generation', () => {
 
   test('Handles empty reports', () => {
     const report = generateReport(null)
-
-    expect(report).toHaveProperty('summary')
     expect(report).toHaveProperty('annotations')
+    expect(report).toHaveProperty('summary')
     expect(report).toHaveProperty('title')
   })
 
@@ -48,6 +47,6 @@ describe('Report generation', () => {
 
     expect(trueReport.title).toEqual(config.noIssuesResultTitle)
     expect(trueReport.summary).toEqual(config.noIssuesResultSummary)
-    expect(trueReport.annotations).toBeFalsy()
+    expect(trueReport.annotations.length).toEqual(0)
   })
 })

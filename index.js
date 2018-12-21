@@ -50,7 +50,7 @@ module.exports = app => {
 }
 
 /**
- * Retrive files modified by pull request(s), run linter and send results
+ * Retrieve files modified by pull request(s), run linter and send results
  * @param {any[]} pullRequests
  * @param {import('probot').Context} context
  * @param {string} headSha

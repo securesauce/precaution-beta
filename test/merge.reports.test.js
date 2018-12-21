@@ -11,20 +11,19 @@ const gosecSummary = { errors: 1, warnings: 1, notices: 0 }
 
 describe('Merge reports tests from Bandit and Gosec reports', () => {
   test('No issues found from both Gosec and Bandit', () => {
-    let banditReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
-    let gosecReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
+    const banditReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
+    const gosecReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
 
     const result = mergeReports(banditReport, gosecReport)
     expect(result.title).toEqual(config.noIssuesResultTitle)
     expect(result.summary).toEqual(config.noIssuesResultSummary)
-    expect(result.annotations.length).toBe(0)
   })
 
   test('Issues found by Bandit and no issues found by Gosec', () => {
-    let banditReport = { title: config.issuesFoundResultTitle, summary: banditSummary, annotations: banditAnnotations }
-    let gosecReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
+    const banditReport = { title: config.issuesFoundResultTitle, summary: banditSummary, annotations: banditAnnotations }
+    const gosecReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
 
-    let expectedSummary = ':x: 1 error\n' +
+    const expectedSummary = ':x: 1 error\n' +
       ':warning: 1 warning\n' +
       ':information_source: 1 notice\n'
 
@@ -35,10 +34,10 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
   })
 
   test('No issues found by Bandit but issues are found by Gosec', () => {
-    let banditReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
-    let gosecReport = { title: config.issuesFoundResultTitle, summary: gosecSummary, annotations: gosecAnnotations }
+    const banditReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
+    const gosecReport = { title: config.issuesFoundResultTitle, summary: gosecSummary, annotations: gosecAnnotations }
 
-    let expectedSummary = ':x: 1 error\n' +
+    const expectedSummary = ':x: 1 error\n' +
       ':warning: 1 warning\n'
 
     const result = mergeReports(banditReport, gosecReport)
@@ -48,10 +47,10 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
   })
 
   test('Issues found by Bandit and by Gosec', () => {
-    let banditReport = { title: config.issuesFoundResultTitle, summary: banditSummary, annotations: banditAnnotations }
-    let gosecReport = { title: config.issuesFoundResultTitle, summary: gosecSummary, annotations: gosecAnnotations }
+    const banditReport = { title: config.issuesFoundResultTitle, summary: banditSummary, annotations: banditAnnotations }
+    const gosecReport = { title: config.issuesFoundResultTitle, summary: gosecSummary, annotations: gosecAnnotations }
 
-    let expectedSummary = ':x: 2 errors\n' +
+    const expectedSummary = ':x: 2 errors\n' +
       ':warning: 2 warnings\n' +
       ':information_source: 1 notice\n'
 
