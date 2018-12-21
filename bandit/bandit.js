@@ -4,6 +4,7 @@
 const { spawn } = require('child_process')
 const path = require('path')
 const parseOutput = require('../parse_output')
+const fs = require('fs')
 
 /**
  * Spawn a bandit process analyzing all given files in provided directory
@@ -25,6 +26,11 @@ module.exports = (directory, inputFiles, params) => {
   const reportPath = path.join(directory, params.reportFile)
 
   let banditArgs = [...pyFiles, '--format', 'json', '-o', params.reportFile]
+
+  if (fs.existsSync(path.resolve('.bandit'))) {
+    banditArgs.push('-c', path.resolve('.bandit'))
+  }
+
   if (params.baselineFile) {
     banditArgs.push('--baseline', params.baselineFile)
   }
