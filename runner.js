@@ -42,19 +42,28 @@ function run (linter, workingDirectory, files) {
   const process = spawn(linter.name, linter.args(filtered), { cwd: workingDirectory })
   const reportFilePath = path.join(workingDirectory, linter.reportPath)
 
+  let errorLogs = ''
+  process.stderr.on('data', (chunk) => {
+    errorLogs += chunk.toString()
+  })
+
   // Promise report generation
   return new Promise((resolve, reject) => {
     process.on('error', reject)
-    process.on('close', () => reportHandler(linter, reportFilePath, resolve, reject))
+    process.on('close', () => reportHandler(linter, reportFilePath, resolve, reject, errorLogs))
   })
 }
 
-function reportHandler (linter, reportFilePath, resolve, reject) {
-  fs.readFile(reportFilePath, (err, data) => {
-    if (err) { reject(err) } else {
+function reportHandler (linter, reportFilePath, resolve, reject, logs) {
+  fs.readFile(reportFilePath, 'utf8', (err, data) => {
+    if (err) {
+      console.log('Could not read linter results: ' + reportFilePath)
+      console.log('stderr: ' + logs)
+      return reject(err)
+    } else {
       const results = linter.parseResults(data)
       const report = linter.generateReport(results)
-      resolve(report)
+      return resolve(report)
     }
   })
 }
