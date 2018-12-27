@@ -1,0 +1,13 @@
+# Copyright 2018 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause
+
+# That way you can say which security linters do you want to skip
+skip_linters: 'bandit'
+
+# Example of Bandit specific options
+# All of them can be found here: https://github.com/PyCQA/bandit#configuration
+bandit:
+ targets: './test'
+ exclude: './cache'
+ skips: 'B101'
+ tests: ['B309', 'B203']
