@@ -23,3 +23,28 @@ addons:
 
 notifications:
   disabled: true
+
+# For reference see:
+#    https://docs.travis-ci.com/user/deployment/heroku/
+#    https://docs.travis-ci.com/user/deployment/
+deploy:
+  # This section below makes Travis to deploy to dev-precaution dyno (Heroku application)
+  # whenever a successful build is created on the master branch
+  - provider: heroku
+    api_key:
+      secure: 0d0zoGySiD6vywyrOWE2384y2s/sNE8KOTiEwKT7XBFWNmDfQPFRepTbgs0YffydjVFlLuTeziyio0Er+u6EgqfFdRP/9Sy33hkzhV/IWLJhwTyUsh/CFHOlS8z7OJhviemCd7+CpYdf+dBhiHF8zEKGqfhXyqUd5oYLXVxY8t1z69GpHYLm4UR024tyaVNY/M/3sEkKm2qVcHYvqFpTA0CIKBTwE3r3qfS38eQM2chLin7cGVimuRcGfk7PI1kRtJWZtyaslxKQtWXEwFBAkGxH26OomoJBfCg98XlEWEy6koZY0EyToHKxJGWGcNM/JKKWJ6uIdsh8ghfh6++VUMd1d7xlYHi6W30X5BP/kTuLf0sVyvLuq+KuTJWn2KeWQI/ULSxZzdv0Hl731KoLt819f1EBb+dvx5znYZkqJgNGLQsrYZhbm0p4dKlT4QtKlyklsaaEsDtaqotFtEHo2PEBuTBvvKKYDTb0VIgvMBgEzhUn5GhFhRfWwFpS12vGCfpUbaoA+KgyuqZKdqkjvAr2ehg9Eo3jthsojGKSd71sASBSTfKG5H9/YS/rmfOu7PssLkaVseaR6rV2gITVMClgLdw2nqBwx0muNFscMy5/C+K7SwAyfz0AqCqhhRaIgqOwKanj44YN3BuJyf6aX+hKBXMUAQLyQ3SO5KUb750=
+    app:
+      master: dev-precaution
+
+  # This section below makes Travis to deploy to precaution dyno (Heroku application)
+  # whenever a successful build is created on the master branch and the commit is tagged
+  - provider: heroku
+    api_key:
+      secure: 0d0zoGySiD6vywyrOWE2384y2s/sNE8KOTiEwKT7XBFWNmDfQPFRepTbgs0YffydjVFlLuTeziyio0Er+u6EgqfFdRP/9Sy33hkzhV/IWLJhwTyUsh/CFHOlS8z7OJhviemCd7+CpYdf+dBhiHF8zEKGqfhXyqUd5oYLXVxY8t1z69GpHYLm4UR024tyaVNY/M/3sEkKm2qVcHYvqFpTA0CIKBTwE3r3qfS38eQM2chLin7cGVimuRcGfk7PI1kRtJWZtyaslxKQtWXEwFBAkGxH26OomoJBfCg98XlEWEy6koZY0EyToHKxJGWGcNM/JKKWJ6uIdsh8ghfh6++VUMd1d7xlYHi6W30X5BP/kTuLf0sVyvLuq+KuTJWn2KeWQI/ULSxZzdv0Hl731KoLt819f1EBb+dvx5znYZkqJgNGLQsrYZhbm0p4dKlT4QtKlyklsaaEsDtaqotFtEHo2PEBuTBvvKKYDTb0VIgvMBgEzhUn5GhFhRfWwFpS12vGCfpUbaoA+KgyuqZKdqkjvAr2ehg9Eo3jthsojGKSd71sASBSTfKG5H9/YS/rmfOu7PssLkaVseaR6rV2gITVMClgLdw2nqBwx0muNFscMy5/C+K7SwAyfz0AqCqhhRaIgqOwKanj44YN3BuJyf6aX+hKBXMUAQLyQ3SO5KUb750=
+    app: precaution
+    on:
+    # "all_branches" is necessary because of a limitation: 
+    # https://docs.travis-ci.com/user/deployment/heroku/#conditional-deploys
+      all_branches: true
+      tags: true
+
