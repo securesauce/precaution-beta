@@ -23,3 +23,13 @@ addons:
 
 notifications:
   disabled: true
+ 
+deploy:
+  provider: heroku
+  api_key:
+    secure: eyvcQG1MjcQCbWFOMGfdFOUYm7+yv01WOjjlWIHp3aDlYWt8OFelQcqQmcOgSAGuCyJJdwWVEK8470NRJeAzwuTEbW8FgSrkQN82/7zoQ9Q5pdsydtn1S2+cvH56YL8fZqwkN9mwIsYJCqzUPpydqgFlI8OMr/ND3kJI2r1u366A96NpPO/TH5NSa5DTA2w6bKZTONgmxG8Lvpov/VrilNWDVSiUU+DU/7cKJ9LjNreBuD/2M5GSFEl8ujClb9qJ9lGzV6aYkm0hBarqC5q2tlyK/NXboD8ObMyEoCHES1WXwI52eUiMMZzoX0ovS2Aa8PPsyPTqlEJnQe7IYcVhOsnZwMgtiQJjMV3pxDlmEk1NOyIlxNheXFzQjMgiEmocQZwXtLj5yYg02BC7S2ZWzI24HWzyiPRN6mHSRjQxlXqbX9FUusNbXbUCiLMmNWQzLqaXxW6ns/M1uFRgS2GlIUx1qNXv1k3YS/5mR5e8s/Nzs8dllItOV1s+49BHk+SvCRyaX3NleR/lJl+IBV2xpFk4uetqsS3a891gpXxYEpkO5Qcev7++JbRvpRs+agycQ27vkBX75sie527w+jIHte5q0dR7JY3If3Xh8YkNkINs7/lE+OYhAP1Z9HKM3aev19kDNAecXtscoI8TyLALAam0VSJS1x+vAXA5UNb9108=
+  app: dev-precaution
+  on:
+    repo: vmware/precaution
+    branch: deploy
+  strategy: git
