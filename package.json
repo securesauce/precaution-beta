@@ -47,7 +47,9 @@
     "testEnvironment": "node",
     "roots": [
       "test"
-    ]
+    ],
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   },
   "standard": {
     "globals": [
