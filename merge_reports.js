@@ -4,7 +4,7 @@
 const { config } = require('./config')
 
 /**
- * Creates the final summary based on how many errors, warnings and notices there is
+ * Creates the final summary message describing the number of errors, warnings and notices.
  * so the final summary to be meaningful.
  * @param {Number} errors the number of errors found
  * @param {Number} warnings the number of warnings found
