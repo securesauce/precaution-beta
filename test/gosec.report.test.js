@@ -9,7 +9,7 @@ describe('Gosec report tests', () => {
     const trueReport = gosecReport('', '')
     expect(trueReport.title).toEqual(config.noIssuesResultTitle)
     expect(trueReport.summary).toEqual(config.noIssuesResultSummary)
-    expect(trueReport.annotations).toBeFalsy()
+    expect(trueReport.annotations.length).toEqual(0)
   })
 
   test('Generate valid report', () => {

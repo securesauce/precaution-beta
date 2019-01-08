@@ -6,26 +6,26 @@ const mergeReports = require('../merge_reports')
 const banditAnnotations = require('./fixtures/annotations/mixed_levels_annotations.json').annotations
 const gosecAnnotations = require('./fixtures/annotations/gosec_mix_annotations.json').annotations
 
-const banditSummary = { SEVERITY_HIGH: 1, SEVERITY_MEDIUM: 3, SEVERITY_LOW: 0 }
-const gosecSummary = { SEVERITY_HIGH: 4, SEVERITY_MEDIUM: 3, SEVERITY_LOW: 1 }
+const banditSummary = { errors: 1, warnings: 1, notices: 1 }
+const gosecSummary = { errors: 1, warnings: 1, notices: 0 }
 
 describe('Merge reports tests from Bandit and Gosec reports', () => {
   test('No issues found from both Gosec and Bandit', () => {
-    let banditReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
-    let gosecReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
+    const banditReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
+    const gosecReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
 
     const result = mergeReports(banditReport, gosecReport)
     expect(result.title).toEqual(config.noIssuesResultTitle)
     expect(result.summary).toEqual(config.noIssuesResultSummary)
-    expect(result.annotations.length).toBe(0)
   })
 
   test('Issues found by Bandit and no issues found by Gosec', () => {
-    let banditReport = { title: config.issuesFoundResultTitle, summary: banditSummary, annotations: banditAnnotations }
-    let gosecReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
+    const banditReport = { title: config.issuesFoundResultTitle, summary: banditSummary, annotations: banditAnnotations }
+    const gosecReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
 
-    const expectedSummary = 'SEVERITY_HIGH: ' + banditSummary.SEVERITY_HIGH + '\n' + 'SEVERITY_MEDIUM: ' +
-      banditSummary.SEVERITY_MEDIUM + '\n' + 'SEVERITY_LOW: ' + banditSummary.SEVERITY_LOW + '\n'
+    const expectedSummary = ':x: 1 error\n' +
+      ':warning: 1 warning\n' +
+      ':information_source: 1 notice\n'
 
     const result = mergeReports(banditReport, gosecReport)
     expect(result.title).toEqual(config.issuesFoundResultTitle)
@@ -34,11 +34,11 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
   })
 
   test('No issues found by Bandit but issues are found by Gosec', () => {
-    let banditReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
-    let gosecReport = { title: config.issuesFoundResultTitle, summary: gosecSummary, annotations: gosecAnnotations }
+    const banditReport = { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations: [] }
+    const gosecReport = { title: config.issuesFoundResultTitle, summary: gosecSummary, annotations: gosecAnnotations }
 
-    const expectedSummary = 'SEVERITY_HIGH: ' + gosecSummary.SEVERITY_HIGH + '\n' + 'SEVERITY_MEDIUM: ' +
-      gosecSummary.SEVERITY_MEDIUM + '\n' + 'SEVERITY_LOW: ' + gosecSummary.SEVERITY_LOW + '\n'
+    const expectedSummary = ':x: 1 error\n' +
+      ':warning: 1 warning\n'
 
     const result = mergeReports(banditReport, gosecReport)
     expect(result.title).toEqual(config.issuesFoundResultTitle)
@@ -47,11 +47,12 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
   })
 
   test('Issues found by Bandit and by Gosec', () => {
-    let banditReport = { title: config.issuesFoundResultTitle, summary: banditSummary, annotations: banditAnnotations }
-    let gosecReport = { title: config.issuesFoundResultTitle, summary: gosecSummary, annotations: gosecAnnotations }
+    const banditReport = { title: config.issuesFoundResultTitle, summary: banditSummary, annotations: banditAnnotations }
+    const gosecReport = { title: config.issuesFoundResultTitle, summary: gosecSummary, annotations: gosecAnnotations }
 
-    const expectedSummary = 'SEVERITY_HIGH: ' + 5 + '\n' + 'SEVERITY_MEDIUM: ' + 6 +
-      '\n' + 'SEVERITY_LOW: ' + 1 + '\n'
+    const expectedSummary = ':x: 2 errors\n' +
+      ':warning: 2 warnings\n' +
+      ':information_source: 1 notice\n'
 
     let expectedAnnotations = []
     expectedAnnotations = expectedAnnotations.concat(gosecAnnotations, banditAnnotations)
