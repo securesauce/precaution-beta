@@ -57,12 +57,11 @@ module.exports = (banditReport, gosecReport) => {
   if (banditReport.title === config.noIssuesResultTitle && banditReport.title === gosecReport.title) {
     title = config.noIssuesResultTitle
     summary = config.noIssuesResultSummary
-    return { title, summary }
+  } else {
+    title = config.issuesFoundResultTitle
+    summary = mergeSummaries(banditReport.summary, gosecReport.summary)
+    text = banditReport.moreInfo
   }
-
-  title = config.issuesFoundResultTitle
-  summary = mergeSummaries(banditReport.summary, gosecReport.summary)
-  text = banditReport.moreInfo
 
   if (!gosecReport.annotations) {
     annotations = banditReport.annotations
