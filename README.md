@@ -78,7 +78,9 @@ to direct GitHub webhooks to your local machine.
 
 Run ```npm test``` or ```yarn test```. This does not require any GitHub interaction (no need to register an instance of the app).
 
-## Documentation
+## Additional documentation
+
+- [Debugging with VSCode](docs/localdev.md)
 
 ## Releases & Major Branches
 
