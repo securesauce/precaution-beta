@@ -1,0 +1,40 @@
+{
+  "name": "check_run",
+  "payload": {
+    "action": "rerequested",
+    "check_run": {
+      "id": 100,
+      "head_branch": "head_branch",
+      "head_sha": "head_sha",
+      "status": "queued",
+      "before": "before_sha",
+      "after": "after_sha",
+      "pull_requests": [
+        {
+          "id": 2108,
+          "number": 6,
+          "head": {
+            "ref": "head_ref",
+            "sha": "head_sha"
+          },
+          "base": {
+            "ref": "base_ref",
+            "sha": "base_sha"
+          }
+        }
+      ],
+      "head_commit": {
+        "id": "commit_id",
+        "tree_id": "tree_id"
+      }
+    },
+    "repository": {
+      "id": 54321,
+      "name": "repo_name",
+      "full_name": "owner_login/repo_name",
+      "owner": {
+        "login": "owner_login"
+      }
+    }
+  }
+}

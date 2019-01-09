@@ -40,6 +40,16 @@ module.exports = app => {
     }
   })
 
+  app.on('check_run', async context => {
+    const action = context.payload.action
+    const headSha = context.payload.check_run.head_sha
+    const pullRequests = context.payload.check_run.pull_requests
+    if (action === 'rerequested') {
+      // Check suite was manually rerequested by a user on the checks dashboard
+      await runLinterFromPRData(pullRequests, context, headSha)
+    }
+  })
+
   app.on(['pull_request.opened', 'pull_request.reopened'], async context => {
     // Same thing but have to intercept the event because check suite is not triggered
     const pullRequest = context.payload.pull_request

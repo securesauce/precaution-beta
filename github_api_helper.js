@@ -88,7 +88,7 @@ function getConclusion (annotations) {
 /**
  * Send check run results
  * @param {import('probot').Context} context Probot context
- * @param {Number} runID chek run identifier
+ * @param {Number} runID check run identifier
  * @param {Object} output output from the scan of Gosec and Bandit
  * @returns {Promise<any>} GitHub response
  * See: https://developer.github.com/v3/checks/runs/#update-a-check-run

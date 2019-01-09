@@ -9,6 +9,7 @@ const linterApp = require('..')
 const { config } = require('../config')
 
 const checkSuiteRerequestedEvent = require('./events/check_suite.rerequested.json')
+const checkRunRerequestEvent = require('./events/check_run_rerequested.json')
 const pullRequestOpenedEvent = require('./events/pull_request.opened.json')
 
 const samplePythonPRFixture = require('./fixtures/pull_request.files.python.json')
@@ -71,6 +72,33 @@ describe('Bandit-linter', () => {
   describe('interacts with the Checks API', () => {
     test('responds to the requesting checks event', async () => {
       await app.receive(checkSuiteRerequestedEvent)
+
+      expect(github.checks.create).toHaveBeenCalledWith(expect.objectContaining({
+        status: 'in_progress',
+        owner: 'owner_login',
+        repo: 'repo_name',
+        started_at: expect.any(String),
+        head_sha: expect.any(String)
+      }))
+
+      expect(github.pullRequests.listFiles).toHaveBeenCalledWith({
+        owner: 'owner_login',
+        repo: 'repo_name',
+        number: 6
+      })
+
+      expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
+        check_run_id: 1,
+        status: 'completed',
+        conclusion: 'failure',
+        owner: 'owner_login',
+        repo: 'repo_name',
+        completed_at: expect.any(String)
+      }))
+    })
+
+    test('Check run rerequest event', async () => {
+      await app.receive(checkRunRerequestEvent)
 
       expect(github.checks.create).toHaveBeenCalledWith(expect.objectContaining({
         status: 'in_progress',
