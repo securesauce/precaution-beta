@@ -31,13 +31,12 @@ async function runLinters (files, repoID, prID) {
  * @param {*} linter A linter instance
  * @param {string} workingDirectory The path to the process working directory
  * @param {string[]} files Files to analyze
- * @returns {Promise<any>} A promise for the report object with the analysis results,
- *                         or null if there were no files to analyze
+ * @returns {Promise<any>} A promise for the report object with the analysis results
  */
 function run (linter, workingDirectory, files) {
   const filtered = linter.filter(files)
 
-  if (filtered.length === 0) { return null }
+  if (filtered.length === 0) { return linter.defaultReport }
 
   const process = spawn(linter.name, linter.args(filtered), { cwd: workingDirectory })
   const reportFilePath = path.join(workingDirectory, linter.reportPath)

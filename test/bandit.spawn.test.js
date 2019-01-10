@@ -27,13 +27,10 @@ describe('Bandit runner', () => {
     expect(report.annotations.length).toEqual(0)
   })
 
-  // This test is needed when a PR is without python files
-  // and when our app gets the content of the PR
-  // it wouldnt get any files because we filter them.
   test('Handles empty input', async () => {
     const report = await bandit('test/fixtures/python', [])
 
-    expect(report).toBeNull()
+    expect(report.annotations.length).toEqual(0)
   })
 
   afterEach(() => {

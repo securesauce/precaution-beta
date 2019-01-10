@@ -18,6 +18,10 @@ module.exports = class Bandit {
     return '../bandit.json'
   }
 
+  get defaultReport () {
+    return report(null)
+  }
+
   /**
    * Retains files that can be analyzed by this linter
    * @param {string[]} files Names of files to analyze
@@ -33,7 +37,7 @@ module.exports = class Bandit {
    * @param {string} prID PR id in repository
    */
   workingDirectoryForPR (repoID, prID) {
-    return cache.getBranchPath(repoID, prID)
+    return cache.getBranchPath(repoID, prID, 'bandit')
   }
 
   /**

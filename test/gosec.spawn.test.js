@@ -35,6 +35,12 @@ describe('Gosec runner', () => {
     expect(report.annotations[7].start_line).toEqual('16')
   })
 
+  test('Handles empty input', async () => {
+    const report = await gosec('test/fixtures/go/src', [])
+
+    expect(report.annotations.length).toEqual(0)
+  })
+
   afterEach(() => {
     fs.remove('test/fixtures/go/src/gosec.json')
   })
