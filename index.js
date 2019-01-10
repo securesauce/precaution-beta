@@ -78,22 +78,13 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
 
     // For now only deal with one PR
     const PR = pullRequests[0]
-
     const inputFiles = resolvedPRs[0]
 
-    let banditResults
-    // Only run baseline scan if the directory exists (spawn will crash if working directory doesn't exist)
-    if (config.compareAgainstBaseline && cache.branchPathExists(repoID, PR.id, 'base')) {
-      const baselineFile = '../baseline.json'
-      await runBandit(cache.getBranchPath(repoID, PR.id, 'base'), inputFiles, { reportFile: baselineFile })
-      banditResults = await runBandit(cache.getBranchPath(repoID, PR.id, 'head'), inputFiles, { baselineFile })
-    } else {
-      banditResults = await runBandit(cache.getBranchPath(repoID, PR.id, 'head'), inputFiles)
-    }
-    const banditReport = generateBanditReport(banditResults, cache.getBranchPath(repoID, PR.id, 'head', 'bandit'))
+    const banditResults = await runBandit(cache.getBranchPath(repoID, PR.id, 'bandit'), inputFiles)
+    const banditReport = generateBanditReport(banditResults, cache.getBranchPath(repoID, PR.id, 'bandit'))
 
-    const gosecResults = await runGosec(cache.getBranchPath(repoID, PR.id, 'head', 'gosec'), inputFiles)
-    const gosecReport = generateGosecReport(gosecResults, path.resolve(cache.getBranchPath(repoID, PR.id, 'head', 'gosec')))
+    const gosecResults = await runGosec(cache.getBranchPath(repoID, PR.id, 'gosec'), inputFiles)
+    const gosecReport = generateGosecReport(gosecResults, path.resolve(cache.getBranchPath(repoID, PR.id, 'gosec')))
 
     const output = mergeReports(banditReport, gosecReport)
     const resolvedCheckRunResponse = await checkRunResponse
@@ -121,7 +112,6 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
 async function processPullRequest (pullRequest, context) {
   const number = pullRequest.number
   const ref = pullRequest.head.ref
-  const baseRef = pullRequest.base.ref
   const id = pullRequest.id
   const repoID = context.payload.repository.id
 
@@ -133,19 +123,14 @@ async function processPullRequest (pullRequest, context) {
     .filter(async fileJSON => fileJSON !== 'deleted')
     .map(async fileJSON => {
       const filename = fileJSON.filename
-      const status = fileJSON.status
 
       const headRevision = apiHelper.getContents(context, filename, ref)
 
-      if (config.compareAgainstBaseline && status === 'modified') {
-        const baseRevision = apiHelper.getContents(context, filename, baseRef)
-        cache.saveFile(repoID, id, 'base', filename, (await baseRevision).data, 'python')
-      }
-
+      // TODO: merge this code with linter-specific path resolution
       if (filename.endsWith('.py')) {
-        cache.saveFile(repoID, id, 'head', filename, (await headRevision).data, 'python')
+        cache.saveFile(repoID, id, filename, (await headRevision).data, 'python')
       } else if (filename.endsWith('.go')) {
-        cache.saveFile(repoID, id, 'head', filename, (await headRevision).data, 'go')
+        cache.saveFile(repoID, id, filename, (await headRevision).data, 'go')
       }
 
       return filename

@@ -3,7 +3,6 @@
 
 const config = {
   cleanupAfterRun: true,
-  compareAgainstBaseline: false,
   fileExtensions: ['.py', '.pyw', '.go'],
   checkRunName: 'Precaution',
   noIssuesResultTitle: 'No issues found',
