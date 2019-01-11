@@ -143,8 +143,8 @@ describe('Bandit-linter', () => {
 
     test('handles PRs with mixed file types', async () => {
       // Manually load in the go file contents
-      mockFiles['networking_binding.go'] = fs.readFileSync('test/fixtures/go/src/multiple_bad_files/networking_binding.go', 'utf8')
-      mockFiles['bad_test_file.go'] = fs.readFileSync('test/fixtures/go/src/multiple_bad_files/bad_test_file.go', 'utf8')
+      mockFiles['networking_binding.go'] = fs.readFileSync('test/fixtures/go/src/vulnerable_package/networking_binding.go', 'utf8')
+      mockFiles['bad_test_file.go'] = fs.readFileSync('test/fixtures/go/src/vulnerable_package/bad_test_file.go', 'utf8')
 
       mockPRContents(github, sampleMixedPRFixture)
 

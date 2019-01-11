@@ -11,8 +11,8 @@ function bandit (dir, files) {
 }
 
 describe('Bandit runner', () => {
-  test('Finds issues in invalid file', async () => {
-    const report = await bandit('test/fixtures/python', ['mix.invalid.py'])
+  test('Finds issues in vulnerable file', async () => {
+    const report = await bandit('test/fixtures/python', ['mix.vulnerable.py'])
 
     expect(report.annotations.length).toEqual(4)
     expect(report.annotations[0].start_line).toEqual(8)
@@ -21,8 +21,8 @@ describe('Bandit runner', () => {
     expect(report.annotations[3].start_line).toEqual(15)
   })
 
-  test('Passes on correct file', async () => {
-    const report = await bandit('test/fixtures/python', ['mix.valid.py'])
+  test('Passes on safe file', async () => {
+    const report = await bandit('test/fixtures/python', ['mix.safe.py'])
 
     expect(report.annotations.length).toEqual(0)
   })

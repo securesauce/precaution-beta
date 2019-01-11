@@ -11,8 +11,8 @@ function gosec (dir, files) {
 }
 
 describe('Gosec runner', () => {
-  test('Finds issues in invalid file', async () => {
-    const report = await gosec('test/fixtures/go/src/bad_files', ['bad_test_file.go'])
+  test('Finds issues in vulnerable file', async () => {
+    const report = await gosec('test/fixtures/go/src/vulnerable', ['bad_test_file.go'])
 
     expect(report.annotations.length).toEqual(6)
     expect(report.annotations[0].start_line).toEqual('15')
@@ -21,14 +21,14 @@ describe('Gosec runner', () => {
     expect(report.annotations[3].start_line).toEqual('27')
   })
 
-  test('Passes on correct file', async () => {
-    const report = await gosec('test/fixtures/go/src/secure_go_files', ['hello_world.go'])
+  test('Passes on safe file', async () => {
+    const report = await gosec('test/fixtures/go/src/safe', ['hello_world.go'])
 
     expect(report.annotations.length).toEqual(0)
   })
 
   test('Handles packages with multiple files', async () => {
-    const report = await gosec('test/fixtures/go/src/multiple_bad_files/', ['bad_test_file.go', 'networking_binding.go', 'randNumTest.go'])
+    const report = await gosec('test/fixtures/go/src/vulnerable_package/', ['bad_test_file.go', 'networking_binding.go', 'randNumTest.go'])
 
     expect(report.annotations.length).toEqual(8)
     expect(report.annotations[4].start_line).toEqual('9')
