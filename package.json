@@ -26,7 +26,7 @@
   "scripts": {
     "dev": "nodemon --exec \"npm start\"",
     "start": "probot run ./index.js",
-    "test": "LOG_LEVEL=error jest && standard",
+    "test": "standard && LOG_LEVEL=error jest",
     "test:watch": "LOG_LEVEL=error jest --watch --notify --notifyMode=change --coverage",
     "lint": "standard --fix"
   },
