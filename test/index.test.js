@@ -21,7 +21,6 @@ function mockPRContents (github, PR) {
 describe('Bandit-linter', () => {
   let app, github
   let mockFiles = {}
-  let fileRefs = {}
 
   beforeAll(() => {
     // Load all python files in the fixture directories and map names to contents in mock object
@@ -29,9 +28,6 @@ describe('Bandit-linter', () => {
     files.forEach((filename) => {
       mockFiles[filename] = fs.readFileSync(path.join('test/fixtures/python', filename), 'utf8')
     })
-
-    fileRefs['head_ref'] = mockFiles['key_sizes.py']
-    fileRefs['base_ref'] = mockFiles['key_sizes.old.py']
   })
 
   beforeEach(() => {
