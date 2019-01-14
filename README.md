@@ -81,6 +81,7 @@ Run ```npm test``` or ```yarn test```. This does not require any GitHub interact
 ## Additional documentation
 
 - [Debugging with VSCode](docs/localdev.md)
+- [Architecture](docs/architecture.md)
 
 ## Releases & Major Branches
 
