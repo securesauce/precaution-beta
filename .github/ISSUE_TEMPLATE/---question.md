@@ -14,8 +14,8 @@ What make you think of this question? Is there something unclear in the code or 
 
 **Screenshots**
 
-If applicable, add screenshots to help explain your problem.
+If applicable, add screenshots to help explain your question.
 
 **Other comments or additional context**
 
-Add any other context about the problem here.
+If you have something else to say or any other context about your question write it here.
