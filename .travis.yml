@@ -36,7 +36,7 @@ deploy:
     app:
       master: dev-precaution
 
-  # This section below makes Travis to deploy to precaution dyno (Heroku application)
+  # The section below tells Travis to deploy to precaution dyno (Heroku application)
   # whenever a successful build is created on the master branch and the commit is tagged
   - provider: heroku
     api_key:
