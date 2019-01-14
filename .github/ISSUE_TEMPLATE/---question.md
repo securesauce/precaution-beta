@@ -1,5 +1,5 @@
 ---
-name: ":question: Bug report"
+name: ":question: Question"
 about: Do you have a question? We will be happy to answer it.
 
 ---
