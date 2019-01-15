@@ -96,3 +96,7 @@ The Precaution project team welcomes contributions from the community. Before yo
 ## License
 
 BSD-2 License
+
+## Have any other question?
+
+If you have any other question which was not answered in the docs or in the README, please let us know in our slack channel.
