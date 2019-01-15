@@ -1,7 +1,6 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const { config } = require('../config')
 const { getAnnotation } = require('./bandit_annotations')
 const { countIssueLevels } = require('../annotations_levels')
 
@@ -23,23 +22,13 @@ function createMoreInfoLinks (issues) {
 }
 
 /**
- * Convert bandit output into valid 'output' object for check run conclusion
+ * Process Bandit output (generate annotations, count issue levels)
  * @param {any} results Bandit json output
  */
 module.exports = (results) => {
-  let title = ''
-  let summary = ''
-  let annotations = []
-  let moreInfo = ''
+  const annotations = results.results.map(issue => getAnnotation(issue))
+  const issueCount = countIssueLevels(annotations)
+  const moreInfo = annotations.length > 0 ? createMoreInfoLinks(results.results) : ''
 
-  if (results && results.results.length !== 0) {
-    title = config.issuesFoundResultTitle
-    annotations = results.results.map(issue => getAnnotation(issue))
-    summary = countIssueLevels(annotations)
-    moreInfo = createMoreInfoLinks(results.results)
-  } else {
-    title = config.noIssuesResultTitle
-    summary = config.noIssuesResultSummary
-  }
-  return { title, summary, annotations, moreInfo }
+  return { annotations, issueCount, moreInfo }
 }

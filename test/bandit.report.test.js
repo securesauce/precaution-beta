@@ -2,14 +2,22 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const generateReport = require('../bandit/bandit_report')
-const { config } = require('../config')
+
 const banditResults = require('./fixtures/reports/bandit_vulnerable.json')
 
-describe('Report generation', () => {
+describe('Bandit report generation', () => {
   let report
 
   beforeEach(() => {
     report = generateReport(banditResults)
+  })
+
+  test('Creates correct report structure', () => {
+    expect(report).toHaveProperty('annotations')
+    expect(report).toHaveProperty('issueCount.errors')
+    expect(report).toHaveProperty('issueCount.warnings')
+    expect(report).toHaveProperty('issueCount.notices')
+    expect(report).toHaveProperty('moreInfo')
   })
 
   test('Creates correct annotations', () => {
@@ -25,28 +33,20 @@ describe('Report generation', () => {
     })
   })
 
-  test('Creates correct report structure', () => {
-    expect(report.summary).not.toBe('')
-    expect(report).toHaveProperty('annotations')
-    expect(report).toHaveProperty('title')
+  test('Creates correct issue count', () => {
+    expect(report.issueCount.errors).toBe(1)
+    expect(report.issueCount.warnings).toBe(3)
+    expect(report.issueCount.notices).toBe(0)
   })
 
-  test('Handles empty reports', () => {
-    const report = generateReport(null)
-    expect(report).toHaveProperty('annotations')
-    expect(report).toHaveProperty('summary')
-    expect(report).toHaveProperty('title')
-  })
+  test('Handles no vuln reports', async () => {
+    const jsonResults = require('./fixtures/reports/bandit_safe.json')
 
-  // This test caches a few cases at a time: when a pr scans python files without security issues
-  // and when a PR doesn't have any python files
-  test('Generate report on results from Bandit without security issues', async () => {
-    const results = require('./fixtures/reports/bandit_safe.json')
+    const report = generateReport(jsonResults)
 
-    const report = generateReport(results)
-
-    expect(report.title).toEqual(config.noIssuesResultTitle)
-    expect(report.summary).toEqual(config.noIssuesResultSummary)
-    expect(report.annotations.length).toEqual(0)
+    expect(report.annotations).toHaveLength(0)
+    expect(report.issueCount.errors).toBe(0)
+    expect(report.issueCount.warnings).toBe(0)
+    expect(report.issueCount.notices).toBe(0)
   })
 })

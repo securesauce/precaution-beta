@@ -18,7 +18,7 @@ module.exports = class Gosec {
   }
 
   get defaultReport () {
-    return report(null)
+    return { annotations: [], issueCount: { errors: 0, warnings: 0, notices: 0 }, moreInfo: '' }
   }
 
   /**

@@ -17,10 +17,8 @@ const linters = require('./linters')
 async function runLinters (files, repoID, prID) {
   // TODO: Sync directory with file download location resolution
   const reports = Object.values(linters).map((linter) => run(linter, linter.workingDirectoryForPR(repoID, prID), files))
-  const resolved = await Promise.all(reports)
 
-  // TODO: rewrite merge to handle list of reports
-  return merge(resolved[0], resolved[1])
+  return merge(await Promise.all(reports))
 }
 
 /**
