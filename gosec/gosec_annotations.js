@@ -11,8 +11,8 @@ const { getAnnotationLevel } = require('../annotations_levels')
  */
 function getAnnotation (issue, directory) {
   const path = issue.file.replace(directory + '/', '')
-  const startLine = issue.line
-  const endLine = issue.line
+  const startLine = Number(issue.line)
+  const endLine = startLine
   const annotationLevel = getAnnotationLevel(issue.severity, issue.confidence)
   const title = `${issue.rule_id}:${issue.details}`
   const message = `The issue is in the code: ${issue.code}`
