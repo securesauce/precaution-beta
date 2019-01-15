@@ -6,8 +6,7 @@ const fs = require('fs')
 const path = require('path')
 
 const merge = require('./merge_reports')
-const Bandit = require('./linters/bandit')
-const Gosec = require('./linters/gosec')
+const linters = require('./linters')
 
 /**
  * Run all linters on specified files
@@ -16,13 +15,12 @@ const Gosec = require('./linters/gosec')
  * @param {string} prID
  */
 async function runLinters (files, repoID, prID) {
-  // TODO: Sync with file download location resolution
-  const bandit = new Bandit()
-  const banditReport = run(bandit, bandit.workingDirectoryForPR(repoID, prID), files)
-  const gosec = new Gosec()
-  const gosecReport = run(gosec, gosec.workingDirectoryForPR(repoID, prID), files)
+  // TODO: Sync directory with file download location resolution
+  const reports = Object.values(linters).map((linter) => run(linter, linter.workingDirectoryForPR(repoID, prID), files))
+  const resolved = await Promise.all(reports)
 
-  return merge(await banditReport, await gosecReport)
+  // TODO: rewrite merge to handle list of reports
+  return merge(resolved[0], resolved[1])
 }
 
 /**
