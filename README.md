@@ -99,4 +99,4 @@ BSD-2 License
 
 ## Do you have any other question? 
 
-If you have any other question which was not answered in the docs or in the README, please let us know in our slack channel.
+If you have any other question which was not answered in the docs or in the README, please let us know in the #precaution channel on [Slack](https://code.vmware.com/web/code/join).
