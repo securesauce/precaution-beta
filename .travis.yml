@@ -28,7 +28,7 @@ notifications:
 #    https://docs.travis-ci.com/user/deployment/heroku/
 #    https://docs.travis-ci.com/user/deployment/
 deploy:
-  # The section below tells Travis to deploy to dev-precaution dyno (Heroku application)
+  # The section below tells Travis to deploy to the dev-precaution dyno (Heroku application)
   # whenever a successful build is created on the master branch.
   - provider: heroku
     api_key:
