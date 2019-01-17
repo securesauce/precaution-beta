@@ -36,8 +36,8 @@ function run (linter, workingDirectory, files) {
 
   if (filtered.length === 0) { return linter.defaultReport }
 
-  const process = spawn(linter.name, linter.args(filtered), { cwd: workingDirectory })
-  const reportFilePath = path.join(workingDirectory, linter.reportPath)
+  const reportFilePath = path.join(workingDirectory, '..', linter.reportFile)
+  const process = spawn(linter.name, linter.args(filtered, path.join('..', linter.reportFile)), { cwd: workingDirectory })
 
   let errorLogs = ''
   process.stderr.on('data', (chunk) => {

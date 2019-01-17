@@ -11,11 +11,10 @@ module.exports = class Gosec {
   }
 
   /**
-   * The path to the generated report file
-   * relative to the working directory
+   * The name of the generated report file
    */
-  get reportPath () {
-    return '../gosec.json'
+  get reportFile () {
+    return 'gosec.json'
   }
 
   get defaultReport () {
@@ -42,10 +41,11 @@ module.exports = class Gosec {
 
   /**
    * Builds the command line args to pass to the linter process
-   * @param {string[]} files
+   * @param {string[]} files List of files to analyze
+   * @param {string} reportPath Path to the report file relative to working directory
    */
-  args (files) {
-    return ['-fmt=json', '-out', this.reportPath, './...']
+  args (files, reportPath) {
+    return ['-fmt=json', '-out', reportPath, './...']
   }
 
   /**
