@@ -3,7 +3,7 @@
 
 const generateReport = require('../bandit/bandit_report')
 const { config } = require('../config')
-const banditResults = require('./fixtures/reports/mix_results.json')
+const banditResults = require('./fixtures/reports/bandit_vulnerable.json')
 
 describe('Report generation', () => {
   let report
@@ -41,12 +41,12 @@ describe('Report generation', () => {
   // This test caches a few cases at a time: when a pr scans python files without security issues
   // and when a PR doesn't have any python files
   test('Generate report on results from Bandit without security issues', async () => {
-    const jsonResults = require('./fixtures/reports/no_issues_report.json')
+    const results = require('./fixtures/reports/bandit_safe.json')
 
-    const trueReport = generateReport(jsonResults)
+    const report = generateReport(results)
 
-    expect(trueReport.title).toEqual(config.noIssuesResultTitle)
-    expect(trueReport.summary).toEqual(config.noIssuesResultSummary)
-    expect(trueReport.annotations.length).toEqual(0)
+    expect(report.title).toEqual(config.noIssuesResultTitle)
+    expect(report.summary).toEqual(config.noIssuesResultSummary)
+    expect(report.annotations.length).toEqual(0)
   })
 })

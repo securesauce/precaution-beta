@@ -21,7 +21,6 @@ function mockPRContents (github, PR) {
 describe('Bandit-linter', () => {
   let app, github
   let mockFiles = {}
-  let fileRefs = {}
 
   beforeAll(() => {
     // Load all python files in the fixture directories and map names to contents in mock object
@@ -29,9 +28,6 @@ describe('Bandit-linter', () => {
     files.forEach((filename) => {
       mockFiles[filename] = fs.readFileSync(path.join('test/fixtures/python', filename), 'utf8')
     })
-
-    fileRefs['head_ref'] = mockFiles['key_sizes.py']
-    fileRefs['base_ref'] = mockFiles['key_sizes.old.py']
   })
 
   beforeEach(() => {
@@ -147,8 +143,8 @@ describe('Bandit-linter', () => {
 
     test('handles PRs with mixed file types', async () => {
       // Manually load in the go file contents
-      mockFiles['networking_binding.go'] = fs.readFileSync('test/fixtures/go/src/multiple_bad_files/networking_binding.go', 'utf8')
-      mockFiles['bad_test_file.go'] = fs.readFileSync('test/fixtures/go/src/multiple_bad_files/bad_test_file.go', 'utf8')
+      mockFiles['networking_binding.go'] = fs.readFileSync('test/fixtures/go/src/vulnerable_package/networking_binding.go', 'utf8')
+      mockFiles['bad_test_file.go'] = fs.readFileSync('test/fixtures/go/src/vulnerable_package/bad_test_file.go', 'utf8')
 
       mockPRContents(github, sampleMixedPRFixture)
 

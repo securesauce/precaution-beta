@@ -1,36 +1,47 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const gosec = require('../gosec/gosec')
 const fs = require('fs-extra')
 
-describe('Spawn gosec tests', () => {
-  test('Empty input for gosec', async () => {
-    const gosecResult = await gosec('', [])
-    expect(gosecResult).toBeFalsy()
+const { run } = require('../runner')
+const Gosec = require('../linters/gosec')
+
+function gosec (dir, files) {
+  return run(new Gosec(), dir, files)
+}
+
+describe('Gosec runner', () => {
+  test('Finds issues in vulnerable file', async () => {
+    const report = await gosec('test/fixtures/go/src/vulnerable', ['bad_test_file.go'])
+
+    expect(report.annotations.length).toEqual(6)
+    expect(report.annotations[0].start_line).toEqual('15')
+    expect(report.annotations[1].start_line).toEqual('19')
+    expect(report.annotations[2].start_line).toEqual('26')
+    expect(report.annotations[3].start_line).toEqual('27')
   })
 
-  test('Run gosec on non go files', async () => {
-    const gosecResult = await gosec('test/fixtures/go/src/non_go_files', ['hello_world.py'])
-    expect(gosecResult).toBeFalsy()
+  test('Passes on safe file', async () => {
+    const report = await gosec('test/fixtures/go/src/safe', ['hello_world.go'])
+
+    expect(report.annotations.length).toEqual(0)
   })
 
-  test('Run gosec on a go file without security problems', async () => {
-    const gosecResult = await gosec('test/fixtures/go/src/secure_go_files', ['hello_world.go'])
-    expect(gosecResult.Issues.length).toEqual(0)
-    fs.remove('test/fixtures/go/src/secure_go_files/gosec.json')
+  test('Handles packages with multiple files', async () => {
+    const report = await gosec('test/fixtures/go/src/vulnerable_package/', ['bad_test_file.go', 'networking_binding.go', 'randNumTest.go'])
+
+    expect(report.annotations.length).toEqual(8)
+    expect(report.annotations[4].start_line).toEqual('9')
+    expect(report.annotations[7].start_line).toEqual('16')
   })
 
-  test('Run gosec on go problematic file', async () => {
-    const gosecResult = await gosec('test/fixtures/go/src/bad_files', ['bad_test_file.go'])
-    expect(gosecResult.Stats.found).toBeGreaterThan(0)
-    fs.remove('test/fixtures/go/src/bad_files/gosec.json')
+  test('Handles empty input', async () => {
+    const report = await gosec('test/fixtures/go/src', [])
+
+    expect(report.annotations.length).toEqual(0)
   })
 
-  test('Run gosec multiple go files', async () => {
-    const gosecResult = await gosec('test/fixtures/go/src/multiple_bad_files/', ['bad_test_file.go', 'networking_binding_test.go', 'randNumTest.go'])
-    expect(gosecResult.Stats.found).toBeGreaterThan(0)
-    expect(gosecResult.Stats.files).toEqual(3)
-    fs.remove('test/fixtures/go/src/multiple_bad_files/gosec.json')
+  afterEach(() => {
+    fs.remove('test/fixtures/go/src/gosec.json')
   })
 })

@@ -13,7 +13,7 @@ describe('Gosec report tests', () => {
   })
 
   test('Generate valid report', () => {
-    const mixedResults = require('./fixtures/reports/gosec_mix_results.json')
+    const mixedResults = require('./fixtures/reports/gosec_vulnerable.json')
     const trueReport = gosecReport(mixedResults, './fixtures/reports/')
     expect(trueReport.title).toEqual(config.issuesFoundResultTitle)
     expect(trueReport.summary).not.toBe('')
