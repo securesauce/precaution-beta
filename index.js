@@ -44,18 +44,17 @@ module.exports = app => {
     }
   })
 
-  app.on(['pull_request.opened', 'pull_request.reopened'], async context => {
+  app.on(['pull_request.opened', 'pull_request.reopened', 'pull_request.synchronize'], async context => {
     // Same thing but have to intercept the event because check suite is not triggered
     const pullRequest = context.payload.pull_request
     const headSha = pullRequest.head.sha
-
     await runLinterFromPRData([pullRequest], context, headSha)
   })
 }
 
 /**
  * Retrieve files modified by pull request(s), run linter and send results
- * @param {any[]} pullRequests
+ * @param {any[]} pullRequests object which contains information about the pull request
  * @param {import('probot').Context} context
  * @param {string} headSha
  */
@@ -111,7 +110,7 @@ async function processPullRequest (pullRequest, context) {
     .map(async fileJSON => {
       const filename = fileJSON.filename
 
-      const headRevision = apiHelper.getContents(context, filename, ref)
+      const headRevision = apiHelper.getContents(context, pullRequest, filename, ref)
 
       // TODO: merge this code with linter-specific path resolution
       if (filename.endsWith('.py')) {

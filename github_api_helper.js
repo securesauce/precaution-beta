@@ -46,13 +46,21 @@ function getPRFiles (context, number) {
 /**
  * Get file contents as raw data
  * @param {import('probot').Context} context Probot context
+ *  @param {any[]} pullRequests object which contains information about the pull request
  * @param {string} path file path relative to repository root
  * @param {string} ref sha of file revision
  * @returns {Promise<any>} GitHub response
  * See https://developer.github.com/v3/repos/contents/#get-contents
  */
-function getRawFileContents (context, path, ref) {
-  const { owner, repo } = context.repo()
+function getRawFileContents (context, pullRequest, path, ref) {
+  let { owner, repo } = context.repo()
+  // This check is necessary in the case when there is a pr
+  // which is not from forked repository.
+  // Then the repo and owner fields are not in the pullRequest object
+  if (pullRequest.head.user) {
+    owner = pullRequest.head.user.login
+    repo = pullRequest.head.repo.name
+  }
 
   return context.github.repos.getContents({
     owner,
@@ -111,7 +119,7 @@ function sendResults (context, runID, output) {
 /**
  * Sends check run error conclusion
  * @param {import('probot').Context} context Probot context
- * @param {Number} runId chek run identifier
+ * @param {Number} runId check run identifier
  * @param {Error} err the error which occurs and stops the program
  * @returns {Promise<any>} GitHub response
  * See: https://developer.github.com/v3/checks/runs/#update-a-check-run
