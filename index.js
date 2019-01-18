@@ -110,7 +110,7 @@ async function processPullRequest (pullRequest, context) {
     .map(async fileJSON => {
       const filename = fileJSON.filename
 
-      const headRevision = apiHelper.getContents(context, pullRequest, filename, ref)
+      const headRevision = apiHelper.getContents(context, filename, ref, pullRequest.head)
 
       // TODO: merge this code with linter-specific path resolution
       if (filename.endsWith('.py')) {
