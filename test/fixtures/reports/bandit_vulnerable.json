@@ -1,89 +1,89 @@
 {
-    "errors": [],
-    "generated_at": "2018-08-30T17:29:56Z",
-    "metrics": {
-      "_totals": {
-        "CONFIDENCE.HIGH": 3.0,
-        "CONFIDENCE.LOW": 1.0,
-        "CONFIDENCE.MEDIUM": 0.0,
-        "CONFIDENCE.UNDEFINED": 0.0,
-        "SEVERITY.HIGH": 1.0,
-        "SEVERITY.LOW": 0.0,
-        "SEVERITY.MEDIUM": 3.0,
-        "SEVERITY.UNDEFINED": 0.0,
-        "loc": 11,
-        "nosec": 0
-      },
-      "test/fixtures/python/mix.py": {
-        "CONFIDENCE.HIGH": 3.0,
-        "CONFIDENCE.LOW": 1.0,
-        "CONFIDENCE.MEDIUM": 0.0,
-        "CONFIDENCE.UNDEFINED": 0.0,
-        "SEVERITY.HIGH": 1.0,
-        "SEVERITY.LOW": 0.0,
-        "SEVERITY.MEDIUM": 3.0,
-        "SEVERITY.UNDEFINED": 0.0,
-        "loc": 11,
-        "nosec": 0
-      }
+  "errors": [],
+  "generated_at": "2018-08-30T17:29:56Z",
+  "metrics": {
+    "_totals": {
+      "CONFIDENCE.HIGH": 3.0,
+      "CONFIDENCE.LOW": 1.0,
+      "CONFIDENCE.MEDIUM": 0.0,
+      "CONFIDENCE.UNDEFINED": 0.0,
+      "SEVERITY.HIGH": 1.0,
+      "SEVERITY.LOW": 0.0,
+      "SEVERITY.MEDIUM": 3.0,
+      "SEVERITY.UNDEFINED": 0.0,
+      "loc": 11,
+      "nosec": 0
     },
-    "results": [
-      {
-        "code": "7                          backend=backends.default_backend())\n8 dsa.generate_private_key(key_size=1024,\n9                          backend=backends.default_backend())\n10 \n",
-        "filename": "mix.py",
-        "issue_confidence": "HIGH",
-        "issue_severity": "MEDIUM",
-        "issue_text": "DSA key sizes below 2048 bits are considered breakable. ",
-        "line_number": 8,
-        "line_range": [
-          8,
-          9
-        ],
-        "more_info": "https://bandit.readthedocs.io/en/latest/plugins/b505_weak_cryptographic_key.html",
-        "test_id": "B505",
-        "test_name": "weak_cryptographic_key"
-      },
-      {
-        "code": "10 \n11 ssl.wrap_socket(ssl_version=ssl.PROTOCOL_SSLv2)\n12 \n",
-        "filename": "mix.py",
-        "issue_confidence": "HIGH",
-        "issue_severity": "HIGH",
-        "issue_text": "ssl.wrap_socket call with insecure SSL/TLS protocol version identified, security issue.",
-        "line_number": 11,
-        "line_range": [
-          11
-        ],
-        "more_info": "https://bandit.readthedocs.io/en/latest/plugins/b502_ssl_with_bad_version.html",
-        "test_id": "B502",
-        "test_name": "ssl_with_bad_version"
-      },
-      {
-        "code": "12 \n13 mode = ECB(iv)\n14 \n",
-        "filename": "mix.py",
-        "issue_confidence": "HIGH",
-        "issue_severity": "MEDIUM",
-        "issue_text": "Use of insecure cipher mode cryptography.hazmat.primitives.ciphers.modes.ECB.",
-        "line_number": 13,
-        "line_range": [
-          13
-        ],
-        "more_info": "https://bandit.readthedocs.io/en/latest/blacklists/blacklist_calls.html#b304-b305-ciphers-and-modes",
-        "test_id": "B305",
-        "test_name": "blacklist"
-      },
-      {
-        "code": "14 \n15 query = \"SELECT * FROM foo WHERE id = '%s'\" % identifier\n",
-        "filename": "mix.py",
-        "issue_confidence": "LOW",
-        "issue_severity": "MEDIUM",
-        "issue_text": "Possible SQL injection vector through string-based query construction.",
-        "line_number": 15,
-        "line_range": [
-          15
-        ],
-        "more_info": "https://bandit.readthedocs.io/en/latest/plugins/b608_hardcoded_sql_expressions.html",
-        "test_id": "B608",
-        "test_name": "hardcoded_sql_expressions"
-      }
-    ]
-  }
+    "test/fixtures/python/mix.py": {
+      "CONFIDENCE.HIGH": 3.0,
+      "CONFIDENCE.LOW": 1.0,
+      "CONFIDENCE.MEDIUM": 0.0,
+      "CONFIDENCE.UNDEFINED": 0.0,
+      "SEVERITY.HIGH": 1.0,
+      "SEVERITY.LOW": 0.0,
+      "SEVERITY.MEDIUM": 3.0,
+      "SEVERITY.UNDEFINED": 0.0,
+      "loc": 11,
+      "nosec": 0
+    }
+  },
+  "results": [
+    {
+      "code": "7                          backend=backends.default_backend())\n8 dsa.generate_private_key(key_size=1024,\n9                          backend=backends.default_backend())\n10 \n",
+      "filename": "mix.py",
+      "issue_confidence": "HIGH",
+      "issue_severity": "MEDIUM",
+      "issue_text": "DSA key sizes below 2048 bits are considered breakable. ",
+      "line_number": 8,
+      "line_range": [
+        8,
+        9
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/latest/plugins/b505_weak_cryptographic_key.html",
+      "test_id": "B505",
+      "test_name": "weak_cryptographic_key"
+    },
+    {
+      "code": "10 \n11 ssl.wrap_socket(ssl_version=ssl.PROTOCOL_SSLv2)\n12 \n",
+      "filename": "mix.py",
+      "issue_confidence": "HIGH",
+      "issue_severity": "HIGH",
+      "issue_text": "ssl.wrap_socket call with insecure SSL/TLS protocol version identified, security issue.",
+      "line_number": 11,
+      "line_range": [
+        11
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/latest/plugins/b502_ssl_with_bad_version.html",
+      "test_id": "B502",
+      "test_name": "ssl_with_bad_version"
+    },
+    {
+      "code": "12 \n13 mode = ECB(iv)\n14 \n",
+      "filename": "mix.py",
+      "issue_confidence": "HIGH",
+      "issue_severity": "MEDIUM",
+      "issue_text": "Use of insecure cipher mode cryptography.hazmat.primitives.ciphers.modes.ECB.",
+      "line_number": 13,
+      "line_range": [
+        13
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/latest/blacklists/blacklist_calls.html#b304-b305-ciphers-and-modes",
+      "test_id": "B305",
+      "test_name": "blacklist"
+    },
+    {
+      "code": "14 \n15 query = \"SELECT * FROM foo WHERE id = '%s'\" % identifier\n",
+      "filename": "mix.py",
+      "issue_confidence": "LOW",
+      "issue_severity": "MEDIUM",
+      "issue_text": "Possible SQL injection vector through string-based query construction.",
+      "line_number": 15,
+      "line_range": [
+        15
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/latest/plugins/b608_hardcoded_sql_expressions.html",
+      "test_id": "B608",
+      "test_name": "hardcoded_sql_expressions"
+    }
+  ]
+}
