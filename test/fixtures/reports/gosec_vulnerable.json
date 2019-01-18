@@ -9,7 +9,7 @@
       "code": "password := \"f62e5bcda4fae4f82370da0c6f20697b8f8447ef\"",
       "line": "16"
     },
-	{
+    {
       "severity": "MEDIUM",
       "confidence": "HIGH",
       "rule_id": "G102",
@@ -17,8 +17,8 @@
       "file": "test/fixtures/go/src/bad_files/badTestFile.go",
       "code": "net.Listen(\"tcp\", \"0.0.0.0:2000\")",
       "line": "20"
-	},
-	{
+    },
+    {
       "severity": "MEDIUM",
       "confidence": "HIGH",
       "rule_id": "G302",
