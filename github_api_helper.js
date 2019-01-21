@@ -54,6 +54,7 @@ function getPRFiles (context, number) {
  */
 function getRawFileContents (context, path, ref, head) {
   let { owner, repo } = context.repo()
+
   // This check is necessary in the case when there is a pr
   // which is not from forked repository.
   // Then the repo and owner fields are not in the head object
