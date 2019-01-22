@@ -142,7 +142,7 @@ describe('Bandit-linter', () => {
       }))
     })
 
-    // This event happens when there is already opened pull request which
+    // This event happens when there is an already opened pull request which
     // happens across forks. Then when there is a new commit to this pull request
     // a pull_request.synchronize event will be received
     test('responds on pull request synchronize event', async () => {
