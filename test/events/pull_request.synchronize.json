@@ -1,0 +1,49 @@
+{
+  "name": "pull_request",
+  "payload": {
+    "action": "opened",
+    "number": 8,
+    "pull_request": {
+      "number": 8,
+      "id": 1000,
+      "state": "open",
+      "title": "PR_title",
+      "body": "PR_body",
+      "head": {
+        "ref": "head_ref",
+        "sha": "head_sha",
+        "user": {
+          "login": "forked_repo_owner"
+        },
+        "repo": {
+          "id": 12345,
+          "name": "forked_repo_name",
+          "full_name": "forked_repo_owner/forked_repo_name",
+          "owner": {
+            "login": "forked_repo_owner"
+          }
+        }
+      },
+      "base": {
+        "ref": "base_ref",
+        "sha": "base_sha",
+        "repo": {
+          "id": 54321,
+          "name": "original_repo_name",
+          "full_name": "original_repo_owner/original_repo_name",
+          "owner": {
+            "login": "original_repo_owner"
+          }
+        }
+      }
+    },
+    "repository": {
+      "id": 54321,
+      "name": "original_repo_name",
+      "full_name": "original_repo_owner/original_repo_name",
+      "owner": {
+        "login": "original_repo_owner"
+      }
+    }
+  }
+}

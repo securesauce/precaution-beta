@@ -10,6 +10,7 @@ const linterApp = require('..')
 const checkSuiteRerequestedEvent = require('./events/check_suite.rerequested.json')
 const checkRunRerequestEvent = require('./events/check_run_rerequested.json')
 const pullRequestOpenedEvent = require('./events/pull_request.opened.json')
+const pullRequestSynchronize = require('./events/pull_request.synchronize.json')
 
 const samplePythonPRFixture = require('./fixtures/pull_request.files.python.json')
 const sampleMixedPRFixture = require('./fixtures/pull_request.files.mix.json')
@@ -137,6 +138,40 @@ describe('Bandit-linter', () => {
         status: 'completed',
         owner: 'owner_login',
         repo: 'repo_name',
+        completed_at: expect.any(String)
+      }))
+    })
+
+    // This event happens when there is an already opened pull request which
+    // happens across forks. Then, new commit to this pull request will cause
+    // a pull_request.synchronize event.
+    test('responds on pull request synchronize event', async () => {
+      await app.receive(pullRequestSynchronize)
+
+      expect(github.checks.create).toHaveBeenCalledWith(expect.objectContaining({
+        status: 'in_progress',
+        owner: 'original_repo_owner',
+        repo: 'original_repo_name',
+        started_at: expect.any(String),
+        head_sha: expect.any(String)
+      }))
+
+      expect(github.pullRequests.listFiles).toHaveBeenCalledWith({
+        owner: 'original_repo_owner',
+        repo: 'original_repo_name',
+        number: 8
+      })
+
+      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
+        owner: 'forked_repo_owner',
+        repo: 'forked_repo_name',
+        ref: 'head_ref'
+      }))
+
+      expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
+        status: 'completed',
+        owner: 'original_repo_owner',
+        repo: 'original_repo_name',
         completed_at: expect.any(String)
       }))
     })
