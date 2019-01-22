@@ -3,7 +3,7 @@
     SPDX-License-Identifier: BSD-2-Clause
 -->
 
-# Setup Precaution as a required check
+# Setup a Branch Protection Rule
 
 By default, after Precaution is installed, it will not automatically prevent the merging of a pull request even if the check resulted in a failure status. 
 
