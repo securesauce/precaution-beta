@@ -10,7 +10,7 @@ By default, after Precaution is installed, it will not automatically prevent the
 ![check_fails](./setup_images/check_fails.png)
 
 
-If you want to make Precaution succeed check mandatory do the following steps:
+In order to allow Precaution to prevent pull requests from merging, do the following:
 
 ## 1. Go to settings
 
