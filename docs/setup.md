@@ -35,4 +35,4 @@ If you want to apply this rule to the master branch you will have to check the f
 
 
 
-Now when there is a new pull request Precaution will prohibit it from merging into the master branch until the Precaution check passes successfully.
+Now, when there is a new pull request the new rule will prohibit it from merging into the master branch until a successfully check.
