@@ -29,7 +29,7 @@ In order to allow Precaution to prevent pull requests from merging, do the follo
 
 ## 4. Setup the branch protection rule 
 
-If you want to apply this rule to the master branch you will have to fill and click those option:
+If you want to apply this rule to the master branch you will have to check the following options:
 
 ![branch_protection_rule.png](./setup_images/branch_protection_rule.png)
 
