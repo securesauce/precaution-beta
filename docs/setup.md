@@ -5,7 +5,7 @@
 
 # Setup Precaution as a required check
 
-By default, when Precaution is installed and has access on your project, Precaution creates a check and doesn't stop a pull request from merging even if the result of the check is fail status: 
+By default, after Precaution is installed, it will not automatically prevent the merging of a pull request even if the check resulted in a failure status. 
 
 ![check_fails](./setup_images/check_fails.png)
 
