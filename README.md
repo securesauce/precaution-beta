@@ -45,8 +45,6 @@ and communicate with the checks API.
 - [Debugging with VSCode](docs/localdev.md)
 - [Architecture](docs/architecture.md)
 
-## Releases & Major Branches
-
 ## Contributing
 
 The Precaution project team welcomes contributions from the community. Before you start working with Precaution, please read our [Developer Certificate of Origin](https://cla.vmware.com/dco). All contributions to this repository must be signed as described on that page. Your signature certifies that you wrote the patch or have the right to pass it on as an open-source patch. For more detailed information, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
