@@ -12,8 +12,9 @@ const checkRunRerequestEvent = require('./events/check_run_rerequested.json')
 const pullRequestOpenedEvent = require('./events/pull_request.opened.json')
 const pullRequestSynchronize = require('./events/pull_request.synchronize.json')
 
-const samplePythonPRFixture = require('./fixtures/pull_request.files.python.json')
 const sampleMixedPRFixture = require('./fixtures/pull_request.files.mix.json')
+const samplePythonPRFixture = require('./fixtures/pull_request.files.python.json')
+const sampleSafePRFixture = require('./fixtures/pull_request.files.safe.json')
 
 function mockPRContents (github, PR) {
   github.pullRequests.listFiles = jest.fn().mockResolvedValue(PR)
@@ -29,6 +30,11 @@ describe('Bandit-linter', () => {
     files.forEach((filename) => {
       mockFiles[filename] = fs.readFileSync(path.join('test/fixtures/python', filename), 'utf8')
     })
+
+    // Manually load in the go file contents
+    mockFiles['networking_binding.go'] = fs.readFileSync('test/fixtures/go/src/vulnerable_package/networking_binding.go', 'utf8')
+    mockFiles['bad_test_file.go'] = fs.readFileSync('test/fixtures/go/src/vulnerable_package/bad_test_file.go', 'utf8')
+    mockFiles['hello.go'] = fs.readFileSync('test/fixtures/go/src/safe/hello_world.go', 'utf8')
   })
 
   beforeEach(() => {
@@ -177,10 +183,6 @@ describe('Bandit-linter', () => {
     })
 
     test('handles PRs with mixed file types', async () => {
-      // Manually load in the go file contents
-      mockFiles['networking_binding.go'] = fs.readFileSync('test/fixtures/go/src/vulnerable_package/networking_binding.go', 'utf8')
-      mockFiles['bad_test_file.go'] = fs.readFileSync('test/fixtures/go/src/vulnerable_package/bad_test_file.go', 'utf8')
-
       mockPRContents(github, sampleMixedPRFixture)
 
       await app.receive(pullRequestOpenedEvent)
@@ -203,6 +205,17 @@ describe('Bandit-linter', () => {
       await app.receive(checkSuiteRerequestedEvent)
 
       expect(fs.existsSync('cache/54321/2108')).toBeFalsy()
+    })
+
+    test('sends a success status on safe code', async () => {
+      mockPRContents(github, sampleSafePRFixture)
+
+      await app.receive(pullRequestOpenedEvent)
+
+      expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
+        status: 'completed',
+        conclusion: 'success'
+      }))
     })
 
     test('sends an error report on crash', async () => {
