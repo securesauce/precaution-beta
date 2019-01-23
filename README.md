@@ -41,6 +41,7 @@ and communicate with the checks API.
 
 ## Additional documentation
 
+- [False positives and how to handle them](docs/false_pos.md)
 - [Setting up a manual deployment](docs/manual_deployment.md)
 - [Debugging with VSCode](docs/localdev.md)
 - [Architecture](docs/architecture.md)
