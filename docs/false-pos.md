@@ -13,6 +13,10 @@ Although this line may cause a potential security issue, it will not be reported
 
 ``` self.process = subprocess.Popen('/bin/echo', shell=True)  # nosec ```
 
+
+If you want to read more about annotating the code:
+https://github.com/PyCQA/bandit#exclusions
+
 ## Go example
 
 In Go the annotation has to be inside a line or block comment:
@@ -32,3 +36,6 @@ func main(){
 }
 
 ```
+
+If you want to read more about annotating the code:
+https://github.com/securego/gosec#annotating-code
