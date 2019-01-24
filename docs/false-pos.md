@@ -3,7 +3,7 @@
 
 As with all automated detection tools there will be cases of false positives.
 
-The way to handle this situation is to write #nosec in your code
+If Precaution reports a failure that has been manually verified as being safe, it is possible to annotate the code with a `#nosec` comment.
 
 Here are examples:
 
