@@ -1,7 +1,7 @@
 
 # False positives and how to handle them
 
-No tool is perfect, neither is Precaution and false positives may happened.
+As with all automated detection tools there will be cases of false positives.
 
 The way to handle this situation is to write #nosec in your code
 
