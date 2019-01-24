@@ -15,7 +15,7 @@ Although this line may cause a potential security issue, it will not be reported
 
 ## Go example
 
-Same here, with #nosec comment you basically say: "I know what I am doing don't warn me":
+In Go the annotation has to be inside a line or block comment:
 
 ```go
 
