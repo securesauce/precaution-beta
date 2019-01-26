@@ -41,10 +41,10 @@ and communicate with the checks API.
 
 ## Additional documentation
 
-- [False positives and how to handle them](docs/false-pos.md)
-- [Setting up a manual deployment](docs/manual_deployment.md)
-- [Debugging with VSCode](docs/localdev.md)
-- [Architecture](docs/architecture.md)
+- [False positives and how to handle them](https://vmware.github.io/precaution/docs/false-pos.html)
+- [Setting up a manual deployment](https://vmware.github.io/precaution/docs/manual_deployment)
+- [Debugging with VSCode](https://vmware.github.io/precaution/docs/localdev.html)
+- [Architecture](https://vmware.github.io/precaution/docs/architecture.html)
 
 ## Contributing
 
