@@ -39,6 +39,6 @@ module.exports = (reports) => {
 
   const summary = mergeSummaries(reports.map(r => r.issueCount))
 
-  // TODO: handle text merge
-  return { title: config.issuesFoundResultTitle, summary, annotations, text: '' }
+  const text = reports.map(r => r.moreInfo).reduce((a, b) => a + b, '')
+  return { title: config.issuesFoundResultTitle, summary, annotations, text }
 }
