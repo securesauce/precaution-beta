@@ -3,7 +3,7 @@
     SPDX-License-Identifier: BSD-2-Clause
 -->
 
-# Setup a Branch Protection Rule
+# Setting up a Branch Protection Rule
 
 By default, after Precaution is installed, it will not automatically prevent the merging of a pull request even if the check resulted in a failure status. 
 
@@ -12,28 +12,28 @@ By default, after Precaution is installed, it will not automatically prevent the
 
 In order to allow Precaution to prevent pull requests from merging, do the following:
 
-## 0. Create a pull request
+## 1. Create a pull request
 
-There should be a pull request after the installation of Precaution in order to setup Precaution as a branch protection rule.
+You should create a pull request after the installation of Precaution in order to setup Precaution as a branch protection rule.
 
-The pull request can be fictitious and doesn't have to be merged.
+This pull request doesn't have to be merged.
 
-## 1. Go to settings
+## 2. Go to settings
 
 ![settings](./images/settings.png)
 
 
-## 2. Choose branches
+## 3. Choose branches
 
 ![branches](./images/branches.png)
 
 
-## 3. Create a new branch protection rule 
+## 4. Create a new branch protection rule 
 
 ![add_rule](./images/add_rule.png)
 
 
-## 4. Setup the branch protection rule 
+## 5. Setup the branch protection rule 
 
 If you want to apply this rule to the master branch you will have to check the following options:
 
