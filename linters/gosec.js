@@ -36,7 +36,7 @@ module.exports = class Gosec {
    * @param {string} prID PR id in repository
    */
   workingDirectoryForPR (repoID, prID) {
-    return cache.getBranchPath(repoID, prID, 'gosec')
+    return cache.getBranchPath(repoID, prID)
   }
 
   /**

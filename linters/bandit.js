@@ -36,7 +36,7 @@ module.exports = class Bandit {
    * @param {string} prID PR id in repository
    */
   workingDirectoryForPR (repoID, prID) {
-    return cache.getBranchPath(repoID, prID, 'bandit')
+    return cache.getBranchPath(repoID, prID)
   }
 
   /**
