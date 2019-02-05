@@ -54,6 +54,6 @@ The Precaution project team welcomes contributions from the community. Before yo
 
 BSD-2 License
 
-## Do you have any other question? 
+## Any other questions? 
 
-If you have any other question which was not answered in the docs or in the README, please let us know in the #precaution channel on [Slack](https://code.vmware.com/web/code/join).
+If you have any other questions which are not addressed in the docs or README, reach out to us in the #precaution channel on [Slack](https://code.vmware.com/web/code/join).
