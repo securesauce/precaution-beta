@@ -41,13 +41,11 @@ and communicate with the checks API.
 
 ## Additional documentation
 
-- [Setting up a Branch Protection Rule](https://vmware.github.io/precaution/docs/setup.md)
+- [Initial setup](https://vmware.github.io/precaution/docs/initial_setup.md)
 - [False positives and how to handle them](https://vmware.github.io/precaution/docs/false_positivies.html)
 - [Setting up a manual deployment](https://vmware.github.io/precaution/docs/manual_deployment)
 - [Debugging with VSCode](https://vmware.github.io/precaution/docs/local_development.html)
 - [Architecture](https://vmware.github.io/precaution/docs/architecture.html)
-
-## Releases & Major Branches
 
 ## Contributing
 
