@@ -1,15 +1,15 @@
-// Copyright 2018 VMware, Inc.
+// Copyright 2019 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const generateReport = require('../bandit/bandit_report')
+const generateReport = require('../eslint_plugin/eslint_plugin_report')
 
-const banditResults = require('./fixtures/reports/bandit_vulnerable.json')
+const eslintResults = require('./fixtures/reports/eslint_vulnerable.json')
 
-describe('Bandit report generation', () => {
+describe('ESlint plugin report generation', () => {
   let report
 
   beforeEach(() => {
-    report = generateReport(banditResults)
+    report = generateReport(eslintResults, 'test/fixtures/go/src')
   })
 
   test('Creates correct report structure', () => {
@@ -22,10 +22,9 @@ describe('Bandit report generation', () => {
 
   test('Creates correct annotations', () => {
     expect(report.annotations).toHaveLength(4)
-    expect(report.annotations[0].end_line).toBe(8)
-    expect(report.annotations[3].start_line).toBe(15)
-    expect(report.annotations[1].path).toBe('mix.py')
-    expect(report.annotations[2].title).toBe('B305:blacklist')
+    expect(report.annotations[0].end_line).toBe(56)
+    expect(report.annotations[2].start_line).toBe(31)
+    expect(report.annotations[1].path).toEqual('precaution/test/index.test.js')
 
     report.annotations.forEach(annotation => {
       expect(annotation.annotation_level).toMatch(/notice|warning|failure/)
@@ -34,13 +33,13 @@ describe('Bandit report generation', () => {
   })
 
   test('Creates correct issue count', () => {
-    expect(report.issueCount.errors).toBe(1)
-    expect(report.issueCount.warnings).toBe(3)
+    expect(report.issueCount.errors).toBe(0)
+    expect(report.issueCount.warnings).toBe(4)
     expect(report.issueCount.notices).toBe(0)
   })
 
-  test('Handles no vulnerable reports', async () => {
-    const jsonResults = require('./fixtures/reports/bandit_safe.json')
+  test('Handles no vulnerable reports', () => {
+    const jsonResults = require('./fixtures/reports/eslint_safe.json')
 
     const report = generateReport(jsonResults)
 
