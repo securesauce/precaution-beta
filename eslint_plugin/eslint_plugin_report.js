@@ -9,9 +9,10 @@ const { countIssueLevels } = require('../annotations_levels')
  * @param {*} results Eslint plugin json output
  */
 module.exports = (results) => {
-  // The structure of the ESlint JSON output is that the issues are grouped by files.
-  // Also, the ESlint plugin gives output for every single file even though some of the files
-  // can be secure and we have to filter those files.
+  // The structure of the ESlint JSON output is that
+  // the issues found by ESLint are grouped by files.
+  // In the ESlint output there are files without any problems
+  // and that's why I have to filter them.
   const filesWithIssues = results.filter((fileWithIssues) => fileWithIssues.messages.length !== 0)
   let annotations = []
   for (let i = 0; i < filesWithIssues.length; ++i) {

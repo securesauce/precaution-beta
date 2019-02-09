@@ -5,7 +5,7 @@
  * @param {*} filePath path to the file containing the issue
  * @param {*} issue
  * @return {Object} returns an annotation object as specified here:
- * https://developer.github.com/v3/checks/runs/#annotations-object
+ * @see {@link https://developer.github.com/v3/checks/runs/#annotations-object }
  */
 function setupSingleAnnotation (filePath, issue) {
   const path = filePath
@@ -32,7 +32,7 @@ function setupSingleAnnotation (filePath, issue) {
 /**
  * @param {Object} fileWithIssues object containing all the issues for a given file
  * @return {Object[]} returns an array of annotation objects as specified here:
- * https://developer.github.com/v3/checks/runs/#annotations-object
+ * @see {@link https://developer.github.com/v3/checks/runs/#annotations-object }
  */
 function getAnnotations (fileWithIssues) {
   let annotations = []
