@@ -22,9 +22,9 @@ a pass/fail status report.
 
 Precaution currently supports analysis of python files via Bandit and go files via Gosec. New languages may be added in future.
 
-* Documentation: https://vmware.github.io/precaution/
-* Source: https://github.com/vmware/precaution
-* Bugs: https://github.com/vmware/precaution/issues
+* Documentation: [vmware/precaution/docs](https://vmware.github.io/precaution/)
+* Source: [vmware/precaution](https://github.com/vmware/precaution)
+* Bugs: [vmware/precaution/issues](https://github.com/vmware/precaution/issues)
 
 ## Installing Precaution on a GitHub repository
 
