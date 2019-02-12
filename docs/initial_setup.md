@@ -10,7 +10,7 @@
 In order to achieve the best results when using Precaution, it's important to run static code analysis on the codebase in your main branch locally. 
 The reason to do that is that there can be many older source code files which are stable and won't be changed soon by a pull request but still it's good to ensure they don't contain common security-related mistakes.
 
-You can run static code analysis for source code in Python using Bandit: https://github.com/PyCQA/bandit 
+You can run static code analysis of Python source code using Bandit: https://github.com/PyCQA/bandit 
 
 and for source code in Go using Gosec: https://github.com/securego/gosec 
 
