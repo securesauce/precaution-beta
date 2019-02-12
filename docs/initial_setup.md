@@ -5,10 +5,9 @@
 
 # Initial setup
 
-## Run static code analysis locally (recommended)
+## Run static code analysis (recommended)
 
-Precaution scans new pull requests for security vulnerabilities and if in a pull request there are modifications of old source code it is likely that Precaution will find issues not related with the pull request changes but with the old source code in the modified file.
-Therefore for best results, before using Precaution it is recommended to run static code analysis for security problems locally. That way when you resolve the possible issues you can ensure that the current code base does not contain common security issues.
+For best results, prior to using Precaution, it is recommended to run static code analysis tooling on the code base. That way the current code base does not contain known security issues.
 
 You can run static code analysis of Python source code using Bandit: https://github.com/PyCQA/bandit 
 
