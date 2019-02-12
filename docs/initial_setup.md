@@ -5,7 +5,7 @@
 
 # Initial setup
 
-## Run static code analysis (recommended)
+## Run static code analysis tooling (recommended)
 
 For best results, prior to using Precaution, it is recommended to run static code analysis tooling on the code base. That way the current code base does not contain known security issues.
 
