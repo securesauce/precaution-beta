@@ -12,7 +12,7 @@ The reason to do that is that there can be many older source code files which ar
 
 You can run static code analysis of Python source code using Bandit: https://github.com/PyCQA/bandit 
 
-and for source code in Go using Gosec: https://github.com/securego/gosec 
+and for source code in Go use Gosec: https://github.com/securego/gosec 
 
 ## Setting up a Branch Protection Rule
 
