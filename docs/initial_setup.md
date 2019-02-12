@@ -7,8 +7,8 @@
 
 ## Run static code analysis locally (recommended)
 
-In order to achieve the best results when using Precaution, it's important to run static code analysis on the codebase in your main branch locally. 
-The reason to do that is that there can be many older source code files which are stable and won't be changed soon by a pull request but still it's good to ensure they don't contain common security-related mistakes.
+Precaution scans new pull requests for security vulnerabilities and if in a pull request there are modifications of old source code it is likely that Precaution will find issues not related with the pull request changes but with the old source code in the modified file.
+Therefore for best results, before using Precaution it is recommended to run static code analysis for security problems locally. That way when you resolve the possible issues you can ensure that the current code base does not contain common security issues.
 
 You can run static code analysis of Python source code using Bandit: https://github.com/PyCQA/bandit 
 
@@ -52,4 +52,4 @@ If you want to apply this rule to the master branch you will have to check the f
 
 
 
-Congratulations! Branch protection is now enabled and will prevent merging code that fails the status check.
+Congratulations! Now Precaution will prevent the merging of a pull request if the check resulted in a failure status.
