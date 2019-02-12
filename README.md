@@ -41,9 +41,9 @@ and communicate with the checks API.
 
 ## Additional documentation
 
-- [Initial setup](https://vmware.github.io/precaution/docs/initial_setup.md)
+- [Initial setup](https://vmware.github.io/precaution/docs/initial_setup.html)
 - [False positives and how to handle them](https://vmware.github.io/precaution/docs/false_positivies.html)
-- [Setting up a manual deployment](https://vmware.github.io/precaution/docs/manual_deployment)
+- [Setting up a manual deployment](https://vmware.github.io/precaution/docs/manual_deployment.html)
 - [Debugging with VSCode](https://vmware.github.io/precaution/docs/local_development.html)
 - [Architecture](https://vmware.github.io/precaution/docs/architecture.html)
 
