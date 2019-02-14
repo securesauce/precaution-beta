@@ -186,7 +186,6 @@ describe('Bandit-linter', () => {
 
     test('handles PRs with mixed file types', async () => {
       mockPRContents(github, sampleMixedPRFixture)
-
       await app.receive(pullRequestOpenedEvent)
 
       expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
@@ -205,7 +204,6 @@ describe('Bandit-linter', () => {
 
     test('handles PRs with only deletions', async () => {
       mockPRContents(github, sampleOnlyDeletions)
-
       await app.receive(pullRequestOpenedEvent)
 
       expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
@@ -230,7 +228,6 @@ describe('Bandit-linter', () => {
 
     test('handles PRs with deletions, modifications and additions', async () => {
       mockPRContents(github, sampleDelAddModif)
-
       await app.receive(pullRequestOpenedEvent)
 
       expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
@@ -252,7 +249,6 @@ describe('Bandit-linter', () => {
 
     test('sends a success status on safe code', async () => {
       mockPRContents(github, sampleSafePRFixture)
-
       await app.receive(pullRequestOpenedEvent)
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -263,7 +259,6 @@ describe('Bandit-linter', () => {
 
     test('sends an error report on crash', async () => {
       github.pullRequests.listFiles = jest.fn().mockRejectedValue('Rejected promise')
-
       await app.receive(checkSuiteRerequestedEvent)
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
