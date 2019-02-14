@@ -15,6 +15,8 @@ const pullRequestSynchronize = require('./events/pull_request.synchronize.json')
 const sampleMixedPRFixture = require('./fixtures/pull_request.files.mix.json')
 const samplePythonPRFixture = require('./fixtures/pull_request.files.python.json')
 const sampleSafePRFixture = require('./fixtures/pull_request.files.safe.json')
+const sampleOnlyDeletions = require('./fixtures/pull_request.deletions.json')
+const sampleDelAddModif = require('./fixtures/pull_request.deletions.modif.add.json')
 
 function mockPRContents (github, PR) {
   github.pullRequests.listFiles = jest.fn().mockResolvedValue(PR)
@@ -184,7 +186,6 @@ describe('Bandit-linter', () => {
 
     test('handles PRs with mixed file types', async () => {
       mockPRContents(github, sampleMixedPRFixture)
-
       await app.receive(pullRequestOpenedEvent)
 
       expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
@@ -201,6 +202,45 @@ describe('Bandit-linter', () => {
       }))
     })
 
+    test('handles PRs with only deletions', async () => {
+      mockPRContents(github, sampleOnlyDeletions)
+      await app.receive(pullRequestOpenedEvent)
+
+      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
+        path: 'https.py'
+      }))
+      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
+        path: 'cgi.py'
+      }))
+      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
+        path: 'hello.go'
+      }))
+
+      expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
+        check_run_id: 1,
+        status: 'completed',
+        conclusion: 'success',
+        owner: 'owner_login',
+        repo: 'repo_name',
+        completed_at: expect.any(String)
+      }))
+    })
+
+    test('handles PRs with deletions, modifications and additions', async () => {
+      mockPRContents(github, sampleDelAddModif)
+      await app.receive(pullRequestOpenedEvent)
+
+      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
+        path: 'https.py'
+      }))
+      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
+        path: 'cgi.py'
+      }))
+      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
+        path: 'hello.go'
+      }))
+    })
+
     test('cleans up after performing checks', async () => {
       await app.receive(checkSuiteRerequestedEvent)
 
@@ -209,7 +249,6 @@ describe('Bandit-linter', () => {
 
     test('sends a success status on safe code', async () => {
       mockPRContents(github, sampleSafePRFixture)
-
       await app.receive(pullRequestOpenedEvent)
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -220,7 +259,6 @@ describe('Bandit-linter', () => {
 
     test('sends an error report on crash', async () => {
       github.pullRequests.listFiles = jest.fn().mockRejectedValue('Rejected promise')
-
       await app.receive(checkSuiteRerequestedEvent)
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({

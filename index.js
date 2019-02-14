@@ -71,7 +71,8 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
 
     // For now only deal with one PR
     const PR = pullRequests[0]
-    const inputFiles = resolvedPRs[0]
+    // Sometimes the resolverPR list contains undefined members
+    const inputFiles = resolvedPRs[0].filter((file) => file)
 
     const report = await runLinters(inputFiles, repoID, PR.id)
 
@@ -106,7 +107,7 @@ async function processPullRequest (pullRequest, context) {
 
   const filesDownloadedPromise = response.data
     .filter(file => config.fileExtensions.reduce((acc, ext) => acc || file.filename.endsWith(ext), false))
-    .filter(async fileJSON => fileJSON !== 'deleted')
+    .filter(fileJSON => fileJSON.status !== 'removed')
     .map(async fileJSON => {
       const filename = fileJSON.filename
 
