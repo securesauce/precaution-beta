@@ -39,7 +39,7 @@ describe('Gosec report generation', () => {
     expect(report.issueCount.notices).toBe(0)
   })
 
-  test('Handles no vuln reports', async () => {
+  test('Handles no vulnerable reports', async () => {
     const jsonResults = require('./fixtures/reports/gosec_safe.json')
 
     const report = generateReport(jsonResults)
