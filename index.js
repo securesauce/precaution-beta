@@ -71,7 +71,7 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
 
     // For now only deal with one PR
     const PR = pullRequests[0]
-    // It happens sometimes that the resolverPR contains undefined members
+    // Sometimes the resolverPR list contains undefined members
     const inputFiles = resolvedPRs[0].filter((file) => file)
 
     const report = await runLinters(inputFiles, repoID, PR.id)
