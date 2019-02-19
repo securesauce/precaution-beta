@@ -17,6 +17,7 @@ const samplePythonPRFixture = require('./fixtures/pull_request.files.python.json
 const sampleSafePRFixture = require('./fixtures/pull_request.files.safe.json')
 const sampleOnlyDeletions = require('./fixtures/pull_request.deletions.json')
 const sampleDelAddModif = require('./fixtures/pull_request.deletions.modif.add.json')
+const sampleNonValidPRFixture = require('./fixtures/pull_request.non.valid.files.json')
 
 function mockPRContents (github, PR) {
   github.pullRequests.listFiles = jest.fn().mockResolvedValue(PR)
@@ -254,6 +255,23 @@ describe('Bandit-linter', () => {
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
         status: 'completed',
         conclusion: 'success'
+      }))
+    })
+
+    test('sends an error while parsing the AST when scanning python code', async () => {
+      mockPRContents(github, sampleNonValidPRFixture)
+      await app.receive(pullRequestOpenedEvent)
+
+      expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
+        check_run_id: 1,
+        status: 'completed',
+        conclusion: 'failure',
+        output: expect.objectContaining({
+          title: 'App error',
+          summary: 'Error: \n' +
+          'issue 1: syntax error while parsing AST from file: crypto.invalid.py\n' +
+          'issue 2: syntax error while parsing AST from file: hello.world.invalid.py\n'
+        })
       }))
     })
 
