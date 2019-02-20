@@ -57,7 +57,7 @@ module.exports = class Bandit {
     if (parsedData.errors.length !== 0) {
       let errStr = '\n'
       for (let i = 0; i < parsedData.errors.length; ++i) {
-        errStr += 'issue ' + (i + 1) + ': ' + parsedData.errors[i].reason + ': ' +
+        errStr += 'Issue ' + (i + 1) + ': ' + parsedData.errors[i].reason + ': ' +
           parsedData.errors[i].filename + '\n'
       }
       throw new Error(errStr)
