@@ -1,3 +1,6 @@
+# Copyright 2019 VMware, Inc.
+# SPDX-License-Identifier: BSD-2-Clause
+
 num = eval(input("Enter a positive number: "
 if num < 0:
    print("Non positive number"

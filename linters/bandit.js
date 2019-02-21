@@ -54,13 +54,21 @@ module.exports = class Bandit {
    */
   parseResults (data) {
     let parsedData = JSON.parse(data)
+
     if (parsedData.errors.length !== 0) {
-      let errStr = '\n'
       for (let i = 0; i < parsedData.errors.length; ++i) {
-        errStr += 'Issue ' + (i + 1) + ': ' + parsedData.errors[i].reason + ': ' +
-          parsedData.errors[i].filename + '\n'
+        let errAnnotation = {
+          filename: parsedData.errors[i].filename,
+          line_number: 1,
+          issue_severity: 'HIGH',
+          issue_confidence: 'HIGH',
+          issue_text: '',
+          test_id: 'ERROR',
+          test_name: 'Invalid file' }
+
+        errAnnotation.issue_text = 'Error: ' + parsedData.errors[i].reason + ' ' + parsedData.errors[i].filename
+        parsedData.results.push(errAnnotation)
       }
-      throw new Error(errStr)
     }
     return parsedData
   }

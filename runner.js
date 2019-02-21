@@ -41,6 +41,7 @@ function run (linter, workingDirectory, files) {
   process.stderr.on('data', (chunk) => {
     errorLogs += chunk.toString()
   })
+
   // Promise report generation
   return new Promise((resolve, reject) => {
     process.on('error', reject)
@@ -55,13 +56,9 @@ function reportHandler (linter, workingDirectory, reportFilePath, resolve, rejec
       console.log('stderr: ' + logs)
       return reject(err)
     } else {
-      try {
-        const results = linter.parseResults(data)
-        const report = linter.generateReport(results)
-        return resolve(report)
-      } catch (err) {
-        reject(err)
-      }
+      const results = linter.parseResults(data)
+      const report = linter.generateReport(results)
+      return resolve(report)
     }
   })
 }
