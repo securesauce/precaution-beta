@@ -33,6 +33,7 @@ function run (linter, workingDirectory, files) {
   const filtered = linter.filter(files)
 
   if (filtered.length === 0) { return linter.defaultReport }
+  
   const reportFilePath = path.join(workingDirectory, '..', linter.reportFile)
   const process = spawn(linter.name, linter.args(filtered, path.join('..', linter.reportFile)), { cwd: workingDirectory })
 
