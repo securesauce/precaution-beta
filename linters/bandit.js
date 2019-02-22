@@ -63,7 +63,7 @@ module.exports = class Bandit {
    * @param {any} directory current working directory
    * @returns GitHub checks report
    */
-  generateReport (results) {
+  generateReport (results, directory) {
     return report(results)
   }
 }
