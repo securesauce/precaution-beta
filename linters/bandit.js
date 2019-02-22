@@ -60,6 +60,7 @@ module.exports = class Bandit {
    * Generates a report in the format expected by GitHub checks
    * from the linter results
    * @param {any} results Linter results
+   * @param {any} directory current working directory
    * @returns GitHub checks report
    */
   generateReport (results) {
