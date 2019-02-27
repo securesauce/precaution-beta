@@ -41,7 +41,7 @@ describe('Bandit runner', () => {
     expect(mixedReport.annotations[3].path).toEqual('sum.invalid.py')
     expect(mixedReport.annotations[3].start_line).toBe(1)
     expect(mixedReport.annotations[3].annotation_level).toBe('failure')
-    expect(mixedReport.annotations[3].title).toBe('ERROR:Invalid file')
+    expect(mixedReport.annotations[3].title).toBe('ERROR:Syntax error')
   })
 
   afterEach(() => {
