@@ -14,7 +14,7 @@ function createMoreInfoLinks (issues) {
   for (let issue of issues) {
     if (issuesMap.has(issue.test_id) === false) {
       issuesMap.set(issue.test_id)
-      const text = `${issue.test_id}:${issue.test_name}`
+      const text = `${issue.test_id}: ${issue.test_name}`
       moreInfo += `[${text}](${issue.more_info})\n`
     }
   }
