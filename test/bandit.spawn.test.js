@@ -4,6 +4,7 @@
 const fs = require('fs-extra')
 
 const { run } = require('../runner')
+const { config } = require('../config')
 const Bandit = require('../linters/bandit')
 
 function bandit (dir, files) {
@@ -33,14 +34,14 @@ describe('Bandit runner', () => {
     expect(report.annotations.length).toEqual(0)
   })
 
-  test('Handles when there are invalid and valid python files', async () => {
-    let mixedReport = await bandit('test/fixtures/python', ['sum.invalid.py'])
+  test('Handles invalid python file with syntax errors', async () => {
+    const report = await bandit('test/fixtures/python', ['sum.invalid.py'])
 
-    expect(mixedReport.annotations.length).toBe(1)
-    expect(mixedReport.annotations[0].path).toEqual('sum.invalid.py')
-    expect(mixedReport.annotations[0].start_line).toBe(1)
-    expect(mixedReport.annotations[0].annotation_level).toBe('failure')
-    expect(mixedReport.annotations[0].title).toBe('ERROR:Syntax error')
+    expect(report.annotations.length).toBe(1)
+    expect(report.annotations[0].path).toEqual('sum.invalid.py')
+    expect(report.annotations[0].start_line).toBe(1)
+    expect(report.annotations[0].annotation_level).toBe('failure')
+    expect(report.annotations[0].title).toBe(config.syntaxErrorTitle)
   })
 
   afterEach(() => {

@@ -7,7 +7,8 @@ const config = {
   checkRunName: 'Precaution',
   noIssuesResultTitle: 'No issues found',
   noIssuesResultSummary: 'There were no issues found.',
-  issuesFoundResultTitle: 'Issues found'
+  issuesFoundResultTitle: 'Issues found',
+  syntaxErrorTitle: 'ERROR: Syntax error'
 }
 
 const annotationsLevels = {
