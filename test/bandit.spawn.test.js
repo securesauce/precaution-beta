@@ -34,14 +34,13 @@ describe('Bandit runner', () => {
   })
 
   test('Handles when there are invalid and valid python files', async () => {
-    let mixedReport = await bandit('test/fixtures/python', ['sum.invalid.py', 'https.py'])
+    let mixedReport = await bandit('test/fixtures/python', ['sum.invalid.py'])
 
-    expect(mixedReport.annotations.length).toBe(4)
-    expect(mixedReport.annotations[0].title).toBe('B309:blacklist')
-    expect(mixedReport.annotations[3].path).toEqual('sum.invalid.py')
-    expect(mixedReport.annotations[3].start_line).toBe(1)
-    expect(mixedReport.annotations[3].annotation_level).toBe('failure')
-    expect(mixedReport.annotations[3].title).toBe('ERROR:Syntax error')
+    expect(mixedReport.annotations.length).toBe(1)
+    expect(mixedReport.annotations[0].path).toEqual('sum.invalid.py')
+    expect(mixedReport.annotations[0].start_line).toBe(1)
+    expect(mixedReport.annotations[0].annotation_level).toBe('failure')
+    expect(mixedReport.annotations[0].title).toBe('ERROR:Syntax error')
   })
 
   afterEach(() => {
