@@ -4,6 +4,7 @@
 const fs = require('fs-extra')
 
 const { run } = require('../runner')
+const { config } = require('../config')
 const Gosec = require('../linters/gosec')
 
 function gosec (dir, files) {
@@ -19,6 +20,17 @@ describe('Gosec runner', () => {
     expect(report.annotations[1].start_line).toEqual(19)
     expect(report.annotations[2].start_line).toEqual(26)
     expect(report.annotations[3].start_line).toEqual(27)
+  })
+
+  test('Handles invalid go file with syntax errors', async () => {
+    const report = await gosec('test/fixtures/go/src/invalid_files', ['sum.invalid.go'])
+
+    expect(report.annotations.length).toBe(5)
+    expect(report.annotations[0].path).toEqual('sum.invalid.go')
+    expect(report.annotations[0].start_line).toBe(7)
+    expect(report.annotations[0].message).toBe('arr declared but not used')
+    expect(report.annotations[2].annotation_level).toBe('failure')
+    expect(report.annotations[4].title).toBe(config.syntaxErrorTitle)
   })
 
   test('Passes on safe file', async () => {

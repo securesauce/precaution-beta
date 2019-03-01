@@ -53,7 +53,26 @@ module.exports = class Gosec {
    * @param {Buffer} data The raw linter results data
    */
   parseResults (data) {
-    return JSON.parse(data)
+    let parsedData = JSON.parse(data)
+    let syntaxErrors = parsedData['Golang errors']
+    let filePaths = Object.keys(syntaxErrors)
+
+    for (let path of filePaths) {
+      for (let error of syntaxErrors[path]) {
+        let errAnnotation = {
+          severity: 'HIGH',
+          confidence: 'HIGH',
+          rule_id: 'ERROR',
+          details: 'Syntax error',
+          file: path,
+          code: `${error.error}`,
+          line: error.line
+        }
+        parsedData.Issues.push(errAnnotation)
+      }
+    }
+
+    return parsedData
   }
 
   /**
