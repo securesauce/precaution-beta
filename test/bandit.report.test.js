@@ -25,7 +25,7 @@ describe('Bandit report generation', () => {
     expect(report.annotations[0].end_line).toBe(8)
     expect(report.annotations[3].start_line).toBe(15)
     expect(report.annotations[1].path).toBe('mix.py')
-    expect(report.annotations[2].title).toBe('B305:blacklist')
+    expect(report.annotations[2].title).toBe('B305: blacklist')
 
     report.annotations.forEach(annotation => {
       expect(annotation.annotation_level).toMatch(/notice|warning|failure/)
