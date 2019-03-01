@@ -12,7 +12,3 @@ func networkBind() {
 	}
 	defer l.Close()
 }
-
-func main() {
-
-}
