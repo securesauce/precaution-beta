@@ -28,11 +28,11 @@ describe('Gosec runner', () => {
   })
 
   test('Handles packages with multiple files', async () => {
-    const report = await gosec('test/fixtures/go/src/vulnerable_package/', ['bad_test_file.go', 'networking_binding.go', 'randNumTest.go'])
+    const report = await gosec('test/fixtures/go/src/vulnerable_package/', ['bad_test_file.go', 'networking_binding.go'])
 
-    expect(report.annotations.length).toEqual(8)
+    expect(report.annotations.length).toEqual(7)
     expect(report.annotations[4].start_line).toEqual(9)
-    expect(report.annotations[7].start_line).toEqual(16)
+    expect(report.annotations[6].start_line).toEqual(27)
   })
 
   test('Handles empty input', async () => {
