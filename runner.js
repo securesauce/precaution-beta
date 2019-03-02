@@ -57,7 +57,7 @@ function reportHandler (linter, workingDirectory, reportFilePath, resolve, rejec
       return reject(err)
     } else {
       const results = linter.parseResults(data)
-      const report = linter.generateReport(results)
+      const report = linter.generateReport(results, workingDirectory)
       return resolve(report)
     }
   })
