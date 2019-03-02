@@ -55,9 +55,9 @@ module.exports = class Bandit {
   parseResults (data) {
     let parsedData = JSON.parse(data)
 
-    for (let i = 0; i < parsedData.errors.length; ++i) {
+    for (let error of parsedData.errors) {
       let errAnnotation = {
-        filename: parsedData.errors[i].filename,
+        filename: error.filename,
         line_number: 1,
         issue_severity: 'HIGH',
         issue_confidence: 'HIGH',
@@ -65,7 +65,7 @@ module.exports = class Bandit {
         test_id: 'ERROR',
         test_name: 'Syntax error' }
 
-      errAnnotation.issue_text = 'Error: ' + parsedData.errors[i].reason + ' ' + parsedData.errors[i].filename
+      errAnnotation.issue_text = 'Error: ' + error.reason + ' ' + error.filename
       parsedData.results.push(errAnnotation)
     }
     return parsedData
