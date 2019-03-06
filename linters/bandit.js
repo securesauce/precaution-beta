@@ -63,7 +63,8 @@ module.exports = class Bandit {
         issue_confidence: 'HIGH',
         issue_text: '',
         test_id: 'ERROR',
-        test_name: 'Syntax error' }
+        test_name: 'Syntax error'
+      }
 
       errAnnotation.issue_text = 'Error: ' + error.reason + ' ' + error.filename
       parsedData.results.push(errAnnotation)
