@@ -53,7 +53,23 @@ module.exports = class Bandit {
    * @param {Buffer} data The raw linter results data
    */
   parseResults (data) {
-    return JSON.parse(data)
+    let parsedData = JSON.parse(data)
+
+    for (let error of parsedData.errors) {
+      let errAnnotation = {
+        filename: error.filename,
+        line_number: 1,
+        issue_severity: 'HIGH',
+        issue_confidence: 'HIGH',
+        issue_text: '',
+        test_id: 'ERROR',
+        test_name: 'Syntax error'
+      }
+
+      errAnnotation.issue_text = 'Error: ' + error.reason + ' ' + error.filename
+      parsedData.results.push(errAnnotation)
+    }
+    return parsedData
   }
 
   /**

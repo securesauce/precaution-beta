@@ -12,11 +12,14 @@ function createMoreInfoLinks (issues) {
   let moreInfo = 'For more information about the issues follow the links: \n'
 
   for (let issue of issues) {
-    if (issuesMap.has(issue.test_id) === false) {
+    if (issuesMap.has(issue.test_id) === false && issue.more_info) {
       issuesMap.set(issue.test_id)
       const text = `${issue.test_id}: ${issue.test_name}`
       moreInfo += `[${text}](${issue.more_info})\n`
     }
+  }
+  if (issuesMap.size <= 0) {
+    return ''
   }
   return moreInfo
 }
