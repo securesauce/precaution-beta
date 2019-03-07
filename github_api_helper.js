@@ -118,22 +118,48 @@ function getConclusion (annotations) {
  * @param {import('probot').Context} context Probot context
  * @param {Number} runID check run identifier
  * @param {Object} output merged scan output
+ * @param {Number} annotationsPerPage Optional: number of annotations to send with one API call.
  * @returns {Promise<any>} GitHub response
  * See: https://developer.github.com/v3/checks/runs/#update-a-check-run
  */
-function sendResults (context, runID, output) {
+function sendResults (context, runID, output, annotationsPerPage) {
   const { owner, repo } = context.repo()
-  const completedAt = new Date().toISOString()
+  let numAnnotationsLeftToSend = annotationsPerPage || output.annotations.length
+  if (numAnnotationsLeftToSend <= 0 || numAnnotationsLeftToSend > 50) {
+    numAnnotationsLeftToSend = 50
+  }
 
-  return context.github.checks.update({
-    check_run_id: runID,
-    owner,
-    repo,
-    status: 'completed',
-    completed_at: completedAt,
-    conclusion: getConclusion(output.annotations),
-    output
-  })
+  let timesToSendUpdates = Math.ceil(output.annotations.length / numAnnotationsLeftToSend)
+  timesToSendUpdates = timesToSendUpdates === 0 ? 1 : timesToSendUpdates
+
+  let startIndex = 0
+  let endIdex = config.numAnnotationsPerUpdate
+
+  for (let i = 0; i < timesToSendUpdates; ++i) {
+    if (numAnnotationsLeftToSend < config.numAnnotationsPerUpdate) {
+      endIdex = output.annotations.length
+    }
+
+    const completedAt = new Date().toISOString()
+    context.github.checks.update({
+      check_run_id: runID,
+      owner,
+      repo,
+      status: 'completed',
+      completed_at: completedAt,
+      conclusion: getConclusion(output.annotations),
+      output: {
+        title: output.title,
+        summary: output.summary,
+        text: output.text,
+        annotations: output.annotations.slice(startIndex, endIdex)
+      }
+    })
+
+    startIndex += config.numAnnotationsPerUpdate
+    endIdex += config.numAnnotationsPerUpdate
+    numAnnotationsLeftToSend -= endIdex - startIndex
+  }
 }
 
 /**
