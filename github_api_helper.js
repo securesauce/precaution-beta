@@ -26,6 +26,14 @@ function inProgressAPIresponse (context, headSha) {
   })
 }
 
+// Filters the files which are not relevant to us
+function filterData (rawData) {
+  return rawData.data.filter(file => config.fileExtensions.reduce((acc, ext) => acc || file.filename.endsWith(ext), false))
+    .filter(fileJSON => fileJSON.status !== 'removed').map(async fileInfo => {
+      return fileInfo.filename
+    })
+}
+
 /**
  * Get list of files modified by a pull request
  * @param {import('probot').Context} context Probot context
@@ -33,14 +41,22 @@ function inProgressAPIresponse (context, headSha) {
  * @returns {Promise<any>} GitHub response
  * See https://developer.github.com/v3/pulls/#list-pull-requests-files
  */
-function getPRFiles (context, number) {
+async function getPRFiles (context, number) {
   const { owner, repo } = context.repo()
 
-  return context.github.pullRequests.listFiles({
-    owner,
-    repo,
-    number
+  let response = await context.github.pullRequests.listFiles({
+    owner: owner,
+    repo: repo,
+    number: number,
+    per_page: config.amountFilesListedPerPage
   })
+
+  let data = filterData(response)
+  while (context.github.hasNextPage(response)) {
+    response = await context.github.getNextPage(response)
+    data = data.concat(filterData(response))
+  }
+  return Promise.all(data)
 }
 
 /**

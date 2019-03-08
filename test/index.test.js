@@ -1,4 +1,4 @@
-// Copyright 2018 VMware, Inc.
+// Copyright 2019 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
 const fs = require('fs-extra')
@@ -6,6 +6,7 @@ const path = require('path')
 
 const { Application } = require('probot')
 const linterApp = require('..')
+const { config } = require('../config')
 
 const checkSuiteRerequestedEvent = require('./events/check_suite.rerequested.json')
 const checkRunRerequestEvent = require('./events/check_run_rerequested.json')
@@ -19,7 +20,11 @@ const sampleOnlyDeletions = require('./fixtures/pull_request.deletions.json')
 const sampleDelAddModif = require('./fixtures/pull_request.deletions.modif.add.json')
 
 function mockPRContents (github, PR) {
-  github.pullRequests.listFiles = jest.fn().mockResolvedValue(PR)
+  github.pullRequests.listFiles = jest.fn(() => {
+    --github.numPagesOfContent
+    return PR
+  })
+  github.getNextPage = github.pullRequests.listFiles
 }
 
 describe('Bandit-linter', () => {
@@ -49,9 +54,18 @@ describe('Bandit-linter', () => {
         create: jest.fn().mockResolvedValue({ data: { id: 1 } }),
         update: jest.fn().mockResolvedValue({})
       },
+      numPagesOfContent: 2,
       pullRequests: {
-        listFiles: jest.fn().mockResolvedValue(samplePythonPRFixture)
+        listFiles: jest.fn(() => {
+          --github.numPagesOfContent
+          return samplePythonPRFixture
+        })
       },
+      hasNextPage: jest.fn(() => github.numPagesOfContent > 0),
+      getNextPage: jest.fn(() => {
+        --github.numPagesOfContent
+        return samplePythonPRFixture
+      }),
       repos: {
         getContents: jest.fn(({ path }) => {
           if (mockFiles.hasOwnProperty(path)) {
@@ -84,7 +98,8 @@ describe('Bandit-linter', () => {
       expect(github.pullRequests.listFiles).toHaveBeenCalledWith({
         owner: 'owner_login',
         repo: 'repo_name',
-        number: 6
+        number: 6,
+        per_page: config.amountFilesListedPerPage
       })
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -111,7 +126,8 @@ describe('Bandit-linter', () => {
       expect(github.pullRequests.listFiles).toHaveBeenCalledWith({
         owner: 'owner_login',
         repo: 'repo_name',
-        number: 6
+        number: 6,
+        per_page: config.amountFilesListedPerPage
       })
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -138,7 +154,8 @@ describe('Bandit-linter', () => {
       expect(github.pullRequests.listFiles).toHaveBeenCalledWith({
         owner: 'owner_login',
         repo: 'repo_name',
-        number: 8
+        number: 8,
+        per_page: config.amountFilesListedPerPage
       })
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -167,7 +184,8 @@ describe('Bandit-linter', () => {
       expect(github.pullRequests.listFiles).toHaveBeenCalledWith({
         owner: 'original_repo_owner',
         repo: 'original_repo_name',
-        number: 8
+        number: 8,
+        per_page: config.amountFilesListedPerPage
       })
 
       expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
@@ -239,6 +257,24 @@ describe('Bandit-linter', () => {
       expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
         path: 'hello.go'
       }))
+    })
+
+    test('handles paging through the GitHub API', async () => {
+      await app.receive(pullRequestOpenedEvent)
+
+      expect(github.hasNextPage).toHaveBeenCalledTimes(2)
+      expect(github.getNextPage).toHaveBeenCalledTimes(1)
+
+      const expectedRes = { 'data':
+        [
+          { 'filename': 'https.py', 'status': 'added' },
+          { 'filename': 'cgi.py', 'status': 'added' },
+          { 'filename': 'twisted_dir.py', 'status': 'added' },
+          { 'filename': 'twisted_script.py', 'status': 'added' }
+        ]
+      }
+      expect(github.getNextPage).toHaveNthReturnedWith(1, expectedRes)
+      expect(github.pullRequests.listFiles).toHaveNthReturnedWith(1, expectedRes)
     })
 
     test('cleans up after performing checks', async () => {

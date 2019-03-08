@@ -102,25 +102,19 @@ async function processPullRequest (pullRequest, context) {
   const id = pullRequest.id
   const repoID = context.payload.repository.id
 
-  // TODO: Support pagination for >30 files (max 300)
   const response = await apiHelper.getPRFiles(context, number)
-
-  const filesDownloadedPromise = response.data
-    .filter(file => config.fileExtensions.reduce((acc, ext) => acc || file.filename.endsWith(ext), false))
-    .filter(fileJSON => fileJSON.status !== 'removed')
-    .map(async fileJSON => {
-      const filename = fileJSON.filename
-
-      const headRevision = apiHelper.getContents(context, filename, ref, pullRequest.head)
+  const filesDownloadedPromise = response
+    .map(async fileName => {
+      const headRevision = apiHelper.getContents(context, fileName, ref, pullRequest.head)
 
       // TODO: merge this code with linter-specific path resolution
-      if (filename.endsWith('.py')) {
-        cache.saveFile(repoID, id, filename, (await headRevision).data, 'python')
-      } else if (filename.endsWith('.go')) {
-        cache.saveFile(repoID, id, filename, (await headRevision).data, 'go')
+      if (fileName.endsWith('.py')) {
+        cache.saveFile(repoID, id, fileName, (await headRevision).data, 'python')
+      } else if (fileName.endsWith('.go')) {
+        cache.saveFile(repoID, id, fileName, (await headRevision).data, 'go')
       }
 
-      return filename
+      return fileName
     })
 
   // Wait until all files have been downloaded
