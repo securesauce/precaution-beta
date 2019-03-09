@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const { getAnnotationLevel } = require('../annotations_levels')
-const { config } = require('../config')
 
 /**
  * @param {*} issue - an issue from which the annotation will be build
@@ -16,8 +15,7 @@ function getAnnotation (issue, directory) {
   const endLine = startLine
   const annotationLevel = getAnnotationLevel(issue.severity, issue.confidence)
   const title = `${issue.rule_id}: ${issue.details}`
-  const message = title === config.syntaxErrorTitle ? `${issue.code}`
-    : `The issue is in the code: ${issue.code}`
+  const message = `${issue.code}`
 
   return {
     path,
