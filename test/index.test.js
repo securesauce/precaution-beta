@@ -54,7 +54,7 @@ describe('Bandit-linter', () => {
         create: jest.fn().mockResolvedValue({ data: { id: 1 } }),
         update: jest.fn().mockResolvedValue({})
       },
-      numPagesOfContent: 2,
+      numPagesOfContent: 1,
       pullRequests: {
         listFiles: jest.fn(() => {
           --github.numPagesOfContent
@@ -260,6 +260,7 @@ describe('Bandit-linter', () => {
     })
 
     test('handles paging through the GitHub API', async () => {
+      github.numPagesOfContent = 2
       await app.receive(pullRequestOpenedEvent)
 
       expect(github.hasNextPage).toHaveBeenCalledTimes(2)
