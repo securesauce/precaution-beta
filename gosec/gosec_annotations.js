@@ -15,7 +15,7 @@ function getAnnotation (issue, directory) {
   const endLine = startLine
   const annotationLevel = getAnnotationLevel(issue.severity, issue.confidence)
   const title = `${issue.rule_id}: ${issue.details}`
-  const message = `The issue is in the code: ${issue.code}`
+  const message = `${issue.code}`
 
   return {
     path,
