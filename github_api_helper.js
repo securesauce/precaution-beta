@@ -1,4 +1,4 @@
-// Copyright 2018 VMware, Inc.
+// Copyright 2019 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
 const { config } = require('./config')
@@ -124,18 +124,20 @@ function getConclusion (annotations) {
  */
 function sendResults (context, runID, output, annotationsPerPage) {
   const { owner, repo } = context.repo()
-  let numAnnotationsLeftToSend = annotationsPerPage || output.annotations.length
-  if (numAnnotationsLeftToSend <= 0 || numAnnotationsLeftToSend > 50) {
-    numAnnotationsLeftToSend = 50
+  let numAnnotationsLeftToSend = output.annotations.length
+
+  let numAnnotationsPerAPICall = annotationsPerPage || config.numAnnotationsPerUpdate
+  if (numAnnotationsPerAPICall <= 0 || numAnnotationsPerAPICall > 50) {
+    numAnnotationsPerAPICall = config.numAnnotationsPerUpdate
   }
 
-  let timesToSendUpdates = Math.ceil(output.annotations.length / numAnnotationsLeftToSend)
-  timesToSendUpdates = timesToSendUpdates === 0 ? 1 : timesToSendUpdates
+  let numberOfAPIcalls = Math.ceil(numAnnotationsLeftToSend / numAnnotationsPerAPICall)
+  numberOfAPIcalls = numberOfAPIcalls === 0 ? 1 : numberOfAPIcalls
 
   let startIndex = 0
-  let endIdex = config.numAnnotationsPerUpdate
+  let endIdex = numAnnotationsPerAPICall
 
-  for (let i = 0; i < timesToSendUpdates; ++i) {
+  for (let i = 0; i < numberOfAPIcalls; ++i) {
     if (numAnnotationsLeftToSend < config.numAnnotationsPerUpdate) {
       endIdex = output.annotations.length
     }
@@ -156,8 +158,8 @@ function sendResults (context, runID, output, annotationsPerPage) {
       }
     })
 
-    startIndex += config.numAnnotationsPerUpdate
-    endIdex += config.numAnnotationsPerUpdate
+    startIndex += numAnnotationsPerAPICall
+    endIdex += numAnnotationsPerAPICall
     numAnnotationsLeftToSend -= endIdex - startIndex
   }
 }
