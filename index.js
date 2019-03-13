@@ -104,17 +104,17 @@ async function processPullRequest (pullRequest, context) {
 
   const response = await apiHelper.getPRFiles(context, number)
   const filesDownloadedPromise = response
-    .map(async fileName => {
-      const headRevision = apiHelper.getContents(context, fileName, ref, pullRequest.head)
+    .map(async filename => {
+      const headRevision = apiHelper.getContents(context, filename, ref, pullRequest.head)
 
       // TODO: merge this code with linter-specific path resolution
-      if (fileName.endsWith('.py')) {
-        cache.saveFile(repoID, id, fileName, (await headRevision).data, 'python')
-      } else if (fileName.endsWith('.go')) {
-        cache.saveFile(repoID, id, fileName, (await headRevision).data, 'go')
+      if (filename.endsWith('.py')) {
+        cache.saveFile(repoID, id, filename, (await headRevision).data, 'python')
+      } else if (filename.endsWith('.go')) {
+        cache.saveFile(repoID, id, filename, (await headRevision).data, 'go')
       }
 
-      return fileName
+      return filename
     })
 
   // Wait until all files have been downloaded

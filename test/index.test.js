@@ -19,10 +19,10 @@ const sampleSafePRFixture = require('./fixtures/pull_request.files.safe.json')
 const sampleOnlyDeletions = require('./fixtures/pull_request.deletions.json')
 const sampleDelAddModif = require('./fixtures/pull_request.deletions.modif.add.json')
 
-function mockPRContents (github, PR) {
+function mockPRContents (github, pr) {
   github.pullRequests.listFiles = jest.fn(() => {
     --github.numPagesOfContent
-    return PR
+    return pr
   })
   github.getNextPage = github.pullRequests.listFiles
 }
@@ -99,7 +99,7 @@ describe('Bandit-linter', () => {
         owner: 'owner_login',
         repo: 'repo_name',
         number: 6,
-        per_page: config.amountFilesListedPerPage
+        per_page: config.numberFilesListedPerPage
       })
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -127,7 +127,7 @@ describe('Bandit-linter', () => {
         owner: 'owner_login',
         repo: 'repo_name',
         number: 6,
-        per_page: config.amountFilesListedPerPage
+        per_page: config.numberFilesListedPerPage
       })
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -155,7 +155,7 @@ describe('Bandit-linter', () => {
         owner: 'owner_login',
         repo: 'repo_name',
         number: 8,
-        per_page: config.amountFilesListedPerPage
+        per_page: config.numberFilesListedPerPage
       })
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -185,7 +185,7 @@ describe('Bandit-linter', () => {
         owner: 'original_repo_owner',
         repo: 'original_repo_name',
         number: 8,
-        per_page: config.amountFilesListedPerPage
+        per_page: config.numberFilesListedPerPage
       })
 
       expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
@@ -266,13 +266,14 @@ describe('Bandit-linter', () => {
       expect(github.hasNextPage).toHaveBeenCalledTimes(2)
       expect(github.getNextPage).toHaveBeenCalledTimes(1)
 
-      const expectedRes = { 'data':
-        [
-          { 'filename': 'https.py', 'status': 'added' },
-          { 'filename': 'cgi.py', 'status': 'added' },
-          { 'filename': 'twisted_dir.py', 'status': 'added' },
-          { 'filename': 'twisted_script.py', 'status': 'added' }
-        ]
+      const expectedRes = {
+        'data':
+          [
+            { 'filename': 'https.py', 'status': 'added' },
+            { 'filename': 'cgi.py', 'status': 'added' },
+            { 'filename': 'twisted_dir.py', 'status': 'added' },
+            { 'filename': 'twisted_script.py', 'status': 'added' }
+          ]
       }
       expect(github.getNextPage).toHaveNthReturnedWith(1, expectedRes)
       expect(github.pullRequests.listFiles).toHaveNthReturnedWith(1, expectedRes)
