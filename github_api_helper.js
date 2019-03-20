@@ -52,7 +52,7 @@ async function getPRFiles (context, number) {
     owner: owner,
     repo: repo,
     number: number,
-    per_page: config.numberFilesListedPerPage
+    per_page: config.numFilesPerPage
   })
 
   let data = filterData(response)

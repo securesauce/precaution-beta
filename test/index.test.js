@@ -99,7 +99,7 @@ describe('Bandit-linter', () => {
         owner: 'owner_login',
         repo: 'repo_name',
         number: 6,
-        per_page: config.numberFilesListedPerPage
+        per_page: config.numFilesPerPage
       })
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -127,7 +127,7 @@ describe('Bandit-linter', () => {
         owner: 'owner_login',
         repo: 'repo_name',
         number: 6,
-        per_page: config.numberFilesListedPerPage
+        per_page: config.numFilesPerPage
       })
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -155,7 +155,7 @@ describe('Bandit-linter', () => {
         owner: 'owner_login',
         repo: 'repo_name',
         number: 8,
-        per_page: config.numberFilesListedPerPage
+        per_page: config.numFilesPerPage
       })
 
       expect(github.checks.update).toHaveBeenCalledWith(expect.objectContaining({
@@ -185,7 +185,7 @@ describe('Bandit-linter', () => {
         owner: 'original_repo_owner',
         repo: 'original_repo_name',
         number: 8,
-        per_page: config.numberFilesListedPerPage
+        per_page: config.numFilesPerPage
       })
 
       expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
