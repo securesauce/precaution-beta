@@ -102,15 +102,9 @@ async function processPullRequest (pullRequest, context) {
   const id = pullRequest.id
   const repoID = context.payload.repository.id
 
-  // TODO: Support pagination for >30 files (max 300)
   const response = await apiHelper.getPRFiles(context, number)
-
-  const filesDownloadedPromise = response.data
-    .filter(file => config.fileExtensions.reduce((acc, ext) => acc || file.filename.endsWith(ext), false))
-    .filter(fileJSON => fileJSON.status !== 'removed')
-    .map(async fileJSON => {
-      const filename = fileJSON.filename
-
+  const filesDownloadedPromise = response
+    .map(async filename => {
       const headRevision = apiHelper.getContents(context, filename, ref, pullRequest.head)
 
       // TODO: merge this code with linter-specific path resolution

@@ -27,20 +27,40 @@ function inProgressAPIresponse (context, headSha) {
 }
 
 /**
+ * Filters the listed files and returns only the files relevant to us
+ * @param {*} rawData the raw output from list files API call
+ * @return {Promise[]<any>} the filtered GitHub response
+ */
+function filterData (rawData) {
+  return rawData.data.filter(file => config.fileExtensions.reduce((acc, ext) => acc || file.filename.endsWith(ext), false))
+    .filter(fileJSON => fileJSON.status !== 'removed').map(async fileInfo => {
+      return fileInfo.filename
+    })
+}
+
+/**
  * Get list of files modified by a pull request
  * @param {import('probot').Context} context Probot context
  * @param {number} number the pull request number inside the repository
- * @returns {Promise<any>} GitHub response
- * See https://developer.github.com/v3/pulls/#list-pull-requests-files
+ * @returns {String[]} paths to the diff files from the pull request relevant to us
  */
-function getPRFiles (context, number) {
+async function getPRFiles (context, number) {
   const { owner, repo } = context.repo()
 
-  return context.github.pullRequests.listFiles({
-    owner,
-    repo,
-    number
+  // See https://developer.github.com/v3/pulls/#list-pull-requests-files
+  let response = await context.github.pullRequests.listFiles({
+    owner: owner,
+    repo: repo,
+    number: number,
+    per_page: config.numFilesPerPage
   })
+
+  let data = filterData(response)
+  while (context.github.hasNextPage(response)) {
+    response = await context.github.getNextPage(response)
+    data = data.concat(filterData(response))
+  }
+  return Promise.all(data)
 }
 
 /**
