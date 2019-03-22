@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "allowJs": true
+  },
+  "include": [
+    "./**/*"
+  ],
+  "exclude":[
+    "node_modules",
+    "coverage"
+  ]
+}
