@@ -125,9 +125,10 @@ function getConclusion (annotations) {
 function sendResults (context, runID, output, annotationsPerPage) {
   const { owner, repo } = context.repo()
   let numAnnotationsLeftToSend = output.annotations.length
+  const MAX_ANNOTATIONS_CALL = 50
 
   let numAnnotationsPerAPICall = annotationsPerPage || config.numAnnotationsPerUpdate
-  if (numAnnotationsPerAPICall <= 0 || numAnnotationsPerAPICall > 50) {
+  if (numAnnotationsPerAPICall <= 0 || numAnnotationsPerAPICall > MAX_ANNOTATIONS_CALL) {
     numAnnotationsPerAPICall = config.numAnnotationsPerUpdate
   }
 
