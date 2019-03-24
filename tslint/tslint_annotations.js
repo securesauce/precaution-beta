@@ -19,13 +19,12 @@ function translateSeverity (severity) {
 }
 
 /**
- * Create bandit Annotations
+ * Create TSLint Annotations
  * @param {*} issue
- * @param {String} directory working directory for the Gosec process
  * @returns {Object} see https://developer.github.com/v3/checks/runs/#annotations-object-1
  */
-function getAnnotation (issue, directory) {
-  const path = issue.name.replace(directory + '/', '')
+function getAnnotation (issue) {
+  const path = issue.name
   const startLine = issue.startPosition.line
   const endLine = issue.endPosition.line
   const annotationLevel = getAnnotationLevel(translateSeverity(issue.ruleSeverity), 'HIGH')

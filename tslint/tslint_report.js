@@ -7,10 +7,9 @@ const { countIssueLevels } = require('../annotations_levels')
 /**
  * Process TSLint output (generate annotations, count issue levels)
  * @param {*} results TSLint json output
- * @param {*} directory working directory for TSLint process
  */
-module.exports = (results, directory) => {
-  const annotations = results.map(issue => getAnnotation(issue, directory))
+module.exports = (results) => {
+  const annotations = results.map(issue => getAnnotation(issue))
   const issueCount = countIssueLevels(annotations)
   const moreInfo = ''
 
