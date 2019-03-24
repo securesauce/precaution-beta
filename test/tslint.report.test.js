@@ -24,7 +24,7 @@ describe('TSLint report generation', () => {
     expect(report.annotations).toHaveLength(7)
     expect(report.annotations[0].end_line).toBe(55)
     expect(report.annotations[3].start_line).toBe(4)
-    expect(report.annotations[5].path).toBe('testFile.js')
+    expect(report.annotations[5].path).toBe('test/fixtures/js-ts/testFile.js')
     expect(report.annotations[6].title).toEqual('tsr-detect-non-literal-fs-filename')
 
     report.annotations.forEach(annotation => {
