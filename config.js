@@ -9,7 +9,8 @@ const config = {
   noIssuesResultSummary: 'There were no issues found.',
   issuesFoundResultTitle: 'Issues found',
   syntaxErrorTitle: 'ERROR: Syntax error',
-  numFilesPerPage: 30
+  numFilesPerPage: 30,
+  numAnnotationsPerUpdate: 50
 }
 
 const annotationsLevels = {

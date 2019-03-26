@@ -244,6 +244,31 @@ describe('Bandit-linter', () => {
       }))
     })
 
+    test('send many annotations through multiple API calls', async () => {
+      const { sendResults } = require('../github_api_helper')
+      let context = {
+        github: {
+          checks: {
+            update: jest.fn().mockResolvedValue({})
+          }
+        },
+        repo: jest.fn().mockResolvedValue({
+          owner: 'owner_login',
+          repo: 'repo_name'
+        })
+      }
+      let { annotations } = require('./fixtures/annotations/mixed_levels_annotations.json')
+      let output = {
+        title: '',
+        summary: '',
+        annotations,
+        text: ''
+      }
+      sendResults(context, 1000, output, 2)
+
+      expect(context.github.checks.update).toHaveBeenCalledTimes(2)
+    })
+
     test('handles PRs with deletions, modifications and additions', async () => {
       mockPRContents(github, sampleDelAddModif)
       await app.receive(pullRequestOpenedEvent)
