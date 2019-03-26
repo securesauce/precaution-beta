@@ -38,6 +38,7 @@ function getAnnotationLevel (severity, confidence) {
         case 'HIGH' : result = annotationsLevels.severityHIGHconfidenceHIGH; break
         case 'MEDIUM' : result = annotationsLevels.severityHIGHconfidenceMEDIUM; break
         case 'LOW' : result = annotationsLevels.severityHIGHconfidenceLOW; break
+        default: result = annotationsLevels.severityHIGHconfidenceHIGH
       }
       break
     case 'MEDIUM' :
@@ -45,6 +46,7 @@ function getAnnotationLevel (severity, confidence) {
         case 'HIGH' : result = annotationsLevels.severityMEDIUMconfidenceHIGH; break
         case 'MEDIUM' : result = annotationsLevels.severityMEDIUMconfidenceMEDIUM; break
         case 'LOW' : result = annotationsLevels.severityMEDIUMconfidenceLOW; break
+        default: result = annotationsLevels.severityMEDIUMconfidenceHIGH
       }
       break
     case 'LOW' :
@@ -52,6 +54,7 @@ function getAnnotationLevel (severity, confidence) {
         case 'HIGH' : result = annotationsLevels.severityLOWconfidenceHIGH; break
         case 'MEDIUM' : result = annotationsLevels.severityLOWconfidenceMEDIUM; break
         case 'LOW' : result = annotationsLevels.severityLOWconfidenceLOW; break
+        default: result = annotationsLevels.severityLOWconfidenceHIGH
       }
   }
   return result

@@ -25,9 +25,9 @@ function translateSeverity (severity) {
  */
 function getAnnotation (issue) {
   const path = issue.name
-  const startLine = issue.startPosition.line
-  const endLine = issue.endPosition.line
-  const annotationLevel = getAnnotationLevel(translateSeverity(issue.ruleSeverity), 'HIGH')
+  const startLine = issue.startPosition.line + 1
+  const endLine = issue.endPosition.line + 1
+  const annotationLevel = getAnnotationLevel(translateSeverity(issue.ruleSeverity))
   const title = `${issue.ruleName}`
   const message = `${issue.failure}`
 
