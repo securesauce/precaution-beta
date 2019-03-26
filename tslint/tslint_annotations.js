@@ -25,6 +25,8 @@ function translateSeverity (severity) {
  */
 function getAnnotation (issue) {
   const path = issue.name
+  // I add 1 to startLine and endline because they are off by 1 as described here:
+  // https://github.com/palantir/tslint/issues/4528
   const startLine = issue.startPosition.line + 1
   const endLine = issue.endPosition.line + 1
   const annotationLevel = getAnnotationLevel(translateSeverity(issue.ruleSeverity))
