@@ -34,8 +34,8 @@ describe('TSLint report generation', () => {
   })
 
   test('Creates correct issue count', () => {
-    expect(report.issueCount.errors).toBe(3)
-    expect(report.issueCount.warnings).toBe(4)
+    expect(report.issueCount.errors).toBe(0)
+    expect(report.issueCount.warnings).toBe(7)
     expect(report.issueCount.notices).toBe(0)
   })
 
