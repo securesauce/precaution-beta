@@ -27,7 +27,7 @@ function mockPRContents (github, pr) {
   github.getNextPage = github.pullRequests.listFiles
 }
 
-describe('Bandit-linter', () => {
+describe('Precaution workflow', () => {
   let app, github
   let mockFiles = {}
 
