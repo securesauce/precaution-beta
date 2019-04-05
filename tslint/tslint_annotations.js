@@ -7,6 +7,7 @@ const { getAnnotationLevel } = require('../annotations_levels')
  * Translates the tslint severity from "ERROR" | "WARNING" | "OFF"
  * to the "HIGH", "MEDIUM" and "LOW"
  * @param {String} severity the severity of the issue provided by  TSLint
+ * @returns {String} severity of an issue compatible with the GitHub API
  */
 function translateSeverity (severity) {
   let result = ''

@@ -7,6 +7,7 @@ const { countIssueLevels } = require('../annotations_levels')
 /**
  * Process TSLint output (generate annotations, count issue levels)
  * @param {*} results TSLint json output
+ * @returns {Object {Object[], Object, String}}
  */
 module.exports = (results) => {
   const annotations = results.map(issue => getAnnotation(issue))
