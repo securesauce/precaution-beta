@@ -1,4 +1,4 @@
-// Copyright 2018 VMware, Inc.
+// Copyright 2019 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
 const fs = require('fs-extra')
@@ -8,16 +8,14 @@ const path = require('path')
  * Get the cache path for this PR branch tag
  * @param {number} repoID repository identifier
  * @param {number} prID pull request identifier
- * @param {string} app Optional: an app that calls the function. (default bandit)
+ * @param {string} app Optional: an app that calls the function. (default linter)
  * It's needed because gosec uses GOPATH.
  */
-function getBranchPath (repoID, prID, app) {
-  app = app || 'bandit'
-  if (app === 'bandit') {
-    return path.join('cache', repoID.toString(), prID.toString())
-  } else if (app === 'gosec') {
+function getBranchPath (repoID, prID, app = 'linter') {
+  if (app === 'gosec') {
     return path.join('cache/go/src', repoID.toString(), prID.toString())
   }
+  return path.join('cache', repoID.toString(), prID.toString())
 }
 
 /**
@@ -26,12 +24,11 @@ function getBranchPath (repoID, prID, app) {
  * @param {number} prID unique pull request identifier
  * @param {string} filePath relative file path
  * @param {any} data file data
- * @param {string} fileType Optional: file type so it knows where to save the file (default python)
+ * @param {string} fileType Optional: file type so it knows where to save the file.
  * It's needed because go files should be in the GOPATH.
  */
 function saveFileToPRCache (repoID, prID, filePath, data, fileType) {
-  fileType = fileType || 'python'
-  const appTag = (fileType === 'go') ? 'gosec' : 'bandit'
+  const appTag = (fileType === 'go') ? 'gosec' : undefined
   const dir = getBranchPath(repoID, prID, appTag)
   writeFileCreateDirs(path.join(dir, filePath), data)
 }
@@ -42,7 +39,7 @@ function saveFileToPRCache (repoID, prID, filePath, data, fileType) {
  * @param {number} prID pull request identifier
  */
 function clearPRCache (repoID, prID) {
-  fs.removeSync(getBranchPath(repoID, prID, 'bandit'))
+  fs.removeSync(getBranchPath(repoID, prID))
   fs.removeSync(getBranchPath(repoID, prID, 'gosec'))
 }
 
