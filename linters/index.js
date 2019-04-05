@@ -3,8 +3,10 @@
 
 const Bandit = require('./bandit')
 const Gosec = require('./gosec')
+const TSLint = require('./tslint')
 
 module.exports = {
   BANDIT: new Bandit(),
-  GOSEC: new Gosec()
+  GOSEC: new Gosec(),
+  TSLint: new TSLint()
 }
