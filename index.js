@@ -108,10 +108,10 @@ async function processPullRequest (pullRequest, context) {
       const headRevision = apiHelper.getContents(context, filename, ref, pullRequest.head)
 
       // TODO: merge this code with linter-specific path resolution
-      if (filename.endsWith('.py')) {
-        cache.saveFile(repoID, id, filename, (await headRevision).data, 'python')
-      } else if (filename.endsWith('.go')) {
+      if (filename.endsWith('.go')) {
         cache.saveFile(repoID, id, filename, (await headRevision).data, 'go')
+      } else {
+        cache.saveFile(repoID, id, filename, (await headRevision).data)
       }
 
       return filename
