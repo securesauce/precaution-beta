@@ -23,14 +23,14 @@ module.exports = app => {
       // TODO: investigate GitHub editor not triggering check suite
       if (pullRequests.length > 0) {
         // Commit was pushed to a PR branch
-        await runLinterFromPRData(pullRequests, context, headSha)
+        return runLinterFromPRData(pullRequests, context, headSha)
       }
 
       // Ignore push events not linked to a pull request
     } else if (action === 'rerequested') {
       // Check suite was manually rerequested by a user on the checks dashboard
       // (previous run didn't complete)
-      await runLinterFromPRData(pullRequests, context, headSha)
+      return runLinterFromPRData(pullRequests, context, headSha)
     }
   })
 
@@ -40,7 +40,7 @@ module.exports = app => {
     const pullRequests = context.payload.check_run.pull_requests
     if (action === 'rerequested') {
       // Check suite was manually rerequested by a user on the checks dashboard
-      await runLinterFromPRData(pullRequests, context, headSha)
+      return runLinterFromPRData(pullRequests, context, headSha)
     }
   })
 
@@ -48,7 +48,7 @@ module.exports = app => {
     // Same thing but have to intercept the event because check suite is not triggered
     const pullRequest = context.payload.pull_request
     const headSha = pullRequest.head.sha
-    await runLinterFromPRData([pullRequest], context, headSha)
+    return runLinterFromPRData([pullRequest], context, headSha)
   })
 }
 
