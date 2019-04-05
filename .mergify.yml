@@ -1,0 +1,12 @@
+pull_request_rules:
+  - name: merge when CI passes and 1 approved review
+    conditions:
+      - "#approved-reviews-by>=1"
+      - status-success=Travis CI - Pull Request
+      - base=master
+      - label!=work-in-progress
+      - label=ready-to-merge
+    actions:
+      merge:
+        method: rebase
+        rebase_fallback: squash
