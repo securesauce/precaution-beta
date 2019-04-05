@@ -20,7 +20,7 @@ which allows results to be presented directly as inline annotations instead of
 a pass/fail status report.
 
 
-Precaution currently supports analysis of python files via Bandit and go files via Gosec. New languages may be added in future.
+Precaution currently supports analysis of python files via [Bandit](https://github.com/PyCQA/bandit) and go files via [Gosec](https://github.com/securego/gosec). New languages may be added in future.
 
 * Documentation: [vmware/precaution/docs](https://vmware.github.io/precaution/)
 * Source: [vmware/precaution](https://github.com/vmware/precaution)
