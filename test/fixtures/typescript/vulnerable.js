@@ -1,7 +1,7 @@
 const fs = require('fs-extra')
 var stdin = process.openStdin()
 
-function bildngSQLQuery () {
+function buildingSQLQuery () {
   const userId = 1
   const query = `SELECT * FROM users WHERE id = ${userId}`
   return query
