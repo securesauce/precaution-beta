@@ -19,7 +19,7 @@ function openFile () {
   })
 }
 
-let query = bildngSQLQuery()
+let query = buildingSQLQuery()
 let templateGreeting = getTemplateGreeting('Martin')
 
 console.log('The query is: ', query)
