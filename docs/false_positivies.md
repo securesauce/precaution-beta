@@ -39,3 +39,15 @@ func main(){
 
 If you want to read more about annotating the code:
 [Gosec Annotating code](https://github.com/securego/gosec#annotating-code)
+
+## JavaScript/TypeScript Example
+
+```JavaScript
+
+const foo = "alert('hello')";
+eval(foo); // tslint:disable-line
+
+```
+
+If you want to read more about annotating the code:
+[TSLint rule flags](https://palantir.github.io/tslint/usage/rule-flags/)

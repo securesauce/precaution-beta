@@ -19,8 +19,12 @@ GitHub integration is made through the GitHub app interface and the checks API (
 which allows results to be presented directly as inline annotations instead of
 a pass/fail status report.
 
+Precaution currently supports analysis of:
+* Go files via [Gosec](https://github.com/securego/gosec)
+* JavaScript and TypeScript via [TSLint](https://github.com/palantir/tslint) and [tslint-config-security](https://github.com/webschik/tslint-config-security)
+* Python files via [Bandit](https://github.com/PyCQA/bandit)
 
-Precaution currently supports analysis of Python files via [Bandit](https://github.com/PyCQA/bandit) and Go files via [Gosec](https://github.com/securego/gosec). New languages may be added in future.
+New languages may be added in future, please file an [issue](https://github.com/vmware/precaution/issues) for your language/linter of choice.
 
 * Documentation: [vmware/precaution/docs](https://vmware.github.io/precaution/)
 * Source: [vmware/precaution](https://github.com/vmware/precaution)
