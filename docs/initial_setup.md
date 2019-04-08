@@ -14,7 +14,9 @@ The table below lists the languages supported by Precaution and the static analy
 | Language | Static analysis tool |
 |---|---|
 | Go | [Gosec](https://github.com/securego/gosec) |
+| JavaScript | [TSLint](https://github.com/palantir/tslint) and [tslint-config-security](https://github.com/webschik/tslint-config-security) |
 | Python | [Bandit](https://github.com/PyCQA/bandit) |
+| TypeScript | [TSLint](https://github.com/palantir/tslint) and [tslint-config-security](https://github.com/webschik/tslint-config-security) |
 
 ## Setting up a Branch Protection Rule
 
