@@ -8,5 +8,5 @@ const TSLint = require('./tslint')
 module.exports = {
   BANDIT: new Bandit(),
   GOSEC: new Gosec(),
-  TSLint: new TSLint()
+  TSLINT: new TSLint()
 }

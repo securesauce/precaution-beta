@@ -33,6 +33,6 @@ describe('TSLint runner', () => {
   })
 
   afterEach(() => {
-    fs.remove('test/fixtures/tslint.json')
+    fs.remove('test/fixtures/tslint_output.json')
   })
 })

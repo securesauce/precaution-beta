@@ -13,7 +13,7 @@ module.exports = class TSLint {
    * The name of the generated report file
    */
   get reportFile () {
-    return 'tslint.json'
+    return 'tslint_output.json'
   }
 
   get defaultReport () {
