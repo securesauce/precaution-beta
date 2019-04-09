@@ -14,7 +14,7 @@ module.exports = class Gosec {
    * The name of the generated report file
    */
   get reportFile () {
-    return 'gosec.json'
+    return 'gosec_output.json'
   }
 
   get defaultReport () {
