@@ -54,6 +54,6 @@ describe('Gosec runner', () => {
   })
 
   afterEach(() => {
-    fs.remove('test/fixtures/go/src/gosec.json')
+    fs.remove('test/fixtures/go/src/gosec_output.json')
   })
 })

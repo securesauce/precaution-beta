@@ -14,7 +14,7 @@ module.exports = class Bandit {
    * The name of the generated report file
    */
   get reportFile () {
-    return 'bandit.json'
+    return 'bandit_output.json'
   }
 
   get defaultReport () {
