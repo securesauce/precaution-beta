@@ -45,6 +45,6 @@ describe('Bandit runner', () => {
   })
 
   afterEach(() => {
-    fs.remove('test/fixtures/bandit.json')
+    fs.remove('test/fixtures/bandit_output.json')
   })
 })

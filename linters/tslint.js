@@ -1,20 +1,19 @@
-// Copyright 2018 VMware, Inc.
+// Copyright 2019 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
 const cache = require('../cache')
+const report = require('../tslint/tslint_report')
 
-const report = require('../bandit/bandit_report')
-
-module.exports = class Bandit {
+module.exports = class TSLint {
   get name () {
-    return 'bandit'
+    return 'tslint'
   }
 
   /**
    * The name of the generated report file
    */
   get reportFile () {
-    return 'bandit_output.json'
+    return 'tslint_output.json'
   }
 
   get defaultReport () {
@@ -27,7 +26,7 @@ module.exports = class Bandit {
    * @returns {string[]} Filtered list of file names
    */
   filter (files) {
-    return files.filter(name => name.endsWith('.py'))
+    return files.filter(name => name.endsWith('.js') || name.endsWith('ts'))
   }
 
   /**
@@ -36,7 +35,7 @@ module.exports = class Bandit {
    * @param {string} prID PR id in repository
    */
   workingDirectoryForPR (repoID, prID) {
-    return cache.getBranchPath(repoID, prID, 'bandit')
+    return cache.getBranchPath(repoID, prID, 'tslint')
   }
 
   /**
@@ -45,7 +44,7 @@ module.exports = class Bandit {
    * @param {string} reportPath Path to the report file relative to working directory
    */
   args (files, reportPath) {
-    return ['--format', 'json', '-o', reportPath, ...files]
+    return ['-c', '../../../tslint/tslint.json', '--format', 'json', '-o', reportPath, ...files]
   }
 
   /**
@@ -53,23 +52,7 @@ module.exports = class Bandit {
    * @param {Buffer} data The raw linter results data
    */
   parseResults (data) {
-    let parsedData = JSON.parse(data)
-
-    for (let error of parsedData.errors) {
-      let errAnnotation = {
-        filename: error.filename,
-        line_number: 1,
-        issue_severity: 'HIGH',
-        issue_confidence: 'HIGH',
-        issue_text: '',
-        test_id: 'ERROR',
-        test_name: 'Syntax error'
-      }
-
-      errAnnotation.issue_text = 'Error: ' + error.reason + ' ' + error.filename
-      parsedData.results.push(errAnnotation)
-    }
-    return parsedData
+    return JSON.parse(data)
   }
 
   /**
@@ -80,6 +63,6 @@ module.exports = class Bandit {
    * @returns GitHub checks report
    */
   generateReport (results, directory) {
-    return report(results)
+    return report(results, directory)
   }
 }
