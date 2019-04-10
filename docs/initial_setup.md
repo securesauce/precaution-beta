@@ -9,11 +9,12 @@
 
 For best results, prior to using Precaution, it is recommended to run static code analysis tooling on the code base. That way the current code base does not contain known security issues.
 
-You can run static code analysis of Python source code using Bandit: 
-[PyCQA/bandit](https://github.com/PyCQA/bandit) 
+The table below lists the languages supported by Precaution and the static analysis tools used by Precaution in support of the language. You should use the appropriate tool from the list for your initial scans before enabling Precaution.
 
-and for source code in Go use Gosec: 
-[securego/gosec](https://github.com/securego/gosec)
+| Language | Static analysis tool |
+|---|---|
+| Go | [Gosec](https://github.com/securego/gosec) |
+| Python | [Bandit](https://github.com/PyCQA/bandit) |
 
 ## Setting up a Branch Protection Rule
 
