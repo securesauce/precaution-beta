@@ -3,7 +3,7 @@
 
 const config = {
   cleanupAfterRun: true,
-  fileExtensions: ['.py', '.pyw', '.go'],
+  fileExtensions: ['.py', '.pyw', '.go', 'js', 'ts'],
   checkRunName: 'Precaution',
   noIssuesResultTitle: 'No issues found',
   noIssuesResultSummary: 'There were no issues found.',
