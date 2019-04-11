@@ -25,11 +25,10 @@ Precaution currently supports analysis of python files via Bandit and go files v
 * Source: [vmware/precaution](https://github.com/vmware/precaution)
 * Bugs: [vmware/precaution/issues](https://github.com/vmware/precaution/issues)
 
-
 ## Additional documentation
 
-- [Initial setup](https://vmware.github.io/precaution/initial_setup.html)
-- [False positives and how to handle them](https://vmware.github.io/precaution/false_positivies.html)
-- [Setting up a manual deployment](https://vmware.github.io/precaution/manual_deployment.html)
-- [Debugging with VSCode](https://vmware.github.io/precaution/local_development.html)
-- [Architecture](https://vmware.github.io/precaution/architecture.html)
+- [Initial setup](initial_setup.md)
+- [False positives and how to handle them](false_positivies.md)
+- [Setting up a manual deployment](manual_deployment.md)
+- [Debugging with VSCode](local_development.md)
+- [Architecture](architecture.md)
