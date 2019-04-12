@@ -12,7 +12,7 @@ function tslint (dir, files) {
 
 describe('TSLint runner', () => {
   test('Finds issues in vulnerable file', async () => {
-    const report = await tslint('test/fixtures/typescript', ['vulnerable.js'])
+    const report = await tslint('test/fixtures/javascript', ['vulnerable.js'])
 
     expect(report.annotations.length).toEqual(3)
     expect(report.annotations[0].start_line).toEqual(12)
@@ -21,13 +21,13 @@ describe('TSLint runner', () => {
   })
 
   test('Passes on safe file', async () => {
-    const report = await tslint('test/fixtures/typescript', ['safe.js'])
+    const report = await tslint('test/fixtures/javascript', ['safe.js'])
 
     expect(report.annotations.length).toEqual(0)
   })
 
   test('Handles empty input', async () => {
-    const report = await tslint('test/fixtures/typescript', [])
+    const report = await tslint('test/fixtures/javascript', [])
 
     expect(report.annotations.length).toEqual(0)
   })
