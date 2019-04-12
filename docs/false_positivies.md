@@ -15,7 +15,7 @@ Although this line may cause a potential security issue, it will not be reported
 
 
 If you want to read more about annotating the code:
-[https://github.com/PyCQA/bandit#exclusions](https://github.com/PyCQA/bandit#exclusions)
+[Bandit Exclusions](https://github.com/PyCQA/bandit#exclusions)
 
 ## Go example
 
@@ -38,4 +38,4 @@ func main(){
 ```
 
 If you want to read more about annotating the code:
-[https://github.com/securego/gosec#annotating-code](https://github.com/securego/gosec#annotating-code)
+[Gosec Annotating code](https://github.com/securego/gosec#annotating-code)
