@@ -13,6 +13,14 @@
       "status": "added"
     },
     {
+      "filename": "vulnerable.js",
+      "status": "added"
+    },
+    {
+      "filename": "vulnerable.ts",
+      "status": "added"
+    },
+    {
       "filename": "AbstractJavaFileFactoryServiceProvider.java",
       "status": "added"
     },

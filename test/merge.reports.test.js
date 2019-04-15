@@ -6,6 +6,7 @@ const mergeReports = require('../merge_reports')
 const { config } = require('../config')
 const banditAnnotations = require('./fixtures/annotations/mixed_levels_annotations.json').annotations
 const gosecAnnotations = require('./fixtures/annotations/gosec_mix_annotations.json').annotations
+const tslintAnnotations = require('./fixtures/annotations/tslint_mix_annotations.json').annotations
 
 const noIssues = { errors: 0, warnings: 0, notices: 0 }
 const someIssues = { errors: 1, warnings: 4, notices: 2 }
@@ -19,8 +20,9 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
   test('No issues', () => {
     const banditReport = report(noIssues, [])
     const gosecReport = report(noIssues, [])
+    const tslintReport = report(noIssues, [])
 
-    const result = mergeReports([banditReport, gosecReport])
+    const result = mergeReports([banditReport, gosecReport, tslintReport])
     expect(result.title).toEqual(config.noIssuesResultTitle)
     expect(result.summary).toEqual(config.noIssuesResultSummary)
     expect(result.annotations).toHaveLength(0)
@@ -30,12 +32,13 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
     // We don't need the issue count to correspond to the actual annotations (code handles them separately)
     const banditReport = report(someIssues, banditAnnotations)
     const gosecReport = report(noIssues, [])
+    const tslintReport = report(noIssues, [])
 
     const expectedSummary = ':x: 1 error\n' +
       ':warning: 4 warnings\n' +
       ':information_source: 2 notices\n'
 
-    const result = mergeReports([banditReport, gosecReport])
+    const result = mergeReports([banditReport, gosecReport, tslintReport])
     expect(result.title).toEqual(config.issuesFoundResultTitle)
     expect(result.summary).toEqual(expectedSummary)
     expect(result.annotations).toEqual(banditAnnotations)
@@ -44,27 +47,43 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
   test('Gosec issues', () => {
     const banditReport = report(noIssues, [])
     const gosecReport = report(moreIssues, gosecAnnotations)
+    const tslintReport = report(noIssues, [])
 
     const expectedSummary = ':x: 4 errors\n' +
       ':warning: 3 warnings\n'
 
-    const result = mergeReports([banditReport, gosecReport])
+    const result = mergeReports([banditReport, gosecReport, tslintReport])
     expect(result.title).toEqual(config.issuesFoundResultTitle)
     expect(result.summary).toEqual(expectedSummary)
     expect(result.annotations).toEqual(gosecAnnotations)
   })
 
-  test('Both issues', () => {
-    const banditReport = report(someIssues, banditAnnotations)
-    const gosecReport = report(moreIssues, gosecAnnotations)
+  test('TSLint issues', () => {
+    const banditReport = report(noIssues, [])
+    const gosecReport = report(noIssues, [])
+    const tslintReport = report(moreIssues, tslintAnnotations)
 
-    const expectedSummary = ':x: 5 errors\n' +
-      ':warning: 7 warnings\n' +
-      ':information_source: 2 notices\n'
+    const expectedSummary = ':x: 4 errors\n' +
+      ':warning: 3 warnings\n'
 
-    const result = mergeReports([banditReport, gosecReport])
+    const result = mergeReports([banditReport, gosecReport, tslintReport])
     expect(result.title).toEqual(config.issuesFoundResultTitle)
     expect(result.summary).toEqual(expectedSummary)
-    expect(result.annotations).toHaveLength(5)
+    expect(result.annotations).toEqual(tslintAnnotations)
+  })
+
+  test('Issues from all linters', () => {
+    const banditReport = report(someIssues, banditAnnotations)
+    const gosecReport = report(moreIssues, gosecAnnotations)
+    const tslintReport = report(someIssues, tslintAnnotations)
+
+    const expectedSummary = ':x: 6 errors\n' +
+      ':warning: 11 warnings\n' +
+      ':information_source: 4 notices\n'
+
+    const result = mergeReports([banditReport, gosecReport, tslintReport])
+    expect(result.title).toEqual(config.issuesFoundResultTitle)
+    expect(result.summary).toEqual(expectedSummary)
+    expect(result.annotations).toHaveLength(8)
   })
 })
