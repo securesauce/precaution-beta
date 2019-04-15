@@ -42,6 +42,9 @@ describe('Precaution workflow', () => {
     mockFiles['networking_binding.go'] = fs.readFileSync('test/fixtures/go/src/vulnerable_package/networking_binding.go', 'utf8')
     mockFiles['bad_test_file.go'] = fs.readFileSync('test/fixtures/go/src/vulnerable_package/bad_test_file.go', 'utf8')
     mockFiles['hello.go'] = fs.readFileSync('test/fixtures/go/src/safe/hello_world.go', 'utf8')
+    // Mock the files as empty strings because we don't analyze their content anyway
+    mockFiles['vulnerable.js'] = ''
+    mockFiles['vulnerable.ts'] = ''
   })
 
   beforeEach(() => {
@@ -211,6 +214,12 @@ describe('Precaution workflow', () => {
       }))
       expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
         path: 'networking_binding.go'
+      }))
+      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
+        path: 'vulnerable.js'
+      }))
+      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
+        path: 'vulnerable.ts'
       }))
       expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
         path: 'AbstractJavaFileFactoryServiceProvider.java'

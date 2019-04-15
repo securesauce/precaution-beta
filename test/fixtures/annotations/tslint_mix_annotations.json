@@ -1,0 +1,25 @@
+{
+  "annotations": [ 
+    { "path": "vulnerable.js",
+      "start_line": 12,
+      "end_line": 12,
+      "annotation_level": "warning",
+      "title": "tsr-detect-eval-with-expression",
+      "message": "eval with argument of type BinaryExpression"
+    },
+    { "path": "vulnerable.js",
+      "start_line": 18,
+      "end_line": 18,
+      "annotation_level": "notice",
+      "title": "tsr-detect-non-literal-fs-filename",
+      "message": "Found fs.open with non-literal argument at index 0"
+    },
+    { "path": "vulnerable.js",
+      "start_line": 21,
+      "end_line": 21,
+      "annotation_level": "failure",
+      "title": "tsr-detect-sql-literal-injection",
+      "message": "Found possible SQL injection"
+    }
+  ]
+}
