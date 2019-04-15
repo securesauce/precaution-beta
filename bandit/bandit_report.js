@@ -9,7 +9,7 @@ const { countIssueLevels } = require('../annotations_levels')
  */
 function createMoreInfoLinks (issues) {
   let issuesMap = new Map()
-  let moreInfo = 'For more information about the issues follow the links: \n'
+  let moreInfo = ''
 
   for (let issue of issues) {
     if (issuesMap.has(issue.test_id) === false && issue.more_info) {

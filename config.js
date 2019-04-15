@@ -9,6 +9,7 @@ const config = {
   noIssuesResultSummary: 'There were no issues found.',
   issuesFoundResultTitle: 'Issues found',
   syntaxErrorTitle: 'ERROR: Syntax error',
+  moreInfoTitle: 'For more information about the issues follow the links: \n',
   numFilesPerPage: 30,
   numAnnotationsPerUpdate: 50
 }
