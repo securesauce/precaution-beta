@@ -9,3 +9,8 @@ results.json
 *.pem
 .env
 bin/
+
+Gemfile.lock
+docs/_site
+
+*~
