@@ -11,7 +11,9 @@ Here are examples:
 
 Although this line may cause a potential security issue, it will not be reported:
 
-``` self.process = subprocess.Popen('/bin/echo', shell=True)  # nosec ```
+```python
+self.process = subprocess.Popen('/bin/echo', shell=True)  # nosec
+```
 
 
 If you want to read more about annotating the code:
@@ -42,7 +44,7 @@ If you want to read more about annotating the code:
 
 ## JavaScript/TypeScript Example
 
-```JavaScript
+```javascript
 
 const foo = "alert('hello')";
 eval(foo); // tslint:disable-line
