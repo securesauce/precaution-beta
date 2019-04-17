@@ -12,7 +12,7 @@ describe('Gosec report generation', () => {
     report = generateReport(gosecResults, 'test/fixtures/go/src')
   })
 
-  test('Creates correct report structure', () => {
+  test('Creates correct report structure', async () => {
     expect(report).toHaveProperty('annotations')
     expect(report).toHaveProperty('issueCount.errors')
     expect(report).toHaveProperty('issueCount.warnings')
@@ -20,7 +20,7 @@ describe('Gosec report generation', () => {
     expect(report).toHaveProperty('moreInfo')
   })
 
-  test('Creates correct annotations', () => {
+  test('Creates correct annotations', async () => {
     expect(report.annotations).toHaveLength(6)
     expect(report.annotations[0].end_line).toBe(16)
     expect(report.annotations[3].start_line).toBe(28)
@@ -33,7 +33,7 @@ describe('Gosec report generation', () => {
     })
   })
 
-  test('Creates correct issue count', () => {
+  test('Creates correct issue count', async () => {
     expect(report.issueCount.errors).toBe(1)
     expect(report.issueCount.warnings).toBe(5)
     expect(report.issueCount.notices).toBe(0)
