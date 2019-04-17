@@ -2,5 +2,3 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
 theme: jekyll-theme-slate
-plugins:
-  - jekyll-relative-links
