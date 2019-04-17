@@ -10,6 +10,7 @@ const config = {
   issuesFoundResultTitle: 'Issues found',
   syntaxErrorTitle: 'ERROR: Syntax error',
   moreInfoTitle: 'For more information about the issues follow the links: \n',
+  tslintProjectWebsite: 'https://github.com/webschik/tslint-config-security',
   numFilesPerPage: 30,
   numAnnotationsPerUpdate: 50
 }
