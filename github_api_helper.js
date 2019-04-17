@@ -1,9 +1,9 @@
 // Copyright 2019 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const { config } = require('./config')
+const { config } = require('./config') 
 
-const rawMediaType = 'application/vnd.github.v3.raw'
+const rawMediaType = 'application/vnd.github.v3.raw' 
 
 /**
  * Create a check run with status in progress and sends it to Github
