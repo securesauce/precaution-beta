@@ -2,15 +2,23 @@
   "name": "precaution",
   "version": "1.0.0",
   "description": "GitHub App for PR security linting",
-  "author": "Martin Vrachev <martin.vrachev@gmail.com> (d)",
   "contributors": [
     {
       "name": "Antoine Salon",
       "url": "https://github.com/evqna"
     },
     {
+      "name": "Eric Brown",
+      "url": "https://github.com/ericwb"
+    },
+    {
+      "name": "Joshua Lock",
+      "url": "https://github.com/joshuagl"
+    },
+    {
       "name": "Martin Vrachev",
-      "email": "mvrachev@vmware.com"
+      "email": "mvrachev@vmware.com",
+      "url": "https://github.com/mvrachev"
     }
   ],
   "license": "BSD-2",
