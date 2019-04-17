@@ -4,7 +4,7 @@
 const { config } = require('./config')       
 
 const rawMediaType = 'application/vnd.github.v3.raw' 
-
+  
 /**
  * Create a check run with status in progress and sends it to Github
  * @param {import('probot').Context} context Probot context
