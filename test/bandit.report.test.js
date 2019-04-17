@@ -20,7 +20,7 @@ describe('Bandit report generation', () => {
     expect(report).toHaveProperty('moreInfo')
   })
 
-  test('Creates correct annotations', () => {
+  test('Creates correct annotations', async () => {
     expect(report.annotations).toHaveLength(4)
     expect(report.annotations[0].end_line).toBe(8)
     expect(report.annotations[3].start_line).toBe(15)
@@ -33,7 +33,7 @@ describe('Bandit report generation', () => {
     })
   })
 
-  test('Creates correct issue count', () => {
+  test('Creates correct issue count', async () => {
     expect(report.issueCount.errors).toBe(1)
     expect(report.issueCount.warnings).toBe(3)
     expect(report.issueCount.notices).toBe(0)
