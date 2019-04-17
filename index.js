@@ -34,7 +34,7 @@ module.exports = app => {
       // (previous run didn't complete)
       return runLinterFromPRData(pullRequests, context, headSha)
     }
-  })
+  })   
 
   app.on('check_run', async context => {
     const action = context.payload.action
