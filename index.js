@@ -19,6 +19,8 @@ module.exports = app => {
     const pullRequests = checkSuite.pull_requests
 
     if (action === 'requested') {
+      console.log('Pull request lenght is: ', pullRequests.length)
+      console.log('Pull request is: ', pullRequests)
       // Check suite is requested when code is pushed to the repository
       // TODO: investigate GitHub editor not triggering check suite
       if (pullRequests.length > 0) {

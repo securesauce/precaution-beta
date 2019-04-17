@@ -47,6 +47,7 @@ function filterData (rawData) {
 async function getPRFiles (context, number) {
   const { owner, repo } = context.repo()
 
+  console.log('Owner is: ', owner, 'repo is: ', repo)
   // See https://developer.github.com/v3/pulls/#list-pull-requests-files
   let response = await context.github.pullRequests.listFiles({
     owner: owner,
@@ -54,12 +55,14 @@ async function getPRFiles (context, number) {
     number: number,
     per_page: config.numFilesPerPage
   })
+  console.log('The response is: ', response)
 
   let data = filterData(response)
   while (context.github.hasNextPage(response)) {
     response = await context.github.getNextPage(response)
     data = data.concat(filterData(response))
   }
+  console.log('Promise data is: ', data)
   return Promise.all(data)
 }
 
