@@ -39,8 +39,10 @@
     "lint": "standard --fix"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
     "fs-extra": "^7.0.0",
     "probot": "^7.4.0",
+    "request": "^2.88.0",
     "tslint": "^5.14.0",
     "typescript": "^3.3.4000",
     "tslint-config-security": "^1.15.0"
