@@ -1,6 +1,6 @@
 import os . 
 
-def someFunction(user, password="Admin"):
+def someFunction(user, password="Admin"):  
     print("Hi " + user)
 
 def someFunction2(password):
