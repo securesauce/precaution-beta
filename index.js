@@ -18,16 +18,7 @@ module.exports = app => {
     const headSha = checkSuite.head_sha
     const pullRequests = checkSuite.pull_requests
 
-    if (action === 'requested') {
-      // Check suite is requested when code is pushed to the repository
-      // TODO: investigate GitHub editor not triggering check suite
-      if (pullRequests.length > 0) {
-        // Commit was pushed to a PR branch
-        return runLinterFromPRData(pullRequests, context, headSha)
-      }
-
-      // Ignore push events not linked to a pull request
-    } else if (action === 'rerequested') {
+    if (action === 'rerequested') {
       // Check suite was manually rerequested by a user on the checks dashboard
       // (previous run didn't complete)
       return runLinterFromPRData(pullRequests, context, headSha)
