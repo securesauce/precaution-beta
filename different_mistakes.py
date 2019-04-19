@@ -25,3 +25,7 @@ import os
 
 os.chmod('/etc/passwd', 0o227)
 os.chmod('~/.bashrc', 511)
+
+
+
+
