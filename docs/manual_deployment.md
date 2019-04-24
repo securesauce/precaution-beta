@@ -11,8 +11,9 @@ This requires two distinct steps: setting up the environment and dependencies, a
 
 ### Python and Bandit
 
-1. Make sure Python is installed 
-2. Run ```pip install -r requirements.txt```
+1. Make sure Python2/Python3 is installed.
+2. Make sure that pip/pip3 is installed.
+3. Run ```pip install -r requirements.txt``` or ```pip3 install -r requirements.txt``` respectively
 
 ### Go and Gosec
 
