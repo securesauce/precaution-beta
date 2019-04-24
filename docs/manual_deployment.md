@@ -27,6 +27,13 @@ This requires two distinct steps: setting up the environment and dependencies, a
 curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GOPATH/bin 1.3.0
 ```
 binary will be $GOPATH/bin/gosec
+
+### Nodejs
+
+1. Download Nodejs: https://nodejs.org/en/download/
+2. Make sure you have installed npm
+3. Run ```npm install ```
+
 ## Register the app
 
 Please refer to the [GitHub app documentation](https://developer.github.com/apps/building-your-first-github-app/#one-time-setup) to get started on registering your own running instance of the app.
