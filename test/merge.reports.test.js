@@ -17,7 +17,7 @@ const report = (issueCount, annotations) => {
 }
 
 describe('Merge reports tests from Bandit and Gosec reports', () => {
-  test('No issues', async () => {
+  test('No issues', () => {
     const banditReport = report(noIssues, [])
     const gosecReport = report(noIssues, [])
     const tslintReport = report(noIssues, [])
@@ -28,7 +28,7 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
     expect(result.annotations).toHaveLength(0)
   })
 
-  test('Bandit issues', async () => {
+  test('Bandit issues', () => {
     // We don't need the issue count to correspond to the actual annotations (code handles them separately)
     const banditReport = report(someIssues, banditAnnotations)
     const gosecReport = report(noIssues, [])
@@ -44,7 +44,7 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
     expect(result.annotations).toEqual(banditAnnotations)
   })
 
-  test('Gosec issues', async () => {
+  test('Gosec issues', () => {
     const banditReport = report(noIssues, [])
     const gosecReport = report(moreIssues, gosecAnnotations)
     const tslintReport = report(noIssues, [])
@@ -58,7 +58,7 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
     expect(result.annotations).toEqual(gosecAnnotations)
   })
 
-  test('TSLint issues', async () => {
+  test('TSLint issues', () => {
     const banditReport = report(noIssues, [])
     const gosecReport = report(noIssues, [])
     const tslintReport = report(moreIssues, tslintAnnotations)
@@ -72,7 +72,7 @@ describe('Merge reports tests from Bandit and Gosec reports', () => {
     expect(result.annotations).toEqual(tslintAnnotations)
   })
 
-  test('Issues from all linters', async () => {
+  test('Issues from all linters', () => {
     const banditReport = report(someIssues, banditAnnotations)
     const gosecReport = report(moreIssues, gosecAnnotations)
     const tslintReport = report(someIssues, tslintAnnotations)

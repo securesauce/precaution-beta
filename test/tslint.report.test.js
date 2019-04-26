@@ -12,7 +12,7 @@ describe('TSLint report generation', () => {
     report = generateReport(tslintResults, 'test/fixtures/js-ts')
   })
 
-  test('Creates correct report structure', async () => {
+  test('Creates correct report structure', () => {
     expect(report).toHaveProperty('annotations')
     expect(report).toHaveProperty('issueCount.errors')
     expect(report).toHaveProperty('issueCount.warnings')
@@ -20,7 +20,7 @@ describe('TSLint report generation', () => {
     expect(report).toHaveProperty('moreInfo')
   })
 
-  test('Creates correct annotations', async () => {
+  test('Creates correct annotations', () => {
     expect(report.annotations).toHaveLength(7)
     expect(report.annotations[0].end_line).toBe(56)
     expect(report.annotations[3].start_line).toBe(5)
@@ -33,13 +33,13 @@ describe('TSLint report generation', () => {
     })
   })
 
-  test('Creates correct issue count', async () => {
+  test('Creates correct issue count', () => {
     expect(report.issueCount.errors).toBe(0)
     expect(report.issueCount.warnings).toBe(7)
     expect(report.issueCount.notices).toBe(0)
   })
 
-  test('Handles no vulnerable reports', async () => {
+  test('Handles no vulnerable reports', () => {
     const report = generateReport([], '')
 
     expect(report.annotations).toHaveLength(0)
