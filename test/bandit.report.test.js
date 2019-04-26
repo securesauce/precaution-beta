@@ -20,7 +20,7 @@ describe('Bandit report generation', () => {
     expect(report).toHaveProperty('moreInfo')
   })
 
-  test('Creates correct annotations', async () => {
+  test('Creates correct annotations', () => {
     expect(report.annotations).toHaveLength(4)
     expect(report.annotations[0].end_line).toBe(8)
     expect(report.annotations[3].start_line).toBe(15)
@@ -33,13 +33,13 @@ describe('Bandit report generation', () => {
     })
   })
 
-  test('Creates correct issue count', async () => {
+  test('Creates correct issue count', () => {
     expect(report.issueCount.errors).toBe(1)
     expect(report.issueCount.warnings).toBe(3)
     expect(report.issueCount.notices).toBe(0)
   })
 
-  test('Handles no vulnerable reports', async () => {
+  test('Handles no vulnerable reports', () => {
     const jsonResults = require('./fixtures/reports/bandit_safe.json')
 
     const report = generateReport(jsonResults)

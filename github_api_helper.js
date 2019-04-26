@@ -33,7 +33,7 @@ function inProgressAPIresponse (context, headSha) {
  */
 function filterData (rawData) {
   return rawData.data.filter(file => config.fileExtensions.reduce((acc, ext) => acc || file.filename.endsWith(ext), false))
-    .filter(fileJSON => fileJSON.status !== 'removed').map(async fileInfo => {
+    .filter(fileJSON => fileJSON.status !== 'removed').map(fileInfo => {
       return fileInfo.filename
     })
 }

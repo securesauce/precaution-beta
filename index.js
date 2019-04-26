@@ -96,13 +96,13 @@ async function processPullRequest (pullRequest, context) {
   const response = await apiHelper.getPRFiles(context, number)
   const filesDownloadedPromise = response
     .map(async filename => {
-      const headRevision = apiHelper.getContents(context, filename, ref, pullRequest.head)
+      const headRevision = await apiHelper.getContents(context, filename, ref, pullRequest.head)
 
       // TODO: merge this code with linter-specific path resolution
       if (filename.endsWith('.go')) {
-        cache.saveFile(repoID, id, filename, (await headRevision).data, 'go')
+        cache.saveFile(repoID, id, filename, headRevision.data, 'go')
       } else {
-        cache.saveFile(repoID, id, filename, (await headRevision).data)
+        cache.saveFile(repoID, id, filename, headRevision.data)
       }
 
       return filename

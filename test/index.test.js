@@ -253,7 +253,7 @@ describe('Precaution workflow', () => {
       }))
     })
 
-    test('send many annotations through multiple API calls', async () => {
+    test('send many annotations through multiple API calls', () => {
       const { sendResults } = require('../github_api_helper')
       let context = {
         github: {
