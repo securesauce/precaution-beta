@@ -55,4 +55,4 @@ to direct GitHub webhooks to your local machine.
 
 ## Testing
 
-Run ```npm test``` or ```yarn test```. This does not require any GitHub interaction (no need to register an instance of the app).
+Run ```npm test```. This does not require any GitHub interaction (no need to register an instance of the app).
