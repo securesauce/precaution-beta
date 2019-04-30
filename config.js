@@ -12,7 +12,8 @@ const config = {
   moreInfoTitle: 'For more information about the issues follow the links: \n',
   tslintProjectWebsite: 'https://github.com/webschik/tslint-config-security',
   numFilesPerPage: 30,
-  numAnnotationsPerUpdate: 50
+  numAnnotationsPerUpdate: 50,
+  configFilePath: '.precaution.yaml'
 }
 
 const annotationsLevels = {

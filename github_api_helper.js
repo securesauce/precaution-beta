@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const { config } = require('./config')
+const { filterData } = require('./filter')
 
 const rawMediaType = 'application/vnd.github.v3.raw'
 
@@ -27,24 +28,41 @@ function inProgressAPIresponse (context, headSha) {
 }
 
 /**
- * Filters the listed files and returns only the files relevant to us
- * @param {*} rawData the raw output from list files API call
- * @return {Promise[]<any>} the filtered GitHub response
+ * Get Precaution config file contents as raw data,
+ * if that file exists.
+ * @param {import('probot').Context} context Probot context
+ * @return {Promise<any>} GitHub response
+ * See https://developer.github.com/v3/repos/contents/#get-contents
  */
-function filterData (rawData) {
-  return rawData.data.filter(file => config.fileExtensions.reduce((acc, ext) => acc || file.filename.endsWith(ext), false))
-    .filter(fileJSON => fileJSON.status !== 'removed').map(fileInfo => {
-      return fileInfo.filename
+async function getConfigFile (context) {
+  let { owner, repo } = context.repo()
+  // GitHub doesn't provide "checkIfFileExists" API endpoint.
+  // That's why we should try to download the file and if we have
+  // 404 error code the file doesn't exist in the repository.
+  try {
+    return await context.github.repos.getContents({
+      owner,
+      repo,
+      path: config.configFilePath,
+      headers: { accept: rawMediaType }
     })
+  } catch (error) {
+    if (error.code === 404) {
+      return null
+    } else {
+      throw new Error(error)
+    }
+  }
 }
 
 /**
  * Get list of files modified by a pull request
  * @param {import('probot').Context} context Probot context
  * @param {number} number the pull request number inside the repository
+ * @param {Object} configObj configuration object populated by a config file
  * @returns {String[]} paths to the diff files from the pull request relevant to us
  */
-async function getPRFiles (context, number) {
+async function getPRFiles (context, number, configObj) {
   const { owner, repo } = context.repo()
 
   // See https://developer.github.com/v3/pulls/#list-pull-requests-files
@@ -54,11 +72,11 @@ async function getPRFiles (context, number) {
     number: number,
     per_page: config.numFilesPerPage
   })
-
-  let data = filterData(response)
+  let excludes = configObj && configObj.exclude ? configObj.exclude : []
+  let data = filterData(response, excludes)
   while (context.github.hasNextPage(response)) {
     response = await context.github.getNextPage(response)
-    data = data.concat(filterData(response))
+    data = data.concat(filterData(response, excludes))
   }
   return Promise.all(data)
 }
@@ -197,3 +215,4 @@ module.exports.getPRFiles = getPRFiles
 module.exports.getContents = getRawFileContents
 module.exports.sendResults = sendResults
 module.exports.getConclusion = getConclusion
+module.exports.getConfigFile = getConfigFile
