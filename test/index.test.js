@@ -45,6 +45,7 @@ describe('Precaution workflow', () => {
     // Mock the files as empty strings because we don't analyze their content anyway
     mockFiles['vulnerable.js'] = ''
     mockFiles['vulnerable.ts'] = ''
+    mockFiles[config.configFilePath] = fs.readFileSync('test/fixtures/config_files/sample_config.yaml', 'utf8')
   })
 
   beforeEach(() => {
@@ -74,7 +75,9 @@ describe('Precaution workflow', () => {
           if (mockFiles.hasOwnProperty(path)) {
             return Promise.resolve({ data: mockFiles[path] })
           } else {
-            throw Error(path + ' fixture does not exist')
+            let error = new Error(path + ' fixture does not exist')
+            error.code = 404
+            throw error
           }
         })
       }

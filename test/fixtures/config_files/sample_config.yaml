@@ -1,0 +1,4 @@
+exclude:
+ - "./tests/**"
+ - "*_test.go"
+ - "src/cmd/main.py"

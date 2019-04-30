@@ -5,6 +5,7 @@ const cache = require('./cache')
 const { config } = require('./config')
 const apiHelper = require('./github_api_helper')
 const { runLinters } = require('./runner')
+const yaml = require('js-yaml')
 
 /**
  * @param {import('probot').Application} app - Probot's Application class.
@@ -56,12 +57,16 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
   const checkRunResponse = apiHelper.inProgressAPIresponse(context, headSha)
 
   try {
-    // Process all pull requests associated with check suite
-    const PRsDownloadedPromise = pullRequests.map(pr => processPullRequest(pr, context))
-    const resolvedPRs = await Promise.all(PRsDownloadedPromise)
-
     // For now only deal with one PR
     const PR = pullRequests[0]
+
+    // Loads the Precaution configuration file
+    const rawObj = await apiHelper.getConfigFile(context)
+    const configObj = rawObj ? yaml.safeLoad(rawObj.data) : null
+    // Process all pull requests associated with check suite
+    const PRsDownloadedPromise = pullRequests.map(pr => processPullRequest(pr, context, configObj))
+    const resolvedPRs = await Promise.all(PRsDownloadedPromise)
+
     // Sometimes the resolverPR list contains undefined members
     const inputFiles = resolvedPRs[0].filter((file) => file)
 
@@ -85,15 +90,16 @@ async function runLinterFromPRData (pullRequests, context, headSha) {
 /**
  * Retrieve list of files modified by PR and download them to cache
  * @param {import('probot').Context} context
+ * @param {Object} configObj configuration object populated by a config file
  * @returns {Promise<string[]>} Paths to the downloaded PR files
  */
-async function processPullRequest (pullRequest, context) {
+async function processPullRequest (pullRequest, context, configObj) {
   const number = pullRequest.number
   const ref = pullRequest.head.ref
   const id = pullRequest.id
   const repoID = context.payload.repository.id
 
-  const response = await apiHelper.getPRFiles(context, number)
+  const response = await apiHelper.getPRFiles(context, number, configObj)
   const filesDownloadedPromise = response
     .map(async filename => {
       const headRevision = await apiHelper.getContents(context, filename, ref, pullRequest.head)
