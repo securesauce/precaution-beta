@@ -43,14 +43,6 @@ and communicate with the checks API.
  
 5. Done! Now Precaution is installed on your repositories.
 
-## Additional documentation
-
-- [Initial setup](docs/initial_setup.md)
-- [False positives and how to handle them](docs/false_positivies.md)
-- [Setting up a manual deployment](docs/manual_deployment.md)
-- [Debugging with VSCode](docs/local_development.md)
-- [Architecture](docs/architecture.md)
-
 ## Contributing
 
 The Precaution project team welcomes contributions from the community. Before you start working with Precaution, please read our [Developer Certificate of Origin](https://cla.vmware.com/dco). All contributions to this repository must be signed as described on that page. Your signature certifies that you wrote the patch or have the right to pass it on as an open-source patch. For more detailed information, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
