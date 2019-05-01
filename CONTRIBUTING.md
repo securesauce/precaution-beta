@@ -13,7 +13,7 @@ Dicussion about the Precaution project happens in the #precaution channel on the
 
 ## Getting Started
 
-Our documentation includes several pages on Precaution development. Take a look ar our [architecture](docs/architecture.md) document, or browse our documentation [online](https://vmware.github.io/precaution) or [in-repo](docs/index.md).
+Our documentation includes several pages on Precaution development, take a look at our [architecture](docs/architecture.md) document, or browse our documentation [online](https://vmware.github.io/precaution) or [in-repo](docs/index.md).
 
 ## Contribution Flow
 
@@ -33,6 +33,25 @@ git checkout -b my-new-feature master
 git commit -a
 git push origin my-new-feature
 ```
+
+### Code Review
+
+All contributions to Precaution must be reviewed and approved by a maintainer (distinct from the author of the pull request). Pull Requests will be merged to the master branch once one or more maintainers have Approved the Pull Request and the _ready-to-merge_ label has been added.
+
+This final step of adding the _ready-to-merge_ label allows for a range of final check scenarios once the code is deemed ready by a reviewer. Examples of final checks that may occur are:
+- when a Reviewer wants another project maintainer to approve the change
+- when the Submitter needs to squash, rebase, or otherwise clean up their changes before the merge
+
+If a Pull Request is Approved without the _ready-to-merge_ label being added the reviewer must add a comment indicating what must happen before the change can be merged so that the Submitter knows what is gating acceptance of their contribution.
+
+The expected code review process is:
+
+- Submitter creates Pull Request
+- (_optional_) Reviewer provides feedback
+- (_optional_) Submitter addresses feedback, adding further patches to the pull request
+- Reviewer Approves merging of the changes in the Pull Request
+- (_optional_) Final confirmation (from a second reviewer, following rebase, etc)
+- Reviewer adds _ready-to-merge_ label
 
 ### Staying In Sync With Upstream
 
