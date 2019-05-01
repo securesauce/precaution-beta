@@ -1,5 +1,5 @@
 <!--
-    Copyright 2018 VMware, Inc.
+    Copyright 2019 VMware, Inc.
     SPDX-License-Identifier: BSD-2-Clause
 -->
 
@@ -9,7 +9,11 @@ The Precaution project team welcomes contributions from the community. Before yo
 
 ## Community
 
+Dicussion about the Precaution project happens in the #precaution channel on the [VMware{code} Slack](https://code.vmware.com/web/code/join).
+
 ## Getting Started
+
+Our documentation includes several pages on Precaution development. Take a look ar our [architecture](docs/architecture.md) document, or browse our documentation [online](https://vmware.github.io/precaution) or [in-repo](docs/index.md).
 
 ## Contribution Flow
 
@@ -68,6 +72,8 @@ Be sure to add a comment to the PR indicating your new changes are ready to revi
 notification when you git push.
 
 ### Code Style
+
+Precaution follows the [JavaScript Standard Style](https://standardjs.com/).
 
 ### Formatting Commit Messages
 
