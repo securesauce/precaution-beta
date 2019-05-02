@@ -3,7 +3,7 @@
     SPDX-License-Identifier: BSD-2-Clause
 -->
 
-# Precaution
+![Precaution](precaution-logo.png)
 
 [![Build Status](https://travis-ci.com/vmware/precaution.svg?branch=master)](https://travis-ci.com/vmware/precaution)
 [![Coverage Status](https://codecov.io/gh/vmware/precaution/branch/master/graph/badge.svg)](https://codecov.io/gh/vmware/precaution)
