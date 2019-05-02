@@ -26,7 +26,7 @@ function isExcluded (filePath, excludes) {
 /**
  * Filters the listed files and returns only the files relevant to us
  * @param {*} rawData the raw output from list files API call
- * @param {String[]} excludes excludes globs provided by the user to filter files/folders
+ * @param {String[]} excludes array of exclusion rules in glob format provided by the user
  * @return {Promise[]<any>} the filtered GitHub response
  */
 function filterData (rawData, excludes) {
@@ -45,3 +45,4 @@ function filterData (rawData, excludes) {
 }
 
 module.exports.filterData = filterData
+module.exports.isExcluded = isExcluded

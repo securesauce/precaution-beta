@@ -118,6 +118,40 @@ describe('Precaution workflow', () => {
       }))
     })
 
+    test('Checks the downloading of a config file', async () => {
+      await app.receive(pullRequestOpenedEvent)
+
+      expect(github.repos.getContents).toHaveBeenCalledWith(expect.objectContaining({
+        owner: 'owner_login',
+        repo: 'repo_name',
+        path: config.configFilePath
+      }))
+    })
+
+    test('Check for a repo without config file', async () => {
+      const { getConfigFile } = require('../github_api_helper')
+      let context = {
+        repo: jest.fn().mockResolvedValue({
+          owner: 'owner_login',
+          repo: 'repo_name'
+        }),
+        github: {
+          repos: {
+            getContents: jest.fn(({ path }) => {
+              if (mockFiles.hasOwnProperty(path)) {
+                return Promise.resolve({ data: mockFiles[path] })
+              } else {
+                let error = new Error(path + ' fixture does not exist')
+                error.code = 404
+                throw error
+              }
+            })
+          }
+        }
+      }
+      expect(await getConfigFile(context, 'customConfig.json')).toEqual(null)
+    })
+
     test('Check run rerequest event', async () => {
       await app.receive(checkRunRerequestEvent)
 
@@ -229,6 +263,15 @@ describe('Precaution workflow', () => {
       }))
       expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
         path: 'executable'
+      }))
+      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
+        path: 'tests/func/funcTest.go'
+      }))
+      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
+        path: 'src/commands/command_test.go'
+      }))
+      expect(github.repos.getContents).not.toHaveBeenCalledWith(expect.objectContaining({
+        path: 'src/cmd/main.py'
       }))
     })
 
