@@ -27,6 +27,15 @@
     {
       "filename": "executable",
       "status": "added"
+    },
+    {
+      "filename":"tests/func/funcTest.go"
+    },
+    {
+      "filename":"src/commands/command_test.go"
+    },
+    {
+      "filename":"src/cmd/main.py"
     }
   ]
 }

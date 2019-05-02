@@ -31,10 +31,11 @@ function inProgressAPIresponse (context, headSha) {
  * Get Precaution config file contents as raw data,
  * if that file exists.
  * @param {import('probot').Context} context Probot context
+ * @param {String} customConfigPath Optional (default value config.configFilePath)
  * @return {Promise<any>} GitHub response
  * See https://developer.github.com/v3/repos/contents/#get-contents
  */
-async function getConfigFile (context) {
+async function getConfigFile (context, customConfigPath = config.configFilePath) {
   let { owner, repo } = context.repo()
   // GitHub doesn't provide "checkIfFileExists" API endpoint.
   // That's why we should try to download the file and if we have
@@ -43,7 +44,7 @@ async function getConfigFile (context) {
     return await context.github.repos.getContents({
       owner,
       repo,
-      path: config.configFilePath,
+      path: customConfigPath,
       headers: { accept: rawMediaType }
     })
   } catch (error) {
