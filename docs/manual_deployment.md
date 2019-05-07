@@ -7,13 +7,23 @@
 
 This requires two distinct steps: setting up the environment and dependencies, and registering a GitHub application pointing to your own running copy.
 
+## Clone Precaution locally
+
+You have to clone the Precaution source code in order to run it locally.
+
+1. Go to the directory where you want to clone Precaution.
+2. Make sure you have installed Git and run ```git clone https://github.com/vmware/precaution.git```
+3. ``cd precaution``
+
 ## Install dependencies
 
 ### Python and Bandit
 
 1. Make sure Python2/Python3 is installed.
 2. Make sure that pip/pip3 is installed.
-3. Run ```pip install -r requirements.txt``` or ```pip3 install -r requirements.txt``` respectively
+3. From the root directory of the project run:
+```pip install -r requirements.txt``` or
+```pip3 install -r requirements.txt``` respectively
 
 ### Go and Gosec
 
@@ -33,7 +43,7 @@ binary will be $GOPATH/bin/gosec
 
 1. Download Nodejs: https://nodejs.org/en/download/
 2. Make sure you have installed npm
-3. Run ```npm install ```
+3. Run ```npm install```
 
 ## Register the app
 
