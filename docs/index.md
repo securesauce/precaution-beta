@@ -29,6 +29,7 @@ Precaution currently supports analysis of python files via Bandit and go files v
 
 - [Initial setup](initial_setup.md)
 - [False positives and how to handle them](false_positivies.md)
+- [Configuration options](configuration.md)
 - [Setting up a manual deployment](manual_deployment.md)
 - [Building this documentation locally](local_docs_build.md)
 - [Debugging with VSCode](local_development.md)
