@@ -3,6 +3,17 @@
     SPDX-License-Identifier: BSD-2-Clause
 -->
 
+# Overview
+
+Precaution provides simple, automated code reviews for GitHub projects by
+running security analysis tools on all Pull Requests. Precaution achieves this
+by using a variety of tools under the hood without exposing implementation
+details and complexity of the underlying tools to the user.
+
+Concretely, this means that Precaution ignores any tool specific configuration
+files which may exist in the project's repository and performs scans based only
+on Precaution specific configuration.
+
 # Control Flow
 
 ![architecture](architecture.svg)
