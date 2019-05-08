@@ -26,7 +26,7 @@ module.exports = class TSLint {
    * @returns {string[]} Filtered list of file names
    */
   filter (files) {
-    return files.filter(name => name.endsWith('.js') || name.endsWith('ts'))
+    return files.filter(name => name.endsWith('.js') || name.endsWith('.ts'))
   }
 
   /**
