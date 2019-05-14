@@ -5,7 +5,7 @@ const fs = require('fs-extra')
 
 const { run } = require('../runner')
 const { config } = require('../config')
-const Bandit = require('../linters/bandit')
+const Bandit = require('../linters/bandit/bandit')
 
 function bandit (dir, files) {
   return run(new Bandit(), dir, files)

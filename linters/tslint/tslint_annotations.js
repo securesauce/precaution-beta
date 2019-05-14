@@ -1,7 +1,7 @@
 // Copyright 2019 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const { getAnnotationLevel } = require('../annotations_levels')
+const { getAnnotationLevel } = require('../../annotations_levels')
 
 /**
  * Translates the tslint severity from "ERROR" | "WARNING" | "OFF"

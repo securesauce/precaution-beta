@@ -4,7 +4,7 @@
 const fs = require('fs-extra')
 const { run } = require('../runner')
 
-const TSLint = require('../linters/tslint')
+const TSLint = require('../linters/tslint/tslint')
 
 function tslint (dir, files) {
   return run(new TSLint(), dir, files)

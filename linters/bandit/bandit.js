@@ -1,20 +1,20 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const cache = require('../cache')
+const cache = require('../../cache')
 
-const report = require('../gosec/gosec_report')
+const report = require('./bandit_report')
 
-module.exports = class Gosec {
+module.exports = class Bandit {
   get name () {
-    return 'gosec'
+    return 'bandit'
   }
 
   /**
    * The name of the generated report file
    */
   get reportFile () {
-    return 'gosec_output.json'
+    return 'bandit_output.json'
   }
 
   get defaultReport () {
@@ -27,7 +27,7 @@ module.exports = class Gosec {
    * @returns {string[]} Filtered list of file names
    */
   filter (files) {
-    return files.filter(name => name.endsWith('.go'))
+    return files.filter(name => name.endsWith('.py'))
   }
 
   /**
@@ -36,7 +36,7 @@ module.exports = class Gosec {
    * @param {string} prID PR id in repository
    */
   workingDirectoryForPR (repoID, prID) {
-    return cache.getBranchPath(repoID, prID, 'gosec')
+    return cache.getBranchPath(repoID, prID, 'bandit')
   }
 
   /**
@@ -45,7 +45,7 @@ module.exports = class Gosec {
    * @param {string} reportPath Path to the report file relative to working directory
    */
   args (files, reportPath) {
-    return ['-fmt=json', '-out', reportPath, './...']
+    return ['--format', 'json', '-o', reportPath, ...files]
   }
 
   /**
@@ -54,27 +54,21 @@ module.exports = class Gosec {
    */
   parseResults (data) {
     let parsedData = JSON.parse(data)
-    let syntaxErrors = parsedData['Golang errors']
 
-    if (syntaxErrors) {
-      let filePaths = Object.keys(syntaxErrors)
-
-      for (let path of filePaths) {
-        for (let error of syntaxErrors[path]) {
-          let errAnnotation = {
-            severity: 'HIGH',
-            confidence: 'HIGH',
-            rule_id: 'ERROR',
-            details: 'Syntax error',
-            file: path,
-            code: `${error.error}`,
-            line: error.line
-          }
-          parsedData.Issues.push(errAnnotation)
-        }
+    for (let error of parsedData.errors) {
+      let errAnnotation = {
+        filename: error.filename,
+        line_number: 1,
+        issue_severity: 'HIGH',
+        issue_confidence: 'HIGH',
+        issue_text: '',
+        test_id: 'ERROR',
+        test_name: 'Syntax error'
       }
-    }
 
+      errAnnotation.issue_text = 'Error: ' + error.reason + ' ' + error.filename
+      parsedData.results.push(errAnnotation)
+    }
     return parsedData
   }
 
@@ -86,6 +80,6 @@ module.exports = class Gosec {
    * @returns GitHub checks report
    */
   generateReport (results, directory) {
-    return report(results, directory)
+    return report(results)
   }
 }

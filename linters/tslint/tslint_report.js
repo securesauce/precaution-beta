@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const { getAnnotation } = require('./tslint_annotations')
-const { countIssueLevels } = require('../annotations_levels')
-const { config } = require('../config')
+const { countIssueLevels } = require('../../annotations_levels')
+const { config } = require('../../config')
 
 /**
  * @param {*} issues the issues found by TSLint

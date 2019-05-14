@@ -1,7 +1,7 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const generateReport = require('../gosec/gosec_report')
+const generateReport = require('../linters/gosec/gosec_report')
 
 const gosecResults = require('./fixtures/reports/gosec_vulnerable.json')
 
