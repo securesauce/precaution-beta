@@ -5,7 +5,7 @@ const fs = require('fs-extra')
 
 const { run } = require('../runner')
 const { config } = require('../config')
-const Gosec = require('../linters/gosec')
+const Gosec = require('../linters/gosec/gosec')
 
 function gosec (dir, files) {
   return run(new Gosec(), dir, files)

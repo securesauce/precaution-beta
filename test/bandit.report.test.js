@@ -1,7 +1,7 @@
 // Copyright 2018 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const generateReport = require('../bandit/bandit_report')
+const generateReport = require('../linters/bandit/bandit_report')
 
 const banditResults = require('./fixtures/reports/bandit_vulnerable.json')
 

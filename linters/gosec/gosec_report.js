@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const { getAnnotation } = require('./gosec_annotations')
-const { countIssueLevels } = require('../annotations_levels')
+const { countIssueLevels } = require('../../annotations_levels')
 
 /**
  * Process Gosec output (generate annotations, count issue levels)

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const { config } = require('../config')
-const { jsRules } = require('../tslint/tslint.json')
+const { jsRules } = require('../linters/tslint/tslint.json')
 
 const request = require('request')
 const cheerio = require('cheerio')

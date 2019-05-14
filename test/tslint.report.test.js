@@ -1,7 +1,7 @@
 // Copyright 2019 VMware, Inc.
 // SPDX-License-Identifier: BSD-2-Clause
 
-const generateReport = require('../tslint/tslint_report')
+const generateReport = require('../linters/tslint/tslint_report')
 
 const tslintResults = require('./fixtures/reports/tslint_vulnerable.json')
 

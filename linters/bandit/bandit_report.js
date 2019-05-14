@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 const { getAnnotation } = require('./bandit_annotations')
-const { countIssueLevels } = require('../annotations_levels')
+const { countIssueLevels } = require('../../annotations_levels')
 
 /**
  * @param {*} issues the issues found by Bandit
