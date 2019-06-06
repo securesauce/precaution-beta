@@ -31,7 +31,10 @@ const mergeSummaries = (summaries) => {
  * for object schema see: https://developer.github.com/v3/checks/runs/#output-object
  */
 module.exports = (reports) => {
-  const annotations = reports.map(r => r.annotations).flat()
+  let annotations = []
+  for (let linterRes of reports) {
+    annotations = annotations.concat(linterRes.annotations)
+  }
 
   if (!annotations.length) {
     return { title: config.noIssuesResultTitle, summary: config.noIssuesResultSummary, annotations, text: '' }
