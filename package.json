@@ -57,7 +57,7 @@
     "ts-node": "^8.0.3"
   },
   "engines": {
-    "node": ">= 11"
+    "node": ">= 10"
   },
   "jest": {
     "testEnvironment": "node",
