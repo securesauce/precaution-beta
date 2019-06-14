@@ -27,6 +27,7 @@ Precaution currently supports analysis of python files via Bandit and go files v
 
 ## Additional documentation
 
+- [Issues Precaution catches](issues_catched.md)
 - [Initial setup](initial_setup.md)
 - [Setting up Precaution as branch protection rule](branch_protection_rule.md)
 - [False positives and how to handle them](false_positivies.md)
