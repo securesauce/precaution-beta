@@ -34,3 +34,4 @@ Precaution currently supports analysis of python files via Bandit and go files v
 - [Building this documentation locally](local_docs_build.md)
 - [Debugging with VSCode](local_development.md)
 - [Architecture](architecture.md)
+- [Events handling](events_handling.md)
