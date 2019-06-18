@@ -29,3 +29,5 @@ External linters are spawned asynchronously, their output is redirected to
 a file that is then read and converted to the format expected by GitHub checks.
 
 The results are then merged and send back to GitHub with the appropriate status.
+
+We created that diagram using the draw.io website.
