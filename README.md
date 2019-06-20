@@ -15,6 +15,8 @@
 Precaution provides simple, automated code reviews for GitHub projects by running
 code linters with a security focus on all pull requests.
 
+![Precaution Demo](./precaution.gif)
+
 GitHub integration is made through the GitHub app interface and the checks API (beta),
 which allows results to be presented directly as inline annotations instead of
 a pass/fail status report.
