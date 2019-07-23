@@ -21,7 +21,7 @@
       "url": "https://github.com/mvrachev"
     }
   ],
-  "license": "BSD-2",
+  "license": "BSD-2-Clause",
   "repository": "https://github.com/vmware/precaution.git",
   "homepage": "https://github.com/vmware/precaution",
   "bugs": "https://github.com/vmware/precaution/issues",
