@@ -32,7 +32,7 @@
     "lint"
   ],
   "scripts": {
-    "dev": "nodemon --exec \"npm start\"",
+    "dev": "nodemon --exec \"yarn start\"",
     "start": "probot run ./index.js",
     "test": "standard && LOG_LEVEL=error jest",
     "test:watch": "LOG_LEVEL=error jest --watch --notify --notifyMode=change --coverage",
