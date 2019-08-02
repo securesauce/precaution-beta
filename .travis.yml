@@ -4,20 +4,20 @@
 dist: "xenial"
 
 install:
-  - npm install
+  - yarn install
   - pip3 install --upgrade pip
   - pip3 install --user -r requirements.txt
   - curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GOPATH/bin 1.3.0
   - export GOPATH=$GOPATH:${TRAVIS_BUILD_DIR}/test/fixtures/go:${TRAVIS_BUILD_DIR}/cache/go
-  - npm install -g codecov
+  - yarn global add codecov
 
 script:
-   - npm test
+   - yarn test
    - codecov
 
 language: node_js
 node_js:
-  - "11"
+  - "10"
 
 addons:
   apt:

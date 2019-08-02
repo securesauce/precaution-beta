@@ -42,8 +42,8 @@ binary will be $GOPATH/bin/gosec
 ### Nodejs
 
 1. Download Nodejs: https://nodejs.org/en/download/
-2. Make sure you have installed npm
-3. Run ```npm install```
+2. Make sure you have installed yarn
+3. Run ```yarn install```
 
 ## Register the app
 
@@ -65,4 +65,4 @@ to direct GitHub webhooks to your local machine.
 
 ## Testing
 
-Run ```npm test```. This does not require any GitHub interaction (no need to register an instance of the app).
+Run ```yarn test```. This does not require any GitHub interaction (no need to register an instance of the app).
