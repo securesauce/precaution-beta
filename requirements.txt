@@ -4,9 +4,9 @@
 #
 #    pip-compile --build-isolation --generate-hashes requirements.in
 #
-bandit==1.6.0 \
-    --hash=sha256:d31a7b0819fe95d591106ba2d6c35568a513aba24db537ca71984781312a8e95 \
-    --hash=sha256:e50fb4ed4ee8a98b8329385e48e606fded0999a2cb3e2acb6e7213c962ff0de1
+bandit==1.6.2 \
+    --hash=sha256:336620e220cf2d3115877685e264477ff9d9abaeb0afe3dc7264f55fa17a3952 \
+    --hash=sha256:41e75315853507aa145d62a78a2a6c5e3240fe14ee7c601459d0df9418196065
 ddt==1.2.1 \
     --hash=sha256:474546b4020ce8a2f9550ba8899c28aa2c284c7bbf175bddede98be949d1ca7c \
     --hash=sha256:d13e6af8f36238e89d00f4ebccf2bda4f6d1878be560a6600689e42077e164e3 \
