@@ -1,7 +1,16 @@
+---
+layout: page
+//title: Debugging with VSCode
+permalink: /local_development/
+---
+
 <!--
     Copyright 2019 VMware, Inc.
     SPDX-License-Identifier: BSD-2-Clause
 -->
+
+# Debugging with VSCode
+
 
 Debugging recipes are available in the ```.vscode``` folder to help getting started with local debugging.
 
