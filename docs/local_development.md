@@ -1,9 +1,3 @@
----
-layout: page
-//title: Debugging with VSCode
-permalink: /local_development/
----
-
 <!--
     Copyright 2019 VMware, Inc.
     SPDX-License-Identifier: BSD-2-Clause
