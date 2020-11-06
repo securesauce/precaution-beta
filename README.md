@@ -5,10 +5,9 @@
 
 ![Precaution](precaution-logo.png)
 
-[![Build Status](https://travis-ci.org/vmware/precaution.svg?branch=master)](https://travis-ci.org/vmware/precaution)
-[![Coverage Status](https://codecov.io/gh/vmware/precaution/branch/master/graph/badge.svg)](https://codecov.io/gh/vmware/precaution)
-[![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://github.com/vmware/precaution/blob/master/LICENSE.txt)
-[![Slack](https://img.shields.io/badge/slack-join%20chat%20%E2%86%92-e01563.svg)](https://code.vmware.com/web/code/join)
+[![Build Status](https://travis-ci.org/SecurityApps/precaution.svg?branch=master)](https://travis-ci.org/SecurityApps/precaution)
+[![Coverage Status](https://codecov.io/gh/SecurityApps/precaution/branch/master/graph/badge.svg)](https://codecov.io/gh/SecurityApps/precaution)
+[![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://github.com/SecurityApps/precaution/blob/master/LICENSE.txt)
 
 ## Overview
 
@@ -24,11 +23,11 @@ Precaution currently supports analysis of:
 * JavaScript and TypeScript via [TSLint](https://github.com/palantir/tslint) and [tslint-config-security](https://github.com/webschik/tslint-config-security)
 * Python files via [Bandit](https://github.com/PyCQA/bandit)
 
-New languages may be added in future, please file an [issue](https://github.com/vmware/precaution/issues) for your language/linter of choice.
+New languages may be added in future, please file an [issue](https://github.com/SecurityApps/precaution/issues) for your language/linter of choice.
 
-* Documentation: [vmware/precaution/docs](https://vmware.github.io/precaution/)
-* Source: [vmware/precaution](https://github.com/vmware/precaution)
-* Bugs: [vmware/precaution/issues](https://github.com/vmware/precaution/issues)
+* Documentation: [SecurityApps/precaution/docs](https://SecurityApps.github.io/precaution/)
+* Source: [SecurityApps/precaution](https://github.com/SecurityApps/precaution)
+* Bugs: [SecurityApps/precaution/issues](https://github.com/SecurityApps/precaution/issues)
 
 ## Installing Precaution on a GitHub repository
 
@@ -45,12 +44,10 @@ and communicate with the checks API.
 
 ## Contributing
 
-The Precaution project team welcomes contributions from the community. Before you start working with Precaution, please read our [Developer Certificate of Origin](https://cla.vmware.com/dco). All contributions to this repository must be signed as described on that page. Your signature certifies that you wrote the patch or have the right to pass it on as an open-source patch. For more detailed information, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
+The Precaution project team welcomes contributions from the community. For more detailed information, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
 BSD-2 License
 
 ## Any other questions? 
-
-If you have any other questions which are not addressed in the docs or README, reach out to us in the #precaution channel on [Slack](https://code.vmware.com/web/code/join).
